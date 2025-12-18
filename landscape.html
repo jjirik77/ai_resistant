@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The AI Assessment Landscape</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent-primary: #38bdf8; /* Cyan */
+            --accent-secondary: #818cf8; /* Indigo */
+            --accent-danger: #f87171; /* Red */
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --card-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Utilities */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-primary);
+            border-radius: 99px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-brand i { color: var(--accent-primary); }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .nav-item.active {
+            color: var(--accent-primary);
+            background: rgba(56, 189, 248, 0.1);
+            border-color: rgba(56, 189, 248, 0.2);
+        }
+
+        /* Page Control */
+        .page-section {
+            display: none;
+            min-height: 100vh;
+            padding-top: 100px; /* Space for navbar */
+            padding-bottom: 4rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        header {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, rgba(29, 78, 216, 0.15) 0%, transparent 70%);
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .stat-circle-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        svg.progress-ring {
+            width: 300px;
+            height: 300px;
+            transform: rotate(-90deg);
+        }
+
+        circle.progress-ring__circle {
+            stroke: var(--accent-primary);
+            stroke-width: 12;
+            fill: transparent;
+            r: 120;
+            cx: 150;
+            cy: 150;
+            stroke-dasharray: 754; /* 2 * PI * 120 */
+            stroke-dashoffset: 754;
+            transition: stroke-dashoffset 2s ease-out;
+            stroke-linecap: round;
+        }
+
+        .stat-text {
+            position: absolute;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Capabilities Grid */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem 0;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: var(--card-radius);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.3);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Vulnerability Scanner */
+        .scanner-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            background: var(--bg-secondary);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .assessment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .assessment-item {
+            padding: 1rem 1.5rem;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: var(--transition);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .assessment-item:hover, .assessment-item.active {
+            border-color: var(--accent-secondary);
+            background: rgba(129, 140, 248, 0.1);
+        }
+
+        .risk-display {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-primary);
+            border-radius: 16px;
+            position: relative;
+        }
+
+        .risk-meter-container {
+            width: 100%;
+            height: 20px;
+            background: #334155;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .risk-meter-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-secondary), var(--accent-danger));
+            border-radius: 10px;
+            transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .risk-score {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-danger);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .risk-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Urgency Tabs */
+        .urgency-container {
+            margin-top: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid var(--text-secondary);
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 99px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .tab-btn.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: var(--bg-primary);
+            font-weight: 700;
+        }
+
+        .tab-content {
+            background: rgba(255,255,255,0.03);
+            padding: 3rem;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-icon {
+            font-size: 3rem;
+            color: var(--accent-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .scanner-layout {
+                grid-template-columns: 1fr;
+            }
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+            .page-section {
+                padding-top: 140px; /* More space for stacked nav */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+        <a href="#" class="nav-brand" onclick="navigateTo('home'); return false;">
+            <i class="fas fa-brain"></i> AI Assessment Impact
+        </a>
+        <div class="nav-links">
+            <a href="#" class="nav-item active" onclick="navigateTo('home'); return false;" id="nav-home">Status Quo</a>
+            <a href="#" class="nav-item" onclick="navigateTo('capabilities'); return false;" id="nav-capabilities">Capabilities</a>
+            <a href="#" class="nav-item" onclick="navigateTo('simulator'); return false;" id="nav-simulator">Simulate Risk</a>
+            <a href="#" class="nav-item" onclick="navigateTo('urgency'); return false;" id="nav-urgency">Path Forward</a>
+        </div>
+    </nav>
+
+    <!-- PAGE: HOME -->
+    <div id="page-home" class="page-section active">
+        <header class="container">
+            <div class="hero-content">
+                <div style="opacity:0; animation: fadeInUp 1s forwards 0.2s;">
+                    <span class="badge">The Current Landscape</span>
+                    <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem; line-height: 1.1;">
+                        AI has entered<br>
+                        <span style="color: var(--accent-primary);">Higher Education.</span>
+                    </h1>
+                    <p style="color: var(--text-secondary); font-size: 1.25rem; margin-bottom: 2rem;">
+                        Tools like ChatGPT have rapidly become mainstream. The landscape of assessment is shifting beneath our feet.
+                    </p>
+                    <button class="tab-btn active" style="font-weight: 600;" onclick="navigateTo('capabilities')">
+                        Explore Capabilities <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                    </button>
+                </div>
+                
+                <div class="stat-circle-container" id="statContainer">
+                    <svg class="progress-ring">
+                        <!-- Background circle -->
+                        <circle cx="150" cy="150" r="120" stroke="#1e293b" stroke-width="12" fill="transparent"/>
+                        <!-- Animated circle -->
+                        <circle class="progress-ring__circle" id="progressCircle" />
+                    </svg>
+                    <div class="stat-text">
+                        <div class="stat-number" id="counter">0%</div>
+                        <div class="stat-label">of College Students<br>Use Generative AI</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <!-- PAGE: CAPABILITIES -->
+    <div id="page-capabilities" class="page-section">
+        <section class="container">
+            <div class="section-header">
+                <span class="badge">Current Capabilities</span>
+                <h2>What Can AI Do Today?</h2>
+                <p style="color: var(--text-secondary);">Hover over a card to analyze the capability.</p>
+            </div>
+
+            <div class="grid-cards">
+                <div class="card">
+                    <i class="fas fa-pen-fancy card-icon"></i>
+                    <h3>Content Generation</h3>
+                    <p>Generate complete essays, research papers, and creative writing prompts in seconds with high coherence.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-square-root-alt card-icon"></i>
+                    <h3>Problem Solving</h3>
+                    <p>Solve complex problem sets across disciplines, including STEM fields, with step-by-step logic.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-chart-pie card-icon"></i>
+                    <h3>Multimedia</h3>
+                    <p>Create full presentations, data visualizations, and detailed reports from raw data.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-language card-icon"></i>
+                    <h3>Translation</h3>
+                    <p>Translate languages with nuance and summarize complex academic texts instantly.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-code card-icon"></i>
+                    <h3>Coding</h3>
+                    <p>Debug existing code, explain logic, and write functional programs from scratch.</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="tab-btn" onclick="navigateTo('simulator')">Next: Test Vulnerabilities <i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: SIMULATOR -->
+    <div id="page-simulator" class="page-section">
+        <section class="container">
+            <div class="section-header">
+                <span class="badge">Risk Analysis</span>
+                <h2>Vulnerability Simulator</h2>
+                <p style="color: var(--text-secondary);">Select an assessment type to test its vulnerability against AI.</p>
+            </div>
+
+            <div class="scanner-layout">
+                <div class="assessment-list" id="assessmentList">
+                    <div class="assessment-item" data-risk="95" data-reason="AI excels at structured textual output and argument synthesis.">
+                        <span>Standard Essay Prompts</span>
+                        <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                    </div>
+                    <div class="assessment-item" data-risk="90" data-reason="Defined parameters make it easy for AI to calculate answers.">
+                        <span>Defined Problem Sets</span>
+                        <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                    </div>
+                    <div class="assessment-item" data-risk="98" data-reason="Pattern recognition allows AI to answer these instantly.">
+                        <span>Multiple Choice / Short Answer</span>
+                        <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                    </div>
+                    <div class="assessment-item" data-risk="85" data-reason="Generic prompts allow AI to hallucinate personal experiences.">
+                        <span>Generic Reflection Papers</span>
+                        <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                    </div>
+                    <div class="assessment-item" data-risk="80" data-reason="AI can aggregate facts rapidly, though citation accuracy varies.">
+                        <span>Fact-based Research</span>
+                        <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                    </div>
+                </div>
+
+                <div class="risk-display">
+                    <div class="risk-label">AI Completion Probability</div>
+                    <div class="risk-score" id="riskScore">0%</div>
+                    <div class="risk-meter-container">
+                        <div class="risk-meter-fill" id="riskFill"></div>
+                    </div>
+                    <p id="riskAnalysis" style="color: var(--text-secondary); margin-top: 1rem; min-height: 3rem;">
+                        Select an assessment type to run simulation.
+                    </p>
+                    <div id="simStatus" style="font-family: monospace; color: var(--accent-primary); margin-top: 1rem; font-size: 0.8rem;">
+                        WAITING FOR INPUT...
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="tab-btn" onclick="navigateTo('urgency')">Next: Why Redesign? <i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: URGENCY -->
+    <div id="page-urgency" class="page-section">
+        <section class="container">
+            <div class="section-header">
+                <span class="badge">The Path Forward</span>
+                <h2>Why Redesign Assessments?</h2>
+            </div>
+
+            <div class="urgency-container">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('integrity')">Academic Integrity</button>
+                    <button class="tab-btn" onclick="switchTab('learning')">Learning Outcomes</button>
+                    <button class="tab-btn" onclick="switchTab('reality')">Career Prep</button>
+                </div>
+
+                <div id="integrity" class="tab-content active">
+                    <i class="fas fa-user-shield tab-icon"></i>
+                    <h3>The Trust Deficit</h3>
+                    <p style="font-size: 1.1rem; margin-top: 1rem;">
+                        When students can easily outsource work to AI, we lose confidence in what they've actually learned.
+                        The diploma signifies skill acquisition; if the skills are outsourced, the credential loses value.
+                    </p>
+                </div>
+
+                <div id="learning" class="tab-content">
+                    <i class="fas fa-brain tab-icon"></i>
+                    <h3>The Skills Gap</h3>
+                    <p style="font-size: 1.1rem; margin-top: 1rem;">
+                        If AI completes the work, students miss critical skill development opportunities.
+                        The struggle of writing and solving problems is where the actual neural pathways are formed.
+                    </p>
+                </div>
+
+                <div id="reality" class="tab-content">
+                    <i class="fas fa-briefcase tab-icon"></i>
+                    <h3>Real World Readiness</h3>
+                    <p style="font-size: 1.1rem; margin-top: 1rem;">
+                        Students need authentic experience with complex, contextual problems they'll face in their careers—problems AI alone cannot solve.
+                        Future jobs will require managing AI, not competing with it on basic tasks.
+                    </p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 4rem;">
+                <button class="tab-btn active" onclick="navigateTo('home')"><i class="fas fa-redo"></i> Restart Experience</button>
+            </div>
+        </section>
+
+        <footer style="text-align: center; padding: 2rem; margin-top: 4rem; color: var(--text-secondary); border-top: 1px solid rgba(255,255,255,0.05);">
+            <p>Interactive Learning Tool Design &copy; 2025</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- NAVIGATION LOGIC ---
+        function navigateTo(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show target page
+            document.getElementById('page-' + pageId).classList.add('active');
+
+            // Update Nav State
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            const activeNav = document.getElementById('nav-' + pageId);
+            if(activeNav) activeNav.classList.add('active');
+
+            // Trigger animations if needed
+            if (pageId === 'home') {
+                resetAndAnimateHero();
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // --- HERO ANIMATION LOGIC ---
+        const circle = document.getElementById('progressCircle');
+        const radius = circle.r.baseVal.value;
+        const circumference = radius * 2 * Math.PI;
+        
+        // Target percentage
+        const percent = 56;
+        const offset = circumference - (percent / 100) * circumference;
+        const counterElement = document.getElementById('counter');
+        
+        // Initialize circle
+        circle.style.strokeDashoffset = circumference;
+
+        function resetAndAnimateHero() {
+            // Reset
+            circle.style.transition = 'none';
+            circle.style.strokeDashoffset = circumference;
+            counterElement.innerText = "0%";
+            
+            // Force reflow
+            void circle.offsetWidth;
+            
+            // Animate
+            setTimeout(() => {
+                circle.style.transition = 'stroke-dashoffset 2s ease-out';
+                circle.style.strokeDashoffset = offset;
+                
+                let currentCount = 0;
+                const interval = setInterval(() => {
+                    currentCount++;
+                    counterElement.innerText = currentCount + "%";
+                    if (currentCount >= percent) {
+                        clearInterval(interval);
+                    }
+                }, 30);
+            }, 100);
+        }
+        
+        // Initial animation
+        setTimeout(resetAndAnimateHero, 500);
+
+
+        // --- VULNERABILITY SIMULATOR LOGIC ---
+        const items = document.querySelectorAll('.assessment-item');
+        const riskFill = document.getElementById('riskFill');
+        const riskScore = document.getElementById('riskScore');
+        const riskAnalysis = document.getElementById('riskAnalysis');
+        const simStatus = document.getElementById('simStatus');
+
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                // Reset styling
+                items.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                const risk = item.getAttribute('data-risk');
+                const reason = item.getAttribute('data-reason');
+
+                // Simulation Effect
+                simStatus.innerText = "ANALYZING STRUCTURE...";
+                riskFill.style.width = "0%";
+                riskScore.style.opacity = "0";
+                
+                setTimeout(() => {
+                    simStatus.innerText = "DETECTING AI PATTERNS...";
+                    riskFill.style.width = "40%";
+                }, 200);
+
+                setTimeout(() => {
+                    simStatus.innerText = "SIMULATION COMPLETE";
+                    riskFill.style.width = risk + "%";
+                    riskScore.innerText = risk + "%";
+                    riskScore.style.opacity = "1";
+                    riskAnalysis.innerText = reason;
+                    
+                    // Color change based on risk (though all listed are high risk)
+                    if(risk > 80) {
+                        riskFill.style.background = "linear-gradient(90deg, #f87171, #ef4444)";
+                        riskScore.style.color = "#f87171";
+                    } else {
+                        riskFill.style.background = "linear-gradient(90deg, #fbbf24, #f59e0b)";
+                        riskScore.style.color = "#fbbf24";
+                    }
+                }, 800);
+            });
+        });
+
+
+        // --- TAB LOGIC ---
+        function switchTab(tabId) {
+            // Remove active class from all contents and buttons
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                // Only targeting the tab buttons inside .tabs, not navigation buttons
+                if(el.parentElement.classList.contains('tabs')) {
+                    el.classList.remove('active');
+                }
+            });
+
+            // Add active class to selected
+            document.getElementById(tabId).classList.add('active');
+            
+            // Activate the correct button
+            const buttons = document.querySelectorAll('.tabs .tab-btn');
+            if(tabId === 'integrity') buttons[0].classList.add('active');
+            if(tabId === 'learning') buttons[1].classList.add('active');
+            if(tabId === 'reality') buttons[2].classList.add('active');
+        }
+    </script>
+</body>
+</html>
