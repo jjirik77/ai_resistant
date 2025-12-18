@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Resistant Design: Critical Perspectives</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent-primary: #38bdf8; /* Cyan */
+            --accent-secondary: #818cf8; /* Indigo */
+            --accent-danger: #f87171; /* Red */
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --card-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: radial-gradient(circle at 50% 0%, rgba(29, 78, 216, 0.15) 0%, transparent 70%);
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Controls */
+        .controls {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--text-secondary);
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 99px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            margin: 0 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.05);
+            border-color: var(--text-primary);
+        }
+
+        .btn.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: var(--bg-primary);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Interactive Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.2);
+        }
+
+        .card.active {
+            border-color: var(--accent-secondary);
+            background: rgba(30, 41, 59, 0.95);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+            color: var(--accent-primary);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(56, 189, 248, 0.1);
+            border-radius: 12px;
+        }
+
+        .card h2 {
+            font-size: 1.35rem;
+            color: var(--text-primary);
+            flex: 1;
+            padding-top: 5px;
+            font-weight: 600;
+        }
+
+        .toggle-icon {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            transition: transform 0.4s ease;
+            margin-left: 10px;
+        }
+
+        .card.active .toggle-icon {
+            transform: rotate(180deg);
+            color: var(--accent-secondary);
+        }
+
+        .card-summary {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Hidden detailed content */
+        .card-details {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out;
+        }
+
+        .card.active .card-details {
+            max-height: 800px; 
+            opacity: 1;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .card-details p strong {
+            color: var(--accent-primary);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .card-details ul {
+            list-style-type: none;
+            margin-top: 1rem;
+        }
+
+        .card-details li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-primary);
+        }
+
+        .card-details li::before {
+            content: "\f00c"; /* FontAwesome check */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: var(--accent-secondary);
+            font-size: 0.9rem;
+        }
+
+        .card-cta {
+            margin-top: auto;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-top: 1.5rem;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .card:hover .card-cta {
+            opacity: 1;
+            color: var(--accent-primary);
+        }
+
+        /* Bottom Line Section */
+        .bottom-line {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-primary);
+            padding: 3rem;
+            border-radius: var(--card-radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bottom-line::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-primary), var(--accent-secondary));
+        }
+
+        .bottom-line h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-primary);
+        }
+
+        .bottom-line p {
+            font-size: 1.3rem;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--text-secondary);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8rem; }
+            header { padding: 3rem 1rem; }
+            main { margin-top: 0; padding: 1rem; }
+            .grid-container { grid-template-columns: 1fr; }
+            .bottom-line p { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Why AI-Resistant Design Matters</h1>
+    <p>Redesigning assessments isn't just about preventing cheating—it's about fundamentally improving teaching and learning.</p>
+</header>
+
+<main>
+    <div class="controls">
+        <button class="btn active" id="btn-view" onclick="expandAll()">
+            <i class="fas fa-expand-alt"></i> Expand All
+        </button>
+        <button class="btn" id="btn-collapse" onclick="collapseAll()">
+            <i class="fas fa-compress-alt"></i> Collapse All
+        </button>
+    </div>
+
+    <div class="grid-container" id="cardsContainer">
+        
+        <!-- Card 1 -->
+        <div class="card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <div class="card-icon"><i class="fas fa-user-shield"></i></div>
+                <h2>Preserving Academic Integrity <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span></h2>
+            </div>
+            <div class="card-summary">
+                When students can easily outsource work to AI, we lose our ability to accurately measure what they've actually learned.
+            </div>
+            <div class="card-details">
+                <p><strong>The Goal:</strong> Not to catch cheaters, but to make authentic work more valuable and compelling than AI-generated shortcuts.</p>
+                <br>
+                <p><strong>AI-Resistant Design Ensures:</strong></p>
+                <ul>
+                    <li>We assess genuine student understanding, not AI capabilities</li>
+                    <li>Grades reflect actual skill development</li>
+                    <li>Students are accountable for their own learning</li>
+                    <li>Academic credentials maintain their meaning and value</li>
+                </ul>
+            </div>
+            <div class="card-cta">Click to Explore</div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <div class="card-icon"><i class="fas fa-brain"></i></div>
+                <h2>Closing Learning Outcome Gaps <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span></h2>
+            </div>
+            <div class="card-summary">
+                The process of completing assignments is where deep learning happens. When AI does the work, students miss out.
+            </div>
+            <div class="card-details">
+                <p><strong>The Reality:</strong> AI-resistant assignments ensure students engage in the cognitive processes that build lasting competence.</p>
+                <br>
+                <p><strong>What is lost when AI does the work:</strong></p>
+                <ul>
+                    <li>Critical thinking development through wrestling with complex problems</li>
+                    <li>Knowledge construction through research and synthesis</li>
+                    <li>Skill building through practice and iteration</li>
+                    <li>Metacognitive awareness of their own learning process</li>
+                </ul>
+            </div>
+            <div class="card-cta">Click to Explore</div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <div class="card-icon"><i class="fas fa-globe"></i></div>
+                <h2>Preparing for Real-World Complexity <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span></h2>
+            </div>
+            <div class="card-summary">
+                The most important work in any field involves problems that AI alone cannot solve.
+            </div>
+            <div class="card-details">
+                <p><strong>The Future:</strong> By designing for authentic capabilities, we prepare students for work that needs human judgment.</p>
+                <br>
+                <p><strong>Authentically Human Capabilities:</strong></p>
+                <ul>
+                    <li>Navigating ambiguous situations with multiple stakeholders</li>
+                    <li>Making ethical decisions with incomplete information</li>
+                    <li>Integrating specialized domain knowledge with local context</li>
+                    <li>Building relationships and communicating with specific audiences</li>
+                    <li>Adapting general solutions to unique constraints</li>
+                </ul>
+            </div>
+            <div class="card-cta">Click to Explore</div>
+        </div>
+
+    </div>
+
+    <div class="bottom-line">
+        <h3>The Bottom Line</h3>
+        <p>"AI-resistant design isn't about fighting technology—it's about leveraging our understanding of how students learn to create more meaningful, authentic, and valuable learning experiences."</p>
+    </div>
+
+</main>
+
+<script>
+    function toggleCard(element) {
+        // Toggle the 'active' class on the clicked card
+        const wasActive = element.classList.contains('active');
+        
+        if (!wasActive) {
+            element.classList.add('active');
+        } else {
+            element.classList.remove('active');
+        }
+        
+        updateCta(element, !wasActive);
+        updateControlButtons();
+    }
+
+    function updateCta(card, isActive) {
+        const cta = card.querySelector('.card-cta');
+        if (isActive) {
+            cta.textContent = "Click to Collapse";
+            cta.style.color = "#f87171"; // Accent Danger for collapse
+        } else {
+            cta.textContent = "Click to Explore";
+            cta.style.color = ""; // Reset
+        }
+    }
+
+    function expandAll() {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.classList.add('active');
+            updateCta(card, true);
+        });
+        updateControlButtons(true);
+    }
+
+    function collapseAll() {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.classList.remove('active');
+            updateCta(card, false);
+        });
+        updateControlButtons(false);
+    }
+
+    function updateControlButtons(forceState) {
+        const viewBtn = document.getElementById('btn-view');
+        const collBtn = document.getElementById('btn-collapse');
+        
+        // Simple logic: if forced true (expand all clicked), set active.
+        if (forceState === true) {
+            viewBtn.classList.add('active');
+            collBtn.classList.remove('active');
+        } else if (forceState === false) {
+            viewBtn.classList.remove('active');
+            collBtn.classList.add('active');
+        } else {
+            // Check manual state
+            const allActive = document.querySelectorAll('.card.active').length === 3;
+            if (allActive) {
+                viewBtn.classList.add('active');
+                collBtn.classList.remove('active');
+            } else {
+                viewBtn.classList.remove('active');
+                collBtn.classList.remove('active');
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
