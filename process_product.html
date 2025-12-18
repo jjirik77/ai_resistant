@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Over Product: Designing for Learning</title>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            /* Palette */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent-cyan: #38bdf8;
+            --accent-indigo: #818cf8;
+            --accent-danger: #f87171;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(30, 41, 59, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --glass-blur: 12px;
+            
+            /* Shapes & Animation */
+            --radius-card: 16px;
+            --radius-pill: 99px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.05) 0%, transparent 20%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 4rem;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3 {
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* --- LAYOUT UTILITIES --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+
+        /* --- GLASS COMPONENTS --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-card);
+            padding: 2rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* --- HEADER & NAV --- */
+        header {
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .nav-pills {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 0.75rem 2rem;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .nav-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            color: var(--bg-primary);
+            border-color: transparent;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+
+        /* --- TAB CONTENT HANDLING --- */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- SECTION 1: THE PROBLEM --- */
+        .comparison-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .problem-card {
+            border-left: 4px solid var(--accent-danger);
+        }
+
+        .solution-card {
+            border-left: 4px solid var(--accent-cyan);
+        }
+
+        .list-check li {
+            list-style: none;
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .list-check li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+        }
+
+        .list-danger li::before {
+            content: '\f00d';
+            color: var(--accent-danger);
+        }
+
+        /* --- SECTION 2: THE PROCESS (TIMELINE) --- */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .step-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .step-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-indigo);
+        }
+
+        /* --- SECTION 3: STRATEGIES (ACCORDION) --- */
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .strategy-card {
+            cursor: pointer;
+        }
+
+        .strategy-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .strategy-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .chevron {
+            transition: transform 0.3s ease;
+        }
+
+        .strategy-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+            margin-top: 0;
+        }
+
+        .strategy-card.open .strategy-details {
+            max-height: 200px; /* Approximate max height */
+            opacity: 1;
+            margin-top: 1rem;
+        }
+
+        .strategy-card.open .chevron {
+            transform: rotate(180deg);
+            color: var(--accent-cyan);
+        }
+
+        .strategy-card.open {
+            border-color: var(--accent-cyan);
+            background: rgba(30, 41, 59, 0.85);
+        }
+
+        /* --- SECTION 4: IMPLEMENTATION & BENEFITS --- */
+        .tips-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+        }
+
+        .tip-number {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--accent-indigo);
+            min-width: 40px;
+        }
+
+        .benefit-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .comparison-wrapper { grid-template-columns: 1fr; }
+            .nav-pills { flex-direction: column; padding: 0 2rem; }
+            .nav-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container">
+        <h1><span class="gradient-text">Process Over Product</span></h1>
+        <p>The Key to AI-Resistant Learning</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="container">
+        <div class="nav-pills">
+            <button class="nav-btn active" onclick="switchTab('concept')">1. The Concept</button>
+            <button class="nav-btn" onclick="switchTab('framework')">2. The Framework</button>
+            <button class="nav-btn" onclick="switchTab('strategies')">3. Strategies</button>
+            <button class="nav-btn" onclick="switchTab('implementation')">4. Implementation</button>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <!-- TAB 1: THE CONCEPT -->
+        <div id="concept" class="tab-content active">
+            <div class="glass-card" style="margin-bottom: 2rem; text-align: center;">
+                <h2 class="gradient-text">Why Shift Focus?</h2>
+                <p style="margin-top: 1rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                    AI excels at creating polished final products but cannot authentically replicate the messy, iterative process of human learning. Shifting assessment focus from finished products to documented process creates natural AI resistance while enhancing learning.
+                </p>
+            </div>
+
+            <div class="comparison-wrapper">
+                <!-- The Problem -->
+                <div class="glass-card problem-card">
+                    <h3><i class="fa-solid fa-triangle-exclamation" style="color: var(--accent-danger);"></i> The Product Trap</h3>
+                    <p>Traditional assessments evaluate only the final submission. This makes them highly vulnerable to AI generation.</p>
+                    <ul class="list-check list-danger">
+                        <li>Essays judged solely on the finished paper</li>
+                        <li>Projects graded only on final deliverables</li>
+                        <li>Problem sets evaluated on correct answers</li>
+                        <li>Misses the cognitive "struggle" of learning</li>
+                    </ul>
+                </div>
+
+                <!-- The Solution -->
+                <div class="glass-card solution-card">
+                    <h3><i class="fa-solid fa-lightbulb" style="color: var(--accent-cyan);"></i> The Process Alternative</h3>
+                    <p>Process-oriented assignments require documentation of thinking, research, revision, and decision-making.</p>
+                    <ul class="list-check">
+                        <li>Focus on iterative development</li>
+                        <li>Evaluates metacognition & reflection</li>
+                        <li>Making thinking visible</li>
+                        <li>Authentic documentation of growth</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: THE FRAMEWORK -->
+        <div id="framework" class="tab-content">
+            <div class="section-header">
+                <h2>The 3 Pillars of Process</h2>
+                <p>Documenting these stages creates the learning narrative.</p>
+            </div>
+
+            <div class="process-steps">
+                <!-- Step 1 -->
+                <div class="glass-card step-card">
+                    <div class="step-icon"><i class="fa-solid fa-compass-drafting"></i></div>
+                    <h3>1. Pre-Work & Planning</h3>
+                    <p>Before the "doing" begins, capture the thinking.</p>
+                    <ul class="list-check" style="font-size: 0.9rem;">
+                        <li>Initial brainstorming / concept maps</li>
+                        <li>Research notes & source evaluation</li>
+                        <li>Outlines with rationale</li>
+                        <li>Problem analysis</li>
+                    </ul>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="glass-card step-card">
+                    <div class="step-icon"><i class="fa-solid fa-code-branch"></i></div>
+                    <h3>2. Iterative Development</h3>
+                    <p>Show the evolution, not just the revolution.</p>
+                    <ul class="list-check" style="font-size: 0.9rem;">
+                        <li>Multiple drafts showing changes</li>
+                        <li>Feedback incorporation logs</li>
+                        <li>Revision justifications</li>
+                        <li>Dead-end explorations</li>
+                    </ul>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="glass-card step-card">
+                    <div class="step-icon"><i class="fa-solid fa-brain"></i></div>
+                    <h3>3. Metacognitive Reflection</h3>
+                    <p>Thinking about the thinking.</p>
+                    <ul class="list-check" style="font-size: 0.9rem;">
+                        <li>Learning process analysis</li>
+                        <li>Strategy evaluation</li>
+                        <li>Identifying breakthroughs</li>
+                        <li>Connecting to prior knowledge</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: STRATEGIES -->
+        <div id="strategies" class="tab-content">
+            <div class="section-header">
+                <h2>Practical Process Strategies</h2>
+                <p>Click a card to reveal how to implement it.</p>
+            </div>
+
+            <div class="strategy-grid">
+                <!-- Strategy 1 -->
+                <div class="glass-card strategy-card" onclick="toggleStrategy(this)">
+                    <div class="strategy-header">
+                        <span class="strategy-title"><i class="fa-solid fa-book-open"></i> Annotated Bibliographies</span>
+                        <i class="fa-solid fa-chevron-down chevron"></i>
+                    </div>
+                    <div class="strategy-details">
+                        <p>Require students to explain <strong>why</strong> sources were chosen, how they were evaluated for credibility, and specifically how they relate to the project's thesis or goal.</p>
+                    </div>
+                </div>
+
+                <!-- Strategy 2 -->
+                <div class="glass-card strategy-card" onclick="toggleStrategy(this)">
+                    <div class="strategy-header">
+                        <span class="strategy-title"><i class="fa-solid fa-microphone-lines"></i> Thinking Aloud Protocols</span>
+                        <i class="fa-solid fa-chevron-down chevron"></i>
+                    </div>
+                    <div class="strategy-details">
+                        <p>Have students record brief audio/video of themselves explaining their reasoning in real-time while working through a complex problem or coding challenge.</p>
+                    </div>
+                </div>
+
+                <!-- Strategy 3 -->
+                <div class="glass-card strategy-card" onclick="toggleStrategy(this)">
+                    <div class="strategy-header">
+                        <span class="strategy-title"><i class="fa-solid fa-rotate-right"></i> Revision Narratives</span>
+                        <i class="fa-solid fa-chevron-down chevron"></i>
+                    </div>
+                    <div class="strategy-details">
+                        <p>Ask students to track specific changes between Draft 1 and Draft 2, explaining the reasoning behind major revisions and how they addressed feedback.</p>
+                    </div>
+                </div>
+
+                <!-- Strategy 4 -->
+                <div class="glass-card strategy-card" onclick="toggleStrategy(this)">
+                    <div class="strategy-header">
+                        <span class="strategy-title"><i class="fa-solid fa-folder-open"></i> Process Portfolios</span>
+                        <i class="fa-solid fa-chevron-down chevron"></i>
+                    </div>
+                    <div class="strategy-details">
+                        <p>Collect work-in-progress artifacts (sketches, failed attempts, data snippets) throughout the project timeline, not just at the end.</p>
+                    </div>
+                </div>
+
+                <!-- Strategy 5 -->
+                <div class="glass-card strategy-card" onclick="toggleStrategy(this)">
+                    <div class="strategy-header">
+                        <span class="strategy-title"><i class="fa-solid fa-people-arrows"></i> Peer Review Cycles</span>
+                        <i class="fa-solid fa-chevron-down chevron"></i>
+                    </div>
+                    <div class="strategy-details">
+                        <p>Build in structured feedback stages. Students must critique others' work and, crucially, document how they used the feedback they received.</p>
+                    </div>
+                </div>
+
+                <!-- Strategy 6 -->
+                <div class="glass-card strategy-card" onclick="toggleStrategy(this)">
+                    <div class="strategy-header">
+                        <span class="strategy-title"><i class="fa-solid fa-handshake"></i> Checkpoint Conferences</span>
+                        <i class="fa-solid fa-chevron-down chevron"></i>
+                    </div>
+                    <div class="strategy-details">
+                        <p>Brief, scheduled meetings at key project stages to discuss progress, current challenges, and next steps. Hard for AI to fake a live conversation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: IMPLEMENTATION -->
+        <div id="implementation" class="tab-content">
+            <div class="grid grid-2" style="gap: 2rem;">
+                <!-- Tips -->
+                <div>
+                    <h3 class="gradient-text" style="margin-bottom: 1.5rem;">Implementation Tips</h3>
+                    <div class="tips-container">
+                        <div class="tip-item">
+                            <span class="tip-number">01</span>
+                            <div>
+                                <strong>Start Small</strong>
+                                <p style="margin:0; font-size: 0.9rem;">Begin with one process element in existing assignments.</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-number">02</span>
+                            <div>
+                                <strong>Scaffold Thoroughly</strong>
+                                <p style="margin:0; font-size: 0.9rem;">Provide templates and examples for process documentation.</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-number">03</span>
+                            <div>
+                                <strong>Value Authentically</strong>
+                                <p style="margin:0; font-size: 0.9rem;">Assign meaningful points (40-60%) to process components.</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-number">04</span>
+                            <div>
+                                <strong>Embrace Messiness</strong>
+                                <p style="margin:0; font-size: 0.9rem;">Real process is non-linear. Value honest documentation over polish.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefits -->
+                <div class="glass-card">
+                    <h3 class="gradient-text" style="margin-bottom: 1rem;">The Learning Benefits</h3>
+                    <p>Process-focused assessment isn't just about AI resistance.</p>
+                    
+                    <div style="margin-top: 2rem;">
+                        <span class="benefit-tag"><i class="fa-solid fa-eye"></i> Makes thinking visible</span>
+                        <span class="benefit-tag"><i class="fa-solid fa-arrow-up-right-dots"></i> Growth mindset</span>
+                        <span class="benefit-tag"><i class="fa-solid fa-briefcase"></i> Professional habits</span>
+                        <span class="benefit-tag"><i class="fa-solid fa-magnifying-glass"></i> Reveals struggles early</span>
+                        <span class="benefit-tag"><i class="fa-solid fa-user-graduate"></i> Metacognitive awareness</span>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding: 1rem; border: 1px dashed var(--accent-indigo); border-radius: 12px; text-align: center;">
+                        <p style="margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Shift from Performance to Growth</p>
+                        <p style="font-size: 0.9rem;">When students know the journey matters as much as the destination, they engage more deeply.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer style="text-align: center; margin-top: 4rem; color: var(--text-secondary); opacity: 0.6;">
+    </footer>
+
+    <script>
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Deactivate all nav buttons
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Activate selected tab content
+            document.getElementById(tabId).classList.add('active');
+
+            // Activate specific button (finding by onclick attribute for simplicity in this specific setup)
+            const activeBtn = Array.from(buttons).find(btn => btn.getAttribute('onclick').includes(tabId));
+            if(activeBtn) activeBtn.classList.add('active');
+        }
+
+        // Accordion Logic for Strategies
+        function toggleStrategy(card) {
+            // Optional: Close others when opening one (Accordion style)
+            // const allCards = document.querySelectorAll('.strategy-card');
+            // allCards.forEach(c => {
+            //     if (c !== card) c.classList.remove('open');
+            // });
+
+            // Toggle current
+            card.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
