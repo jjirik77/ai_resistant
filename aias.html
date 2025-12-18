@@ -592,8 +592,8 @@
                     </h3>
                     <div class="checkbox-group">
                         ${pillar.features.map(feature => `
-                            <label class="custom-checkbox" onclick="toggleCheckbox(this)">
-                                <input type="checkbox" value="1">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" value="1" onchange="toggleCheckbox(this)">
                                 <div class="checkbox-icon"><i class="fa-solid fa-check" style="font-size: 0.8rem;"></i></div>
                                 <span>${feature.split(':')[0]}</span>
                             </label>
@@ -653,12 +653,15 @@
         });
 
         // Auditor Logic
-        function toggleCheckbox(element) {
-            // Toggle visual state
-            element.classList.toggle('checked');
-            // Toggle input state
-            const checkbox = element.querySelector('input');
-            checkbox.checked = !checkbox.checked;
+        function toggleCheckbox(input) {
+            const label = input.closest('.custom-checkbox');
+            
+            // Sync visual state with actual input state
+            if (input.checked) {
+                label.classList.add('checked');
+            } else {
+                label.classList.remove('checked');
+            }
             
             calculateScore();
         }
