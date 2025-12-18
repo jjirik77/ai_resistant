@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Resistant Assignment Strategies</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CSS VARIABLES & THEME --- */
+        :root {
+            /* Palette */
+            --bg-primary: #0f172a;    /* Deep Slate */
+            --bg-secondary: #1e293b;  /* Slate 800 */
+            --bg-glass: rgba(30, 41, 59, 0.7);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            
+            --accent-cyan: #38bdf8;
+            --accent-indigo: #818cf8;
+            --accent-danger: #f87171;
+            
+            /* Effects */
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(12px);
+            --card-radius: 16px;
+            --btn-radius: 99px;
+            
+            /* Transitions */
+            --ease-elastic: cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-speed: 0.4s;
+        }
+
+        /* --- RESET & BASE --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Inter, system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3 {
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            flex: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+            animation: fadeInDown 0.8s var(--ease-elastic);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- GRID SYSTEM --- */
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        /* --- GLASS CARDS --- */
+        .card {
+            background: var(--bg-glass);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            transition: transform 0.3s var(--ease-elastic), box-shadow 0.3s var(--ease-elastic), border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Card Hover Effects */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.3);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-indigo));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card.active {
+            border-color: var(--accent-cyan);
+            background: rgba(30, 41, 59, 0.85);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+        }
+
+        /* Card Content */
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(56, 189, 248, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .icon-box {
+            background: var(--accent-cyan);
+            color: var(--bg-primary);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .card-preview {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Expandable Details */
+        .card-details {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.5s var(--ease-elastic), opacity 0.3s ease;
+        }
+
+        .card.active .card-details {
+            max-height: 500px; /* Arbitrary large height for animation */
+            opacity: 1;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .strategy-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .strategy-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .strategy-list li::before {
+            content: '•';
+            color: var(--accent-cyan);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .example-box {
+            background: rgba(15, 23, 42, 0.6);
+            border-left: 3px solid var(--accent-indigo);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .example-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-indigo);
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .example-text {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            font-style: italic;
+        }
+
+        .expand-indicator {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            color: var(--text-secondary);
+            transition: transform 0.4s var(--ease-elastic);
+        }
+
+        .card.active .expand-indicator {
+            transform: rotate(180deg);
+            color: var(--accent-cyan);
+        }
+
+        /* --- COMBINATION SECTION --- */
+        .combo-section {
+            background: var(--bg-glass);
+            border-radius: var(--card-radius);
+            padding: 3rem;
+            text-align: center;
+            border: 1px solid rgba(129, 140, 248, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .combo-section::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(129, 140, 248, 0.1) 0%, transparent 60%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .combo-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .combo-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--btn-radius);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: var(--accent-cyan);
+            color: var(--text-primary);
+            transform: scale(1.05);
+        }
+        
+        .tag i {
+            margin-right: 8px;
+            color: var(--accent-indigo);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stagger-1 { animation: fadeInUp 0.6s var(--ease-elastic) 0.1s backwards; }
+        .stagger-2 { animation: fadeInUp 0.6s var(--ease-elastic) 0.2s backwards; }
+        .stagger-3 { animation: fadeInUp 0.6s var(--ease-elastic) 0.3s backwards; }
+        .stagger-4 { animation: fadeInUp 0.6s var(--ease-elastic) 0.4s backwards; }
+        .stagger-5 { animation: fadeInUp 0.6s var(--ease-elastic) 0.5s backwards; }
+
+        /* --- MOBILE TWEAKS --- */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .card { padding: 1.5rem; }
+            .combo-section { padding: 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1><span class="gradient-text">Five Proven Strategies</span><br>for AI-Resistant Design</h1>
+            <p>Research-based methods to create assignments that resist AI completion while deepening authentic learning.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- Strategy Grid -->
+        <div class="strategy-grid" id="cardGrid">
+            
+            <!-- Card 1 -->
+            <div class="card stagger-1" tabindex="0">
+                <div class="expand-indicator"><i class="fa-solid fa-chevron-down"></i></div>
+                <div class="card-header">
+                    <div class="icon-box"><i class="fa-solid fa-fingerprint"></i></div>
+                    <div class="card-title"><h3>Highly Specific & Personalized</h3></div>
+                </div>
+                <div class="card-preview">
+                    Make assignments unique to each student via constraints and personal data.
+                </div>
+                <div class="card-details">
+                    <ul class="strategy-list">
+                        <li>Include student-specific data or prior work</li>
+                        <li>Individualized constraints or parameters</li>
+                        <li>Personalized feedback integration</li>
+                        <li>Unique combinations of variables</li>
+                    </ul>
+                    <div class="example-box">
+                        <span class="example-label">Example</span>
+                        <div class="example-text">"Based on your Week 3 reflection where you discussed [specific experience], analyze how [specific concept] applies to your workplace/clinical setting."</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card stagger-2" tabindex="0">
+                <div class="expand-indicator"><i class="fa-solid fa-chevron-down"></i></div>
+                <div class="card-header">
+                    <div class="icon-box"><i class="fa-solid fa-layer-group"></i></div>
+                    <div class="card-title"><h3>Multilayer / Scaffolded</h3></div>
+                </div>
+                <div class="card-preview">
+                    Break assignments into multiple checkpoints to show the thinking process.
+                </div>
+                <div class="card-details">
+                    <ul class="strategy-list">
+                        <li>Progressive drafts with instructor feedback</li>
+                        <li>Iterative revision requirements</li>
+                        <li>Process documentation (decision logs)</li>
+                        <li>Reflections on changes made between drafts</li>
+                    </ul>
+                    <div class="example-box">
+                        <span class="example-label">Example</span>
+                        <div class="example-text">Proposal → Feedback → Revised approach → Data collection → Analysis → Presentation → Final reflection</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card stagger-3" tabindex="0">
+                <div class="expand-indicator"><i class="fa-solid fa-chevron-down"></i></div>
+                <div class="card-header">
+                    <div class="icon-box"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <div class="card-title"><h3>Local & Community Context</h3></div>
+                </div>
+                <div class="card-preview">
+                    Root assignments in accessible, real-world, non-digital contexts.
+                </div>
+                <div class="card-details">
+                    <ul class="strategy-list">
+                        <li>Local businesses or community partners</li>
+                        <li>Primary source interviews</li>
+                        <li>Site visits and observations</li>
+                        <li>Regional case studies or archives</li>
+                    </ul>
+                    <div class="example-box">
+                        <span class="example-label">Example</span>
+                        <div class="example-text">"Interview 2-3 professionals in your local area about [topic] and analyze their responses using course frameworks."</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="card stagger-4" tabindex="0">
+                <div class="expand-indicator"><i class="fa-solid fa-chevron-down"></i></div>
+                <div class="card-header">
+                    <div class="icon-box"><i class="fa-solid fa-user-pen"></i></div>
+                    <div class="card-title"><h3>Personal Experience</h3></div>
+                </div>
+                <div class="card-preview">
+                    Require integration of personal narrative and metacognition.
+                </div>
+                <div class="card-details">
+                    <ul class="strategy-list">
+                        <li>Personal narratives connected to concepts</li>
+                        <li>Reflective analysis of lived experiences</li>
+                        <li>Metacognitive reflection on learning</li>
+                        <li>Application to personal goals</li>
+                    </ul>
+                    <div class="example-box">
+                        <span class="example-label">Example</span>
+                        <div class="example-text">"Analyze a conflict you personally experienced using three theoretical frameworks from class, explaining how each would interpret the situation differently."</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="card stagger-5" tabindex="0">
+                <div class="expand-indicator"><i class="fa-solid fa-brain"></i></div>
+                <div class="card-header">
+                    <div class="icon-box"><i class="fa-solid fa-person-chalkboard"></i></div>
+                    <div class="card-title"><h3>Beyond What AI Can Do</h3></div>
+                </div>
+                <div class="card-preview">
+                    Incorporate physical, oral, or real-time elements.
+                </div>
+                <div class="card-details">
+                    <ul class="strategy-list">
+                        <li>Oral presentations or defenses</li>
+                        <li>Live demonstrations or performances</li>
+                        <li>Hands-on physical tasks</li>
+                        <li>Real-time in-class problem solving</li>
+                    </ul>
+                    <div class="example-box">
+                        <span class="example-label">Example</span>
+                        <div class="example-text">"Present your analysis in a 10-minute oral defense where you'll respond to questions about your methodology and conclusions."</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Combination Section -->
+        <div class="combo-section stagger-5">
+            <div class="combo-content">
+                <h2 class="gradient-text">Combine for Maximum Impact</h2>
+                <p style="color: var(--text-secondary); margin-top: 1rem;">The most effective assignments use 3-4 strategies together to create a robust learning experience.</p>
+                
+                <div class="combo-tags">
+                    <div class="tag"><i class="fa-solid fa-layer-group"></i> Multilayer</div>
+                    <div class="tag"><i class="fa-solid fa-plus" style="font-size: 0.8em; color: var(--text-secondary);"></i></div>
+                    <div class="tag"><i class="fa-solid fa-map-location-dot"></i> Local Context</div>
+                    <div class="tag"><i class="fa-solid fa-plus" style="font-size: 0.8em; color: var(--text-secondary);"></i></div>
+                    <div class="tag"><i class="fa-solid fa-person-chalkboard"></i> Oral Defense</div>
+                </div>
+
+                <div class="combo-tags" style="margin-top: 1rem;">
+                    <div class="tag"><i class="fa-solid fa-fingerprint"></i> Personal Reflection</div>
+                    <div class="tag"><i class="fa-solid fa-plus" style="font-size: 0.8em; color: var(--text-secondary);"></i></div>
+                    <div class="tag"><i class="fa-solid fa-user-pen"></i> Specific Instructions</div>
+                    <div class="tag"><i class="fa-solid fa-plus" style="font-size: 0.8em; color: var(--text-secondary);"></i></div>
+                    <div class="tag"><i class="fa-solid fa-users"></i> Interviews</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Educational Design Systems. Deep Slate Series.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                // Click Handler
+                card.addEventListener('click', (e) => {
+                    // Prevent closing if clicking inside the text selection
+                    if (window.getSelection().toString().length > 0) return;
+
+                    const isActive = card.classList.contains('active');
+
+                    // Close all other cards (Accordion Style)
+                    cards.forEach(c => c.classList.remove('active'));
+
+                    // Toggle current card
+                    if (!isActive) {
+                        card.classList.add('active');
+                        
+                        // Optional: Smooth scroll to card if it's off screen on mobile
+                        setTimeout(() => {
+                            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }, 300);
+                    }
+                });
+
+                // Keyboard Accessibility (Enter key)
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        card.click();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
