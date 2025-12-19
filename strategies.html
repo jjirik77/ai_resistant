@@ -170,7 +170,7 @@
             transition: all 0.3s ease;
         }
 
-        .card:hover .icon-box {
+        .card:hover .icon-box, .card.active .icon-box {
             background: var(--accent-cyan);
             color: var(--bg-primary);
         }
@@ -268,6 +268,7 @@
             border: 1px solid rgba(129, 140, 248, 0.2);
             position: relative;
             overflow: hidden;
+            transition: all 0.4s ease;
         }
 
         .combo-section::after {
@@ -285,36 +286,76 @@
         .combo-content {
             position: relative;
             z-index: 1;
+            transition: opacity 0.3s ease;
         }
 
-        .combo-tags {
+        /* Mixer Controls */
+        .mixer-controls {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 1rem;
-            margin-top: 2rem;
+            margin: 2rem 0;
         }
 
-        .tag {
+        .mixer-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--btn-radius);
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--btn-radius);
+            cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
         }
 
-        .tag:hover {
-            background: rgba(56, 189, 248, 0.1);
-            border-color: var(--accent-cyan);
-            color: var(--text-primary);
-            transform: scale(1.05);
+        .mixer-btn i {
+            pointer-events: none;
         }
-        
-        .tag i {
-            margin-right: 8px;
-            color: var(--accent-indigo);
+
+        .mixer-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .mixer-btn.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Dynamic Result Box */
+        .mixer-result {
+            margin-top: 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--accent-indigo);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .mixer-title {
+            color: var(--accent-cyan);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .empty-state {
+            color: var(--text-secondary);
+            font-style: italic;
+            opacity: 0.7;
         }
 
         /* --- FOOTER --- */
@@ -348,6 +389,8 @@
             header h1 { font-size: 2rem; }
             .card { padding: 1.5rem; }
             .combo-section { padding: 2rem 1.5rem; }
+            .mixer-controls { gap: 0.75rem; }
+            .mixer-btn { padding: 0.6rem 1rem; font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -487,26 +530,25 @@
 
         </div>
 
-        <!-- Combination Section -->
-        <div class="combo-section stagger-5">
+        <!-- Dynamic Combination Section -->
+        <div class="combo-section stagger-5" id="comboSection">
             <div class="combo-content">
-                <h2 class="gradient-text">Combine for Maximum Impact</h2>
-                <p style="color: var(--text-secondary); margin-top: 1rem;">The most effective assignments use 3-4 strategies together to create a robust learning experience.</p>
+                <h2 class="gradient-text">Assignment Strategy Mixer</h2>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;">Click two or more buttons below to generate a combined assignment example.</p>
                 
-                <div class="combo-tags">
-                    <div class="tag"><i class="fa-solid fa-layer-group"></i> Multilayer</div>
-                    <div class="tag"><i class="fa-solid fa-plus" style="font-size: 0.8em; color: var(--text-secondary);"></i></div>
-                    <div class="tag"><i class="fa-solid fa-map-location-dot"></i> Local Context</div>
-                    <div class="tag"><i class="fa-solid fa-plus" style="font-size: 0.8em; color: var(--text-secondary);"></i></div>
-                    <div class="tag"><i class="fa-solid fa-person-chalkboard"></i> Oral Defense</div>
+                <div class="mixer-controls">
+                    <button class="mixer-btn" data-id="specific"><i class="fa-solid fa-fingerprint"></i> Specific Instructions</button>
+                    <button class="mixer-btn" data-id="multilayer"><i class="fa-solid fa-layer-group"></i> Multilayer</button>
+                    <button class="mixer-btn" data-id="local"><i class="fa-solid fa-map-location-dot"></i> Local Context</button>
+                    <button class="mixer-btn" data-id="personal"><i class="fa-solid fa-user-pen"></i> Personal Experience</button>
+                    <button class="mixer-btn" data-id="beyond"><i class="fa-solid fa-person-chalkboard"></i> Beyond AI</button>
                 </div>
 
-                <div class="combo-tags" style="margin-top: 1rem;">
-                    <div class="tag"><i class="fa-solid fa-fingerprint"></i> Personal Reflection</div>
-                    <div class="tag"><i class="fa-solid fa-plus" style="font-size: 0.8em; color: var(--text-secondary);"></i></div>
-                    <div class="tag"><i class="fa-solid fa-user-pen"></i> Specific Instructions</div>
-                    <div class="tag"><i class="fa-solid fa-plus" style="font-size: 0.8em; color: var(--text-secondary);"></i></div>
-                    <div class="tag"><i class="fa-solid fa-users"></i> Interviews</div>
+                <div id="mixerOutput">
+                    <!-- Default State -->
+                    <div class="mixer-result" style="background: transparent; border: 1px dashed var(--glass-border); opacity: 0.7;">
+                        <div class="example-text" style="text-align: center; color: var(--text-secondary);">Select at least 2 strategies to see a combination.</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -519,12 +561,14 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            
+            /* --- 1. ACCORDION LOGIC FOR TOP CARDS --- */
             const cards = document.querySelectorAll('.card');
 
             cards.forEach(card => {
                 // Click Handler
                 card.addEventListener('click', (e) => {
-                    // Prevent closing if clicking inside the text selection
+                    // Prevent closing if clicking inside text selection
                     if (window.getSelection().toString().length > 0) return;
 
                     const isActive = card.classList.contains('active');
@@ -535,15 +579,14 @@
                     // Toggle current card
                     if (!isActive) {
                         card.classList.add('active');
-                        
-                        // Optional: Smooth scroll to card if it's off screen on mobile
+                        // Smooth scroll if needed
                         setTimeout(() => {
                             card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                         }, 300);
                     }
                 });
 
-                // Keyboard Accessibility (Enter key)
+                // Keyboard
                 card.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
@@ -551,6 +594,91 @@
                     }
                 });
             });
+
+
+            /* --- 2. MIXER LOGIC FOR BOTTOM SECTION --- */
+            const mixerBtns = document.querySelectorAll('.mixer-btn');
+            const mixerOutput = document.getElementById('mixerOutput');
+
+            // Pre-defined combinations
+            const combinations = [
+                {
+                    ids: ['multilayer', 'local'],
+                    title: 'Community Research Project',
+                    text: '1. Submit proposal for local site visit. 2. Conduct interview with stakeholder. 3. Submit draft analysis. 4. Final report incorporating instructor feedback on the draft.'
+                },
+                {
+                    ids: ['multilayer', 'beyond'],
+                    title: 'Oral Defense Portfolio',
+                    text: '1. Submit written analysis. 2. Receive instructor feedback. 3. Defend findings in a 10-min live Q&A session citing your specific process.'
+                },
+                {
+                    ids: ['personal', 'specific'],
+                    title: 'Workplace Application Analysis',
+                    text: 'Analyze a specific conflict currently happening in your workplace using the "XYZ" framework provided in class. Include 3 specific emails/interactions as data points.'
+                },
+                {
+                    ids: ['local', 'beyond'],
+                    title: 'Site Visit Presentation',
+                    text: 'Visit a local organization physically. Take photos of specific artifacts. Present your findings live in class without reading from a script.'
+                },
+                {
+                    ids: ['multilayer', 'personal'],
+                    title: 'Iterative Reflection Journal',
+                    text: 'Week 1: Draft initial thoughts on concept. Week 3: Peer review. Week 5: Final reflection analyzing how your thinking changed based on feedback.'
+                }
+            ];
+
+            function updateMixer() {
+                // Get active IDs
+                const activeBtns = Array.from(document.querySelectorAll('.mixer-btn.active'));
+                const activeIds = activeBtns.map(btn => btn.dataset.id);
+
+                // Need at least 2 for a combination
+                if (activeIds.length < 2) {
+                    mixerOutput.innerHTML = `
+                        <div class="mixer-result" style="background: transparent; border: 1px dashed rgba(255,255,255,0.2); opacity: 0.7;">
+                            <div class="example-text" style="text-align: center; color: var(--text-secondary);">Select at least 2 strategies to see a combination.</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Check for specific Combinations
+                // We find the best match (closest superset) or generic fallback
+                const bestMatch = combinations
+                    .filter(combo => combo.ids.every(id => activeIds.includes(id)))
+                    .sort((a, b) => b.ids.length - a.ids.length)[0];
+
+                if (bestMatch) {
+                    mixerOutput.innerHTML = `
+                        <div class="mixer-result">
+                            <div class="mixer-title"><i class="fa-solid fa-lightbulb"></i> Combined Example: ${bestMatch.title}</div>
+                            <div class="example-text" style="font-size: 1rem;">${bestMatch.text}</div>
+                        </div>
+                    `;
+                } else {
+                    // Generic fallback for custom combinations
+                    mixerOutput.innerHTML = `
+                        <div class="mixer-result">
+                            <div class="mixer-title"><i class="fa-solid fa-flask"></i> Custom Combination</div>
+                            <div class="example-text" style="font-size: 1rem;">
+                                This unique mix leverages <strong>${activeIds.length}</strong> strategies. 
+                                By combining these elements, you ensure that students must demonstrate ${activeIds.includes('local') ? 'real-world engagement' : 'authentic process'} 
+                                that AI cannot easily replicate.
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            mixerBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.classList.toggle('active');
+                    updateMixer();
+                });
+            });
+
         });
     </script>
 </body>
