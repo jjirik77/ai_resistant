@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Trainer: AI-Resistant Assignment Design</title>
+    <title>Master Trainer: Social Science AI-Resistant Assignment Design</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -54,7 +54,7 @@
         }
 
         .hidden-content {
-            display: none;
+            display: none !important;
             opacity: 0;
         }
 
@@ -77,12 +77,111 @@
             padding: 2rem;
             margin-bottom: 2rem;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .glass-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.3);
             border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .vulnerable-card {
+            border-left: 4px solid var(--accent-danger);
+            box-shadow: 0 0 20px rgba(248, 113, 113, 0.1);
+        }
+
+        .resistant-card {
+            border-left: 4px solid var(--accent-success);
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
+        }
+
+        /* Syllabus Paper Card Style */
+        .syllabus-card {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e293b; /* Dark text for contrast */
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-family: 'Georgia', serif; /* Academic feel */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .syllabus-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #cbd5e1, #94a3b8);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .syllabus-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+            letter-spacing: 1px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .syllabus-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        /* Report Panels */
+        .report-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .report-danger {
+            border: 1px solid rgba(248, 113, 113, 0.3);
+        }
+
+        .report-success {
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .report-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .report-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .report-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .report-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--text-secondary);
         }
 
         /* Header */
@@ -175,11 +274,32 @@
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
         }
 
+        /* Danger Button Variant */
+        .audit-btn.danger {
+            border-color: var(--accent-danger);
+            color: var(--accent-danger);
+        }
+        .audit-btn.danger:hover {
+            background: rgba(248, 113, 113, 0.1);
+            box-shadow: 0 0 15px rgba(248, 113, 113, 0.2);
+        }
+        .audit-btn.danger-active {
+            background: var(--accent-danger);
+            color: #fff;
+        }
+
+        /* Success Button Variant */
         .audit-btn.success {
-            background: var(--accent-success);
             border-color: var(--accent-success);
+            color: var(--accent-success);
+        }
+        .audit-btn.success:hover {
+            background: rgba(52, 211, 153, 0.1);
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
+        }
+        .audit-btn.success-active {
+            background: var(--accent-success);
             color: #0f172a;
-            box-shadow: 0 0 20px rgba(52, 211, 153, 0.4);
         }
 
         .analysis-list {
@@ -220,14 +340,33 @@
             display: inline;
         }
 
-        .analysis-trigger:hover {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+        /* Specific Trigger Styles */
+        .trigger-vulnerable {
+            border-bottom-color: var(--accent-danger);
+            color: var(--text-primary);
+        }
+        .trigger-vulnerable:hover {
+            color: var(--accent-danger);
+            text-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
+        }
+        .trigger-vulnerable.audited {
+            color: var(--accent-danger);
+            border-bottom: 1px solid var(--accent-danger);
+            background: rgba(248, 113, 113, 0.1);
+            padding: 0 4px;
+            border-radius: 4px;
         }
 
-        .analysis-trigger.audited {
-            border-bottom: 1px solid var(--accent-success);
+        .trigger-resistant {
+            border-bottom-color: var(--accent-success);
+        }
+        .trigger-resistant:hover {
             color: var(--accent-success);
+            text-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+        }
+        .trigger-resistant.audited {
+            color: var(--accent-success);
+            border-bottom: 1px solid var(--accent-success);
             background: rgba(52, 211, 153, 0.1);
             padding: 0 4px;
             border-radius: 4px;
@@ -246,7 +385,7 @@
             color: var(--text-primary);
             padding: 0.8rem;
             border-radius: 8px;
-            width: 220px;
+            width: 240px;
             text-align: center;
             font-size: 0.85rem;
             transition: all 0.3s ease;
@@ -272,17 +411,41 @@
             bottom: 125%;
         }
 
-        /* Success Message */
-        .audit-success-msg {
-            background: rgba(52, 211, 153, 0.1);
-            border: 1px solid rgba(52, 211, 153, 0.3);
-            border-radius: 12px;
-            padding: 1.5rem;
+        /* Transformation Button */
+        .transform-btn {
+            display: block;
+            width: 100%;
             margin-top: 2rem;
-            color: var(--accent-success);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            color: #0f172a;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .transform-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+        }
+        
+        /* Secondary Navigation Button */
+        .next-step-btn {
+            margin-top: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--text-secondary);
+            color: var(--text-primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .next-step-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: var(--text-primary);
         }
 
         /* Framework Grid */
@@ -424,156 +587,221 @@
 
     <header class="container">
         <div class="subtitle">Faculty Development Series</div>
-        <h1 class="text-gradient">AI-Resistant Assignment Design</h1>
+        <h1 class="text-gradient">Social Science AI-Resistant Assignment Design</h1>
         <p class="intro-text">
-            Move beyond "detecting" AI to "designing" around it. Analyze a model assignment and build your own.
+            Move beyond "detecting" AI to "designing" around it. Follow the journey from a vulnerable prompt to a secure, authentic assessment.
         </p>
     </header>
 
     <main class="container">
         <!-- Navigation -->
         <nav class="nav-tabs">
-            <button onclick="switchTab('audit')" id="tab-audit" class="nav-btn active">
-                1. The Case Study
+            <button onclick="switchTab('vulnerable')" id="tab-vulnerable" class="nav-btn active">
+                1. AI Vulnerable
             </button>
-            <button onclick="switchTab('framework')" id="tab-framework" class="nav-btn">
-                2. The Framework
+            <button onclick="switchTab('transformation')" id="tab-transformation" class="nav-btn">
+                2. Transformation
+            </button>
+            <button onclick="switchTab('resistant')" id="tab-resistant" class="nav-btn">
+                3. AI Resistant
             </button>
             <button onclick="switchTab('workshop')" id="tab-workshop" class="nav-btn">
-                3. Design Workshop
+                4. Apply to Course
             </button>
         </nav>
 
-        <!-- SECTION 1: THE AUDIT -->
-        <section id="content-audit" class="fade-in">
-            <div class="glass-card">
+        <!-- SECTION 1: AI VULNERABLE -->
+        <section id="content-vulnerable" class="fade-in">
+            <div class="glass-card vulnerable-card">
                 <div class="audit-header">
                     <div>
-                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem;">Local Policy Impact Analysis</h2>
-                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Target: Social Science Students</span>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem; color: var(--accent-danger);">The "Paper"</h2>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Status: Highly Vulnerable</span>
                     </div>
-                    <button onclick="runAudit()" id="audit-btn" class="audit-btn">
-                        <i class="fa-solid fa-magnifying-glass"></i> Scan for AI Resistance
+                    <button onclick="analyzeRisk()" id="risk-btn" class="audit-btn danger">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Identify Vulnerabilities
                     </button>
                 </div>
 
-                <div style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                    <strong>Instructions:</strong> In this module, you will analyze the real-world impact of municipal decisions.
+                <!-- Assignment Description (Syllabus Style) -->
+                <div class="syllabus-card">
+                    <div class="syllabus-header">
+                        <span>SOC 201: Urban Sociology</span>
+                        <span>Spring 2025</span>
+                    </div>
+                    <div class="syllabus-title">Final Research Paper: Gentrification</div>
+                    <p><strong>Instructions:</strong> Write a 5-page research paper analyzing the impact of gentrification on urban communities in the United States.</p>
+                    <p style="margin-top:0.5rem">Discuss economic shifts, displacement, and community identity. Use at least 5 scholarly sources to support your arguments.</p>
                 </div>
 
                 <ol class="analysis-list">
                     <li>
-                        <span class="analysis-trigger" data-reason="AI Knowledge Cutoff: LLMs often lack data on very recent, hyper-local events not widely covered online.">
-                            Select a policy from the city council or school board enacted in the past 12 months.
-                            <span class="tooltip">Reason: Recent & Hyper-Local Data</span>
-                        </span>
+                        <span class="analysis-trigger trigger-vulnerable">Analyze impact of gentrification.</span>
                     </li>
                     <li>
-                        <span class="analysis-trigger" data-reason="Physical Presence: AI cannot walk into a room, read body language, or access non-digitized community sentiment.">
-                            Interview 3-5 affected community members face-to-face.
-                            <span class="tooltip">Reason: Physical Presence Required</span>
-                        </span>
+                        <span class="analysis-trigger trigger-vulnerable">Write a 5-page standard research paper.</span>
                     </li>
                     <li>
-                        <span class="analysis-trigger" data-reason="Verification: Attendance requires proof (selfies, tickets, signatures) that a text generator cannot fake.">
-                            Attend one local government meeting and document the proceedings.
-                            <span class="tooltip">Reason: Verifiable Physical Action</span>
-                        </span>
-                    </li>
-                    <li>
-                        <span class="analysis-trigger" data-reason="Synthesis: Combining specific course frameworks with unique local data creates a 'fingerprint' unique to this student.">
-                            Apply course theories (Stakeholder Analysis, Equity Framework) to your specific findings.
-                            <span class="tooltip">Reason: Unique Synthesis of Data</span>
-                        </span>
+                        <span class="analysis-trigger trigger-vulnerable">Synthesize general economic shifts.</span>
                     </li>
                 </ol>
 
-                <div id="audit-summary" class="hidden-content audit-success-msg">
-                    <i class="fa-solid fa-check-circle" style="font-size: 1.5rem;"></i>
-                    <div>
-                        <strong style="display: block; margin-bottom: 0.2rem;">Audit Complete: High Resistance</strong>
-                        <span style="font-size: 0.9rem; color: var(--text-secondary);">This assignment rates <strong>High</strong>. It relies on data that doesn't exist on the internet yet (recent local meetings) and requires physical human interaction.</span>
+                <div id="risk-report" class="hidden-content report-panel report-danger fade-in">
+                    <div class="report-title" style="color: var(--accent-danger)">
+                        <i class="fa-solid fa-bug"></i> Vulnerability Report
                     </div>
+                    <ul class="report-list" style="color: var(--text-primary)">
+                        <li><strong>Universal Training Data:</strong> "Gentrification" is one of the most common topics in sociology. AI has ingested thousands of papers on this exact prompt.</li>
+                        <li><strong>Text-Only Output:</strong> The 5-page format matches the AI's native text-generation capabilities perfectly.</li>
+                        <li><strong>Generic Synthesis:</strong> Without a specific location requirement, the AI can hallucinate a "perfectly average" essay that is technically correct but lacks insight.</li>
+                    </ul>
+                    
+                    <button onclick="switchTab('transformation')" class="next-step-btn">
+                        <i class="fa-solid fa-arrow-right"></i> Proceed to Transformation
+                    </button>
                 </div>
-            </div>
-
-            <div style="text-align: center;">
-                <button onclick="switchTab('framework')" style="background: none; border: none; color: var(--accent-indigo); cursor: pointer; font-size: 1rem;">
-                    Why does this work? View the Framework <i class="fa-solid fa-arrow-right"></i>
-                </button>
             </div>
         </section>
 
-        <!-- SECTION 2: THE FRAMEWORK -->
-        <section id="content-framework" class="hidden-content fade-in">
+        <!-- SECTION 2: TRANSFORMATION (FRAMEWORK) -->
+        <section id="content-transformation" class="hidden-content fade-in">
+            <div class="glass-card" style="margin-bottom: 2rem; border-color: var(--accent-cyan);">
+                <h3 style="margin-bottom: 1rem; color: var(--accent-cyan);">The Social Science Shield</h3>
+                <p style="color: var(--text-primary);">
+                    In Social Sciences, we defend against AI by requiring students to become the primary source of new data through field research and local application.
+                </p>
+            </div>
+
             <div class="framework-grid">
-                <!-- Authentic -->
+                <!-- 1. Authentic Data -->
                 <div class="glass-card">
-                    <i class="fa-solid fa-fingerprint framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Authentic</h3>
+                    <i class="fa-solid fa-database framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">1. Authentic Data</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Data must be local and first-hand. If the answer is on Google, ChatGPT has it. Force students to become the source of new information.
+                        Data must be local and first-hand. If the answer is on Google, ChatGPT has it. Force students to generate new data via interviews or observation.
                     </p>
                 </div>
 
-                <!-- Iterative -->
+                <!-- 2. Process Focus -->
                 <div class="glass-card">
-                    <i class="fa-solid fa-layer-group framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Iterative</h3>
+                    <i class="fa-solid fa-list-check framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">2. Process Focus</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Focus on process. Require proposals, transcripts, and drafts. AI is great at final products, bad at showing the messy work of learning.
+                        Assess the research journey. Require interview transcripts, field notes, and proposals. AI is great at the product, bad at the messy process.
                     </p>
                 </div>
 
-                <!-- Applied -->
+                <!-- 3. Applied Frameworks -->
                 <div class="glass-card">
                     <i class="fa-solid fa-screwdriver-wrench framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Applied</h3>
+                    <h3 style="margin-bottom: 0.5rem;">3. Applied Theory</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">
                         Don't ask "What is Equity?" Ask "How does the Equity Framework apply to the parking ticket data you collected yesterday?"
                     </p>
                 </div>
 
-                <!-- Singular -->
+                <!-- 4. Singular Context -->
                 <div class="glass-card">
-                    <i class="fa-solid fa-puzzle-piece framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Singular</h3>
+                    <i class="fa-solid fa-map-location-dot framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">4. Singular Context</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Encourage unique combinations. A student analyzing <em>this</em> library with <em>these</em> 3 interviewees creates a dataset of one.
+                        Encourage unique combinations. A student analyzing <em>this</em> specific library with <em>these</em> 3 interviewees creates a dataset of one.
                     </p>
                 </div>
             </div>
+
+            <!-- THE TRANSFORM BUTTON -->
+            <button onclick="switchTab('resistant')" class="transform-btn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Transform Assignment Now
+            </button>
+        </section>
+
+        <!-- SECTION 3: AI RESISTANT -->
+        <section id="content-resistant" class="hidden-content fade-in">
             
-            <div style="text-align: center; margin-top: 2rem;">
-                <button onclick="switchTab('workshop')" style="background: none; border: none; color: var(--accent-indigo); cursor: pointer; font-size: 1rem;">
-                    Ready to apply this? Go to Workshop <i class="fa-solid fa-arrow-right"></i>
-                </button>
+            <!-- THE RESULT -->
+            <div class="glass-card resistant-card">
+                <div class="audit-header">
+                    <div>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem; color: var(--accent-success);">The "Project"</h2>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Status: AI Resistant</span>
+                    </div>
+                    <button onclick="verifyResistance()" id="audit-btn-verify" class="audit-btn success">
+                        <i class="fa-solid fa-shield-halved"></i> Run Risk Assessment
+                    </button>
+                </div>
+
+                <!-- Resistant Assignment Description -->
+                <div class="syllabus-card">
+                    <div class="syllabus-header">
+                        <span>SOC 201: Urban Sociology</span>
+                        <span>Spring 2025</span>
+                    </div>
+                    <div class="syllabus-title">Local Policy Impact Analysis</div>
+                    <p><strong>Instructions:</strong> Analyze the real-world impact of a recent municipal decision by conducting primary field research.</p>
+                    <ul style="margin-top:0.5rem; padding-left: 1.2rem; font-size: 0.95rem;">
+                        <li><strong>Selection:</strong> Choose a policy enacted by the city council or school board in the past 12 months.</li>
+                        <li><strong>Fieldwork:</strong> Interview 3-5 affected community members and attend one relevant government meeting.</li>
+                        <li><strong>Synthesis:</strong> Apply course theories (Stakeholder Analysis, Equity) to your specific findings.</li>
+                    </ul>
+                </div>
+
+                <ol class="analysis-list">
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Interview 3-5 affected community members face-to-face.
+                        </span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Select a hyper-local policy from the last 12 months.
+                        </span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Attend one government meeting (proof required).
+                        </span>
+                    </li>
+                </ol>
+
+                <div id="success-report" class="hidden-content report-panel report-success fade-in">
+                    <div class="report-title" style="color: var(--accent-success)">
+                        <i class="fa-solid fa-lock"></i> Verification Successful
+                    </div>
+                    <p style="margin-bottom:0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                        This assignment successfully applies the framework strategies:
+                    </p>
+                    <ul class="report-list" style="color: var(--text-primary)">
+                        <li><strong>Authentic Data:</strong> Conducting interviews generates original data that no AI model has access to.</li>
+                        <li><strong>Singular Context:</strong> Focusing on a recent (last 12 months) hyper-local policy leverages the AI's "knowledge cutoff" and lack of local training data.</li>
+                        <li><strong>Process Focus:</strong> Requiring proof of attendance (meeting) adds physical friction that text generators cannot bypass.</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
-        <!-- SECTION 3: WORKSHOP BUILDER -->
+        <!-- SECTION 4: WORKSHOP (Apply to Course) -->
         <section id="content-workshop" class="hidden-content fade-in">
+            <!-- WORKSHOP BUILDER -->
             <div class="glass-card">
                 <div style="border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; margin-bottom: 2rem;">
-                    <h2 style="font-size: 1.5rem;">Assignment Builder</h2>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Adapt the "Policy Analysis" model to your specific course context.</p>
+                    <h2 style="font-size: 1.5rem;">Apply to Your Course</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Build your own Social Science Shield assignment.</p>
                 </div>
 
                 <form id="builder-form" onsubmit="generateAssignment(event)">
-                    <!-- Step 1 -->
                     <div class="form-group">
                         <label>1. Your Context</label>
                         <input type="text" id="inp-course" placeholder="Course Name (e.g., Intro to Psychology)" style="margin-bottom: 1rem;">
                         <input type="text" id="inp-concept" placeholder="Core Concept to Apply (e.g., Operant Conditioning)">
                     </div>
 
-                    <!-- Step 2 -->
                     <div class="form-group">
                         <label>2. Local Institution (Authentic Data)</label>
                         <div class="helper-text">Where can students go physically to get data not on the internet?</div>
                         <select id="inp-location">
                             <option value="">Select a location type...</option>
-                            <option value="Local Coffee Shop">Local Independent Business</option>
+                            <option value="Local Coffee Shop">Local Independent Business (Coffee Shop/Store)</option>
                             <option value="Public Park">Public Park or Shared Space</option>
                             <option value="Public Library">Public Library</option>
                             <option value="Transit Station">Bus/Train Station</option>
@@ -582,7 +810,6 @@
                         </select>
                     </div>
 
-                    <!-- Step 3 -->
                     <div class="form-group">
                         <label>3. Human Element (Verification)</label>
                         <div class="helper-text">How will they interact with humans?</div>
@@ -603,7 +830,7 @@
                     </div>
 
                     <button type="submit" class="generate-btn">
-                        Generate Assignment Draft <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        Generate Draft <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </button>
                 </form>
 
@@ -615,65 +842,85 @@
                         <p style="margin-top: 0.5rem;"><strong>The Task:</strong> Students will visit <span id="res-location" class="result-highlight"></span> to conduct a field study.</p>
                         <p style="margin-top: 0.5rem;"><strong>Step 1 (Data Collection):</strong> They must <span id="res-action"></span>. This ensures the data is unique, recent, and physically verified.</p>
                         <p style="margin-top: 0.5rem;"><strong>Step 2 (Analysis):</strong> Using the collected data, they must apply the concept of <span id="res-concept" class="result-highlight"></span> to analyze their findings.</p>
-                        <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--glass-border); color: var(--text-secondary); font-size: 0.9rem;">
-                            <em>Why this works:</em> AI cannot visit your local <span id="res-loc-repeat"></span> or predict the specific responses of the people there today.
-                        </p>
                     </div>
-                    <button onclick="window.print()" class="print-btn">
-                        <i class="fa-solid fa-print"></i> Print / Save as PDF
-                    </button>
                 </div>
             </div>
         </section>
+
     </main>
 
     <script>
         // Tab Switching Logic
         function switchTab(tabName) {
-            // Hide all content
-            const sections = ['audit', 'framework', 'workshop'];
+            const sections = ['vulnerable', 'transformation', 'resistant', 'workshop'];
+            
+            // Hide all
             sections.forEach(t => {
-                document.getElementById('content-' + t).classList.add('hidden-content');
-                document.getElementById('content-' + t).classList.remove('fade-in');
-                document.getElementById('tab-' + t).classList.remove('active');
+                const content = document.getElementById('content-' + t);
+                const tab = document.getElementById('tab-' + t);
+                if(content) {
+                    content.classList.add('hidden-content');
+                    content.classList.remove('fade-in');
+                }
+                if(tab) {
+                    tab.classList.remove('active');
+                }
             });
 
-            // Show selected content
+            // Show selected
             const selectedContent = document.getElementById('content-' + tabName);
-            selectedContent.classList.remove('hidden-content');
-            void selectedContent.offsetWidth; // Trigger reflow for animation
-            selectedContent.classList.add('fade-in');
+            if(selectedContent) {
+                selectedContent.classList.remove('hidden-content');
+                selectedContent.classList.add('fade-in');
+            }
             
-            // Activate Tab
-            document.getElementById('tab-' + tabName).classList.add('active');
+            const activeTab = document.getElementById('tab-' + tabName);
+            if(activeTab) {
+                activeTab.classList.add('active');
+            }
         }
 
-        // Audit Logic
-        function runAudit() {
-            const triggers = document.querySelectorAll('.analysis-trigger');
-            const btn = document.getElementById('audit-btn');
-            const summary = document.getElementById('audit-summary');
+        // RISK ANALYSIS (Vulnerable)
+        function analyzeRisk() {
+            const btn = document.getElementById('risk-btn');
+            const report = document.getElementById('risk-report');
+            const triggers = document.querySelectorAll('.trigger-vulnerable');
 
-            // Reset logic for replayability
-            triggers.forEach(el => el.classList.remove('audited'));
-            summary.classList.add('hidden-content');
-
-            // Animation sequence
+            // Trigger visual feedback on list items
             triggers.forEach((el, index) => {
                 setTimeout(() => {
                     el.classList.add('audited');
-                }, index * 600);
+                }, index * 300);
             });
 
-            // Button State
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Scanning...`;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing...`;
             
             setTimeout(() => {
-                btn.innerHTML = `<i class="fa-solid fa-check"></i> Complete`;
-                btn.classList.add('success');
-                summary.classList.remove('hidden-content');
-                summary.classList.add('fade-in');
-            }, triggers.length * 600 + 500);
+                btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Risks Identified`;
+                btn.classList.add('danger-active');
+                report.classList.remove('hidden-content');
+            }, 1000);
+        }
+
+        // RESISTANCE CHECK (Resistant)
+        function verifyResistance() {
+            const btn = document.getElementById('audit-btn-verify');
+            const report = document.getElementById('success-report');
+            const triggers = document.querySelectorAll('.trigger-resistant');
+
+            triggers.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('audited');
+                }, index * 300);
+            });
+
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Verifying...`;
+            
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fa-solid fa-shield-halved"></i> Verified`;
+                btn.classList.add('success-active');
+                report.classList.remove('hidden-content');
+            }, 1000);
         }
 
         // Generator Logic
@@ -692,7 +939,7 @@
             }
 
             const actionMap = {
-                'interview': 'conduct 3 in-depth interviews with patrons/staff',
+                'interview': 'conduct 3 in-depth interviews with patrons/staff regarding local issues',
                 'observe': 'perform a 30-minute structured observation of social dynamics',
                 'survey': 'approach and survey 10 individuals onsite'
             };
@@ -702,7 +949,6 @@
             // Populate Results
             document.getElementById('res-course').textContent = course;
             document.getElementById('res-location').textContent = location;
-            document.getElementById('res-loc-repeat').textContent = location.toLowerCase();
             document.getElementById('res-action').textContent = actionText;
             document.getElementById('res-concept').textContent = concept;
 
@@ -714,7 +960,7 @@
         }
 
         // Initialize
-        switchTab('audit');
+        switchTab('vulnerable');
     </script>
 </body>
 </html>
