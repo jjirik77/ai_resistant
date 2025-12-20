@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Trainer: AI-Resistant Assignment Design</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent-cyan: #38bdf8;
+            --accent-indigo: #818cf8;
+            --accent-danger: #f87171;
+            --accent-success: #34d399;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.1) 0%, transparent 20%);
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hidden-content {
+            display: none;
+            opacity: 0;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glass Components */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.3);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .intro-text {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 0.75rem 2rem;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            color: #0f172a; /* Dark text on bright gradient */
+            border-color: transparent;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Audit Section Styles */
+        .audit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .audit-btn {
+            background: transparent;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 0.6rem 1.5rem;
+            border-radius: 99px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .audit-btn:hover {
+            background: rgba(56, 189, 248, 0.1);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+        }
+
+        .audit-btn.success {
+            background: var(--accent-success);
+            border-color: var(--accent-success);
+            color: #0f172a;
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.4);
+        }
+
+        .analysis-list {
+            list-style: none;
+            padding: 0;
+            counter-reset: audit-counter;
+        }
+
+        .analysis-list li {
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 3rem;
+            counter-increment: audit-counter;
+        }
+
+        .analysis-list li::before {
+            content: counter(audit-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        .analysis-trigger {
+            border-bottom: 1px dashed var(--accent-cyan);
+            cursor: help;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline;
+        }
+
+        .analysis-trigger:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+        }
+
+        .analysis-trigger.audited {
+            border-bottom: 1px solid var(--accent-success);
+            color: var(--accent-success);
+            background: rgba(52, 211, 153, 0.1);
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 140%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 0.8rem;
+            border-radius: 8px;
+            width: 220px;
+            text-align: center;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--bg-secondary) transparent transparent transparent;
+        }
+
+        .analysis-trigger:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+            bottom: 125%;
+        }
+
+        /* Success Message */
+        .audit-success-msg {
+            background: rgba(52, 211, 153, 0.1);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            color: var(--accent-success);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Framework Grid */
+        .framework-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .framework-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--accent-cyan);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .helper-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            padding: 1rem;
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-indigo);
+            box-shadow: 0 0 15px rgba(129, 140, 248, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Custom Radio */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .radio-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .radio-option input {
+            margin-right: 1rem;
+            accent-color: var(--accent-cyan);
+        }
+
+        .generate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            color: #0f172a;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Results Area */
+        .result-card {
+            border-left: 4px solid var(--accent-cyan);
+            margin-top: 2rem;
+        }
+
+        .result-highlight {
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        .print-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .print-btn:hover {
+            color: var(--accent-cyan);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .nav-tabs { flex-direction: column; gap: 0.5rem; }
+            .nav-btn { width: 100%; text-align: center; }
+            .audit-header { flex-direction: column; align-items: flex-start; }
+            .tooltip { bottom: auto; top: 120%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container">
+        <div class="subtitle">Faculty Development Series</div>
+        <h1 class="text-gradient">AI-Resistant Assignment Design</h1>
+        <p class="intro-text">
+            Move beyond "detecting" AI to "designing" around it. Analyze a model Physical Science assignment using the <strong>Five Core Strategies</strong> of AI resistance.
+        </p>
+    </header>
+
+    <main class="container">
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button onclick="switchTab('audit')" id="tab-audit" class="nav-btn active">
+                1. The Case Study
+            </button>
+            <button onclick="switchTab('framework')" id="tab-framework" class="nav-btn">
+                2. The 5 Strategies
+            </button>
+            <button onclick="switchTab('workshop')" id="tab-workshop" class="nav-btn">
+                3. Design Workshop
+            </button>
+        </nav>
+
+        <!-- SECTION 1: THE AUDIT -->
+        <section id="content-audit" class="fade-in">
+            <div class="glass-card">
+                <div class="audit-header">
+                    <div>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem;">Local Water Quality Analysis</h2>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Target: Environmental Science / Chemistry</span>
+                    </div>
+                    <button onclick="runAudit()" id="audit-btn" class="audit-btn">
+                        <i class="fa-solid fa-magnifying-glass"></i> Scan for AI Resistance
+                    </button>
+                </div>
+
+                <div style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    <strong>Instructions:</strong> Investigate the water quality of a local body of water using EPA standards.
+                </div>
+
+                <ol class="analysis-list">
+                    <li>
+                        <span class="analysis-trigger" data-reason="Strategy 1 - Context: AI cannot know the specific GPS location or current conditions of a local creek.">
+                            Select a specific sampling site (GPS coordinates required).
+                            <span class="tooltip">Strategy 1: Local Context</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger" data-reason="Strategy 2 - Personal Experience: AI cannot fake the specific visual observations documented by the student.">
+                            Document site conditions with timestamped photos and field notes.
+                            <span class="tooltip">Strategy 2: Personal Experience</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger" data-reason="Strategy 3 - Process: The physical lab notebook with raw data proves the work was performed.">
+                            Conduct pH and nitrate tests; submit raw Lab Notebook pages.
+                            <span class="tooltip">Strategy 3: Process Documentation</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger" data-reason="Strategy 4 - In-Class: Writing the analysis under supervision removes access to AI tools.">
+                            Draft the "Results Analysis" section during the 50-minute lab period.
+                            <span class="tooltip">Strategy 4: In-Class Work</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger" data-reason="Strategy 5 - Multi-Modal: An oral defense requires real-time knowledge synthesis, difficult to fake.">
+                            Present and defend an "outlier data point" to the lab group.
+                            <span class="tooltip">Strategy 5: Oral/Multi-Modal</span>
+                        </span>
+                    </li>
+                </ol>
+
+                <div id="audit-summary" class="hidden-content audit-success-msg">
+                    <i class="fa-solid fa-check-circle" style="font-size: 1.5rem;"></i>
+                    <div>
+                        <strong style="display: block; margin-bottom: 0.2rem;">Audit Complete: Maximum Resistance</strong>
+                        <span style="font-size: 0.9rem; color: var(--text-secondary);">This assignment rates <strong>Maximum</strong>. It employs all five core strategies: Local Context, Personal Experience, Process Documentation, In-Class Writing, and Oral Defense.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button onclick="switchTab('framework')" style="background: none; border: none; color: var(--accent-indigo); cursor: pointer; font-size: 1rem;">
+                    Why does this work? View the 5 Strategies <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THE FRAMEWORK -->
+        <section id="content-framework" class="hidden-content fade-in">
+            <div class="glass-card" style="margin-bottom: 2rem; border-color: var(--accent-cyan);">
+                <h3 style="margin-bottom: 1rem; color: var(--accent-cyan);">The Five Core Strategies</h3>
+                <p style="color: var(--text-primary);">
+                    Physical sciences offer unique opportunities to bypass AI. By combining these five strategies, we create assignments that require human presence, physical interaction, and real-time synthesis.
+                </p>
+            </div>
+
+            <div class="framework-grid">
+                <!-- 1. Context -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-map-location-dot framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">1. Specific Context</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Tie the work to a specific time and place. AI has general knowledge, not knowledge of <em>this</em> playground's friction or <em>this</em> creek's flow rate today.
+                    </p>
+                </div>
+
+                <!-- 2. Personal Experience -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-user-astronaut framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">2. Personal Experience</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Require evidence of "being there." Field notes, selfies at the site, or reflections on equipment failures validate the human element.
+                    </p>
+                </div>
+
+                <!-- 3. Process -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-flask framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">3. Process Focus</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Value the Lab Notebook as much as the Lab Report. The messy raw data, scribbles, and corrections are proof of learning.
+                    </p>
+                </div>
+
+                <!-- 4. In-Class -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-school framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">4. In-Class Work</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Flip the classroom. Have students do the "writing" or "calculating" in the lab under supervision, where you can assist and verify.
+                    </p>
+                </div>
+
+                <!-- 5. Multi-Modal -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-microphone-lines framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">5. Multi-Modal</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Change the output. Instead of an essay, ask for a video walkthrough of the experiment, a podcast explaining the physics, or an oral defense.
+                    </p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button onclick="switchTab('workshop')" style="background: none; border: none; color: var(--accent-indigo); cursor: pointer; font-size: 1rem;">
+                    Ready to apply this? Go to Workshop <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION 3: WORKSHOP BUILDER -->
+        <section id="content-workshop" class="hidden-content fade-in">
+            <div class="glass-card">
+                <div style="border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.5rem;">Physical Science Assignment Builder</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Create an assignment using the Five Core Strategies.</p>
+                </div>
+
+                <form id="builder-form" onsubmit="generateAssignment(event)">
+                    <!-- Step 1 -->
+                    <div class="form-group">
+                        <label>1. Scientific Context</label>
+                        <input type="text" id="inp-course" placeholder="Course (e.g., Intro to Physics)" style="margin-bottom: 1rem;">
+                        <input type="text" id="inp-concept" placeholder="Lab Topic (e.g., Projectile Motion)">
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="form-group">
+                        <label>2. The Field/Lab Site (Context & Experience)</label>
+                        <div class="helper-text">Where will they collect physical data?</div>
+                        <select id="inp-location">
+                            <option value="">Select a site...</option>
+                            <option value="Local Body of Water">Local Body of Water (Env Sci)</option>
+                            <option value="Campus Infrastructure">Campus Infrastructure/Buildings (Physics/Eng)</option>
+                            <option value="Local Soil Samples">Local Soil/Geology Sites</option>
+                            <option value="Household Kitchen">Household Kitchen (Chemistry)</option>
+                            <option value="Local Playground">Local Playground (Mechanics)</option>
+                            <option value="Night Sky">Local Night Sky (Astronomy)</option>
+                        </select>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="form-group">
+                        <label>3. The "AI-Proof" Assessment (Output)</label>
+                        <div class="helper-text">Which non-text strategy will you use?</div>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="human-action" value="notebook">
+                                <span><strong>Process:</strong> Submit raw handwritten Lab Notebooks (scanned)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="human-action" value="video">
+                                <span><strong>Multi-Modal:</strong> Record a 2-min video explaining the setup</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="human-action" value="inclass">
+                                <span><strong>In-Class:</strong> Write the Discussion section during lab time</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="generate-btn">
+                        Generate Assignment Draft <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </button>
+                </form>
+
+                <!-- RESULTS AREA -->
+                <div id="result-area" class="hidden-content result-card glass-card">
+                    <h3 class="text-gradient" style="font-size: 1.4rem; margin-bottom: 1rem;" id="res-title">Assignment Draft</h3>
+                    <div style="color: var(--text-primary); line-height: 1.8;">
+                        <p><strong>Context:</strong> <span id="res-course"></span></p>
+                        <p style="margin-top: 0.5rem;"><strong>The Task:</strong> Students will investigate <span id="res-concept" class="result-highlight"></span> using data collected from <span id="res-location" class="result-highlight"></span>.</p>
+                        <p style="margin-top: 0.5rem;"><strong>The AI Barrier:</strong> To ensure authenticity, the primary assessment will be <span id="res-action"></span>.</p>
+                        <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--glass-border); color: var(--text-secondary); font-size: 0.9rem;">
+                            <em>Why this works:</em> By anchoring the work in a physical location (<span id="res-loc-repeat"></span>) and requiring a specific output format that demonstrates personal presence, you bypass the AI's ability to generate generic lab reports.
+                        </p>
+                    </div>
+                    <button onclick="window.print()" class="print-btn">
+                        <i class="fa-solid fa-print"></i> Print / Save as PDF
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Tab Switching Logic
+        function switchTab(tabName) {
+            // Hide all content
+            const sections = ['audit', 'framework', 'workshop'];
+            sections.forEach(t => {
+                document.getElementById('content-' + t).classList.add('hidden-content');
+                document.getElementById('content-' + t).classList.remove('fade-in');
+                document.getElementById('tab-' + t).classList.remove('active');
+            });
+
+            // Show selected content
+            const selectedContent = document.getElementById('content-' + tabName);
+            selectedContent.classList.remove('hidden-content');
+            void selectedContent.offsetWidth; // Trigger reflow for animation
+            selectedContent.classList.add('fade-in');
+            
+            // Activate Tab
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+
+        // Audit Logic
+        function runAudit() {
+            const triggers = document.querySelectorAll('.analysis-trigger');
+            const btn = document.getElementById('audit-btn');
+            const summary = document.getElementById('audit-summary');
+
+            // Reset logic for replayability
+            triggers.forEach(el => el.classList.remove('audited'));
+            summary.classList.add('hidden-content');
+
+            // Animation sequence
+            triggers.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('audited');
+                }, index * 600);
+            });
+
+            // Button State
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Scanning...`;
+            
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fa-solid fa-check"></i> Complete`;
+                btn.classList.add('success');
+                summary.classList.remove('hidden-content');
+                summary.classList.add('fade-in');
+            }, triggers.length * 600 + 500);
+        }
+
+        // Generator Logic
+        function generateAssignment(e) {
+            e.preventDefault();
+            
+            // Get values
+            const course = document.getElementById('inp-course').value || "Intro to Physics";
+            const concept = document.getElementById('inp-concept').value || "Projectile Motion";
+            const location = document.getElementById('inp-location').value;
+            const actionRadio = document.querySelector('input[name="human-action"]:checked');
+            
+            if (!location || !actionRadio) {
+                alert("Please select a location and an assessment method.");
+                return;
+            }
+
+            const actionMap = {
+                'notebook': 'submission of raw, handwritten Lab Notebook pages with real-time data logs',
+                'video': 'a 2-minute video walkthrough of the experimental setup and immediate findings',
+                'inclass': 'drafting the results analysis in-class without the use of digital devices'
+            };
+
+            const actionText = actionMap[actionRadio.value];
+
+            // Populate Results
+            document.getElementById('res-course').textContent = course;
+            document.getElementById('res-location').textContent = location;
+            document.getElementById('res-loc-repeat').textContent = location.toLowerCase();
+            document.getElementById('res-action').textContent = actionText;
+            document.getElementById('res-concept').textContent = concept;
+
+            // Show Results
+            const resArea = document.getElementById('result-area');
+            resArea.classList.remove('hidden-content');
+            resArea.scrollIntoView({ behavior: 'smooth' });
+            resArea.classList.add('fade-in');
+        }
+
+        // Initialize
+        switchTab('audit');
+    </script>
+</body>
+</html>
