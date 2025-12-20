@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Trainer: AI-Resistant Assignment Design</title>
+    <title>Master Trainer: Business AI-Resistant Assignment Design</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -54,7 +54,7 @@
         }
 
         .hidden-content {
-            display: none;
+            display: none !important;
             opacity: 0;
         }
 
@@ -77,12 +77,111 @@
             padding: 2rem;
             margin-bottom: 2rem;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .glass-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.3);
             border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .vulnerable-card {
+            border-left: 4px solid var(--accent-danger);
+            box-shadow: 0 0 20px rgba(248, 113, 113, 0.1);
+        }
+
+        .resistant-card {
+            border-left: 4px solid var(--accent-success);
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
+        }
+
+        /* Syllabus Paper Card Style */
+        .syllabus-card {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e293b; /* Dark text for contrast */
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-family: 'Georgia', serif; /* Academic feel */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .syllabus-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #cbd5e1, #94a3b8);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .syllabus-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+            letter-spacing: 1px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .syllabus-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        /* Report Panels */
+        .report-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .report-danger {
+            border: 1px solid rgba(248, 113, 113, 0.3);
+        }
+
+        .report-success {
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .report-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .report-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .report-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .report-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--text-secondary);
         }
 
         /* Header */
@@ -175,11 +274,32 @@
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
         }
 
+        /* Danger Button Variant */
+        .audit-btn.danger {
+            border-color: var(--accent-danger);
+            color: var(--accent-danger);
+        }
+        .audit-btn.danger:hover {
+            background: rgba(248, 113, 113, 0.1);
+            box-shadow: 0 0 15px rgba(248, 113, 113, 0.2);
+        }
+        .audit-btn.danger-active {
+            background: var(--accent-danger);
+            color: #fff;
+        }
+
+        /* Success Button Variant */
         .audit-btn.success {
-            background: var(--accent-success);
             border-color: var(--accent-success);
+            color: var(--accent-success);
+        }
+        .audit-btn.success:hover {
+            background: rgba(52, 211, 153, 0.1);
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
+        }
+        .audit-btn.success-active {
+            background: var(--accent-success);
             color: #0f172a;
-            box-shadow: 0 0 20px rgba(52, 211, 153, 0.4);
         }
 
         .analysis-list {
@@ -220,14 +340,33 @@
             display: inline;
         }
 
-        .analysis-trigger:hover {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+        /* Specific Trigger Styles */
+        .trigger-vulnerable {
+            border-bottom-color: var(--accent-danger);
+            color: var(--text-primary);
+        }
+        .trigger-vulnerable:hover {
+            color: var(--accent-danger);
+            text-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
+        }
+        .trigger-vulnerable.audited {
+            color: var(--accent-danger);
+            border-bottom: 1px solid var(--accent-danger);
+            background: rgba(248, 113, 113, 0.1);
+            padding: 0 4px;
+            border-radius: 4px;
         }
 
-        .analysis-trigger.audited {
-            border-bottom: 1px solid var(--accent-success);
+        .trigger-resistant {
+            border-bottom-color: var(--accent-success);
+        }
+        .trigger-resistant:hover {
             color: var(--accent-success);
+            text-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+        }
+        .trigger-resistant.audited {
+            color: var(--accent-success);
+            border-bottom: 1px solid var(--accent-success);
             background: rgba(52, 211, 153, 0.1);
             padding: 0 4px;
             border-radius: 4px;
@@ -246,7 +385,7 @@
             color: var(--text-primary);
             padding: 0.8rem;
             border-radius: 8px;
-            width: 220px;
+            width: 240px;
             text-align: center;
             font-size: 0.85rem;
             transition: all 0.3s ease;
@@ -272,17 +411,41 @@
             bottom: 125%;
         }
 
-        /* Success Message */
-        .audit-success-msg {
-            background: rgba(52, 211, 153, 0.1);
-            border: 1px solid rgba(52, 211, 153, 0.3);
-            border-radius: 12px;
-            padding: 1.5rem;
+        /* Transformation Button */
+        .transform-btn {
+            display: block;
+            width: 100%;
             margin-top: 2rem;
-            color: var(--accent-success);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            color: #0f172a;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .transform-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+        }
+        
+        /* Secondary Navigation Button */
+        .next-step-btn {
+            margin-top: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--text-secondary);
+            color: var(--text-primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .next-step-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: var(--text-primary);
         }
 
         /* Framework Grid */
@@ -424,163 +587,220 @@
 
     <header class="container">
         <div class="subtitle">Faculty Development Series</div>
-        <h1 class="text-gradient">AI-Resistant Assignment Design</h1>
+        <h1 class="text-gradient">Business AI-Resistant Assignment Design</h1>
         <p class="intro-text">
-            Move beyond "detecting" AI to "designing" around it. Analyze a model business assignment and build your own using the <strong>Process vs Product</strong> approach.
+            Move beyond "detecting" AI to "designing" around it. Follow the journey from a vulnerable prompt to a secure, authentic assessment.
         </p>
     </header>
 
     <main class="container">
         <!-- Navigation -->
         <nav class="nav-tabs">
-            <button onclick="switchTab('audit')" id="tab-audit" class="nav-btn active">
-                1. The Case Study
+            <button onclick="switchTab('vulnerable')" id="tab-vulnerable" class="nav-btn active">
+                1. AI Vulnerable
             </button>
-            <button onclick="switchTab('framework')" id="tab-framework" class="nav-btn">
-                2. Process vs Product
+            <button onclick="switchTab('transformation')" id="tab-transformation" class="nav-btn">
+                2. Transformation
+            </button>
+            <button onclick="switchTab('resistant')" id="tab-resistant" class="nav-btn">
+                3. AI Resistant
             </button>
             <button onclick="switchTab('workshop')" id="tab-workshop" class="nav-btn">
-                3. Design Workshop
+                4. Apply to Course
             </button>
         </nav>
 
-        <!-- SECTION 1: THE AUDIT -->
-        <section id="content-audit" class="fade-in">
-            <div class="glass-card">
+        <!-- SECTION 1: AI VULNERABLE -->
+        <section id="content-vulnerable" class="fade-in">
+            <div class="glass-card vulnerable-card">
                 <div class="audit-header">
                     <div>
-                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem;">Local Small Business Market Analysis</h2>
-                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Target: Business/Marketing Students</span>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem; color: var(--accent-danger);">The "Company Report"</h2>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Status: Highly Vulnerable</span>
                     </div>
-                    <button onclick="runAudit()" id="audit-btn" class="audit-btn">
-                        <i class="fa-solid fa-magnifying-glass"></i> Scan for AI Resistance
+                    <button onclick="analyzeRisk()" id="risk-btn" class="audit-btn danger">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Identify Vulnerabilities
                     </button>
                 </div>
 
-                <div style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                    <strong>Instructions:</strong> In this module, you will conduct primary market research for a local small business.
+                <!-- Assignment Description (Syllabus Style) -->
+                <div class="syllabus-card">
+                    <div class="syllabus-header">
+                        <span>MKT 301: Principles of Marketing</span>
+                        <span>Spring 2025</span>
+                    </div>
+                    <div class="syllabus-title">Midterm Project: Corporate Strategy Analysis</div>
+                    <p><strong>Instructions:</strong> Select a Fortune 500 company (e.g., Apple, Tesla, Nike) and write a 6-page strategic analysis.</p>
+                    <p style="margin-top:0.5rem">Your report must include a SWOT analysis, a review of their current marketing mix (4 Ps), and recommendations for future growth based on recent financial reports.</p>
                 </div>
 
                 <ol class="analysis-list">
                     <li>
-                        <span class="analysis-trigger" data-reason="Real-World Relationships: AI cannot navigate the social process of building trust with a local owner.">
-                            Select a local small business willing to collaborate on this project.
-                            <span class="tooltip">Reason: Real-World Relationships</span>
-                        </span>
+                        <span class="analysis-trigger trigger-vulnerable">Analyze a Fortune 500 company.</span>
                     </li>
                     <li>
-                        <span class="analysis-trigger" data-reason="Primary Research Process: AI cannot perform the human action of interviewing and recording nuances.">
-                            Interview the owner about their specific business challenges and goals.
-                            <span class="tooltip">Reason: Primary Research Process</span>
-                        </span>
+                        <span class="analysis-trigger trigger-vulnerable">Conduct a SWOT Analysis.</span>
                     </li>
                     <li>
-                        <span class="analysis-trigger" data-reason="Generating New Data: The 'Product' (the data) is created by the student's 'Process' (surveying), not retrieved from a database.">
-                            Survey 25+ potential customers in the target market.
-                            <span class="tooltip">Reason: Generating New Data</span>
-                        </span>
-                    </li>
-                    <li>
-                        <span class="analysis-trigger" data-reason="Contextual Application: Applying a framework is a process of judgment, not just definition.">
-                            Analyze competitor offerings and present findings to the business owner.
-                            <span class="tooltip">Reason: Contextual Application</span>
-                        </span>
+                        <span class="analysis-trigger trigger-vulnerable">Write a 6-page strategic report.</span>
                     </li>
                 </ol>
 
-                <div id="audit-summary" class="hidden-content audit-success-msg">
-                    <i class="fa-solid fa-check-circle" style="font-size: 1.5rem;"></i>
-                    <div>
-                        <strong style="display: block; margin-bottom: 0.2rem;">Audit Complete: High Resistance</strong>
-                        <span style="font-size: 0.9rem; color: var(--text-secondary);">This assignment rates <strong>High</strong>. It values the <strong>Process</strong> (interviewing, surveying, consulting) over just a final written <strong>Product</strong>.</span>
+                <div id="risk-report" class="hidden-content report-panel report-danger fade-in">
+                    <div class="report-title" style="color: var(--accent-danger)">
+                        <i class="fa-solid fa-bug"></i> Vulnerability Report
                     </div>
+                    <ul class="report-list" style="color: var(--text-primary)">
+                        <li><strong>Public Data Saturation:</strong> Companies like Apple and Tesla are the most written-about entities in the AI's training set. It has millions of SWOT analyses already indexed.</li>
+                        <li><strong>Generic Analysis:</strong> Without a specific, proprietary data set, the AI can generate a "correct" but generic analysis that requires no actual research.</li>
+                        <li><strong>Zero Human Contact:</strong> The student can complete this entire assignment without ever speaking to a customer, employee, or stakeholder.</li>
+                    </ul>
+                    
+                    <button onclick="switchTab('transformation')" class="next-step-btn">
+                        <i class="fa-solid fa-arrow-right"></i> Proceed to Transformation
+                    </button>
                 </div>
-            </div>
-
-            <div style="text-align: center;">
-                <button onclick="switchTab('framework')" style="background: none; border: none; color: var(--accent-indigo); cursor: pointer; font-size: 1rem;">
-                    Why does this work? View the Process Framework <i class="fa-solid fa-arrow-right"></i>
-                </button>
             </div>
         </section>
 
-        <!-- SECTION 2: THE FRAMEWORK -->
-        <section id="content-framework" class="hidden-content fade-in">
+        <!-- SECTION 2: TRANSFORMATION (FRAMEWORK) -->
+        <section id="content-transformation" class="hidden-content fade-in">
             <div class="glass-card" style="margin-bottom: 2rem; border-color: var(--accent-cyan);">
-                <h3 style="margin-bottom: 1rem; color: var(--accent-cyan);">The Core Shift</h3>
+                <h3 style="margin-bottom: 1rem; color: var(--accent-cyan);">The Business Shield</h3>
                 <p style="color: var(--text-primary);">
-                    Generative AI is a <strong>Product Engine</strong>—it creates essays, code, and summaries instantly. 
-                    To resist AI, we must become <strong>Process Assessors</strong>. We grade the journey, the friction, and the evolution of ideas, not just the final file.
+                    In Business education, we defend against AI by moving from "passive analysis" of global giants to "active consulting" for local partners.
                 </p>
             </div>
 
             <div class="framework-grid">
-                <!-- 1. Scaffolding -->
+                <!-- 1. Authentic Data -->
                 <div class="glass-card">
-                    <i class="fa-solid fa-layer-group framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Scaffolding</h3>
+                    <i class="fa-solid fa-briefcase framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">1. Authentic Partner</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Break the "Product" (Final Paper) into visible "Processes" (Topic Proposal, Annotated Bibliography, Outline). AI is great at the finish line, but bad at showing the steps to get there.
+                        Replace Fortune 500s with local small businesses. AI does not know the specific financial struggles of the bakery down the street.
                     </p>
                 </div>
 
-                <!-- 2. Original Data -->
+                <!-- 2. Human Friction -->
                 <div class="glass-card">
-                    <i class="fa-solid fa-magnifying-glass-chart framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Original Data</h3>
+                    <i class="fa-solid fa-users framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">2. Human Friction</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        AI relies on <em>existing</em> internet data. Force students to generate <em>new</em> data through interviews, surveys, or experiments. The value is in the collection process.
+                        Require interaction. Interviews with owners, surveys of real customers, and mystery shopping create data that cannot be synthesized.
                     </p>
                 </div>
 
-                <!-- 3. Friction & Struggle -->
+                <!-- 3. Applied Strategy -->
                 <div class="glass-card">
-                    <i class="fa-solid fa-mountain framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Friction</h3>
+                    <i class="fa-solid fa-chess-board framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">3. Applied Strategy</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Learning involves friction—confusion, dead ends, and revision. AI is frictionless. Ask students to document their "stuck points" and how they overcame them.
+                        Don't ask "What is a SWOT?" Ask "How does the 'Threat of New Entrants' apply to <em>this</em> specific coffee shop's location?"
                     </p>
                 </div>
 
-                <!-- 4. Metacognition -->
+                <!-- 4. Singular Context -->
                 <div class="glass-card">
-                    <i class="fa-solid fa-brain framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Metacognition</h3>
+                    <i class="fa-solid fa-location-dot framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">4. Singular Context</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Ask "How did you write this?" instead of just "Write this." Reflections, version histories, and oral defenses prove the student did the thinking.
+                        Every local market is unique. A student analyzing <em>this</em> gym in <em>this</em> zip code creates a dataset of one.
                     </p>
                 </div>
             </div>
+
+            <!-- THE TRANSFORM BUTTON -->
+            <button onclick="switchTab('resistant')" class="transform-btn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Transform Assignment Now
+            </button>
+        </section>
+
+        <!-- SECTION 3: AI RESISTANT -->
+        <section id="content-resistant" class="hidden-content fade-in">
             
-            <div style="text-align: center; margin-top: 2rem;">
-                <button onclick="switchTab('workshop')" style="background: none; border: none; color: var(--accent-indigo); cursor: pointer; font-size: 1rem;">
-                    Ready to apply this? Go to Workshop <i class="fa-solid fa-arrow-right"></i>
-                </button>
+            <!-- THE RESULT -->
+            <div class="glass-card resistant-card">
+                <div class="audit-header">
+                    <div>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem; color: var(--accent-success);">The "Consulting Project"</h2>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Status: AI Resistant</span>
+                    </div>
+                    <button onclick="verifyResistance()" id="audit-btn-verify" class="audit-btn success">
+                        <i class="fa-solid fa-shield-halved"></i> Run Risk Assessment
+                    </button>
+                </div>
+
+                <!-- Resistant Assignment Description -->
+                <div class="syllabus-card">
+                    <div class="syllabus-header">
+                        <span>MKT 301: Principles of Marketing</span>
+                        <span>Spring 2025</span>
+                    </div>
+                    <div class="syllabus-title">Project: Small Business Market Analysis</div>
+                    <p><strong>Instructions:</strong> Partner with a local small business to conduct a primary market research analysis.</p>
+                    <ul style="margin-top:0.5rem; padding-left: 1.2rem; font-size: 0.95rem;">
+                        <li><strong>Owner Interview:</strong> Conduct a 30-minute interview with the owner regarding their specific business goals and challenges.</li>
+                        <li><strong>Primary Data:</strong> Design and execute a survey of 25+ potential customers in the local area.</li>
+                        <li><strong>Competitor Audit:</strong> Physically visit and analyze 3 local competitors.</li>
+                    </ul>
+                </div>
+
+                <ol class="analysis-list">
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Partner with a local small business (Real-world context).
+                        </span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Interview owner & survey 25 customers (Primary Data).
+                        </span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Physically visit 3 local competitors (Active Research).
+                        </span>
+                    </li>
+                </ol>
+
+                <div id="success-report" class="hidden-content report-panel report-success fade-in">
+                    <div class="report-title" style="color: var(--accent-success)">
+                        <i class="fa-solid fa-lock"></i> Verification Successful
+                    </div>
+                    <p style="margin-bottom:0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                        This assignment successfully applies the Business Shield strategies:
+                    </p>
+                    <ul class="report-list" style="color: var(--text-primary)">
+                        <li><strong>Authentic Partner:</strong> AI cannot access the internal challenges or financial goals of a specific local small business.</li>
+                        <li><strong>Human Friction:</strong> The requirement for interviews and surveys forces the student to generate original data rather than retrieving it.</li>
+                        <li><strong>Singular Context:</strong> The analysis is tied to a specific geographic location (zip code) and real-time competitor landscape.</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
-        <!-- SECTION 3: WORKSHOP BUILDER -->
+        <!-- SECTION 4: WORKSHOP (Apply to Course) -->
         <section id="content-workshop" class="hidden-content fade-in">
+            <!-- WORKSHOP BUILDER -->
             <div class="glass-card">
                 <div style="border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; margin-bottom: 2rem;">
-                    <h2 style="font-size: 1.5rem;">Process-Based Assignment Builder</h2>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Adapt the Market Research model to value the learning journey over the final output.</p>
+                    <h2 style="font-size: 1.5rem;">Apply to Your Course</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Build your own Business Shield assignment.</p>
                 </div>
 
                 <form id="builder-form" onsubmit="generateAssignment(event)">
-                    <!-- Step 1 -->
                     <div class="form-group">
                         <label>1. Your Context</label>
-                        <input type="text" id="inp-course" placeholder="Course Name (e.g., Principles of Marketing)" style="margin-bottom: 1rem;">
-                        <input type="text" id="inp-concept" placeholder="Core Concept (e.g., SWOT Analysis, 4 Ps)">
+                        <input type="text" id="inp-course" placeholder="Course Name (e.g., Intro to Management)" style="margin-bottom: 1rem;">
+                        <input type="text" id="inp-concept" placeholder="Core Concept (e.g., SWOT, Porter's 5 Forces)">
                     </div>
 
-                    <!-- Step 2 -->
                     <div class="form-group">
-                        <label>2. The "Original Data" Source</label>
-                        <div class="helper-text">What real-world entity will they partner with to generate new data?</div>
+                        <label>2. Local Business Partner</label>
+                        <div class="helper-text">Who will the student collaborate with?</div>
                         <select id="inp-location">
-                            <option value="">Select a partner type...</option>
+                            <option value="">Select a business type...</option>
                             <option value="Independent Cafe/Restaurant">Independent Cafe/Restaurant</option>
                             <option value="Boutique Retail Store">Boutique Retail Store</option>
                             <option value="Local Non-Profit">Local Non-Profit Organization</option>
@@ -590,28 +810,27 @@
                         </select>
                     </div>
 
-                    <!-- Step 3 -->
                     <div class="form-group">
-                        <label>3. The "Visible Process" (Assessment)</label>
-                        <div class="helper-text">How will you grade the journey, not just the destination?</div>
+                        <label>3. Human Element (Client Interaction)</label>
+                        <div class="helper-text">How will they gather primary data?</div>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="human-action" value="interview">
-                                <span>Grade the Interview Notes & Transcripts (Evidence of interaction)</span>
+                                <span>Interview owner/manager (Audio/Transcript required)</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="human-action" value="survey">
-                                <span>Grade the Survey Design & Raw Data Collection (Evidence of research)</span>
+                                <span>Survey 25 potential customers on-site</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="human-action" value="mystery">
-                                <span>Grade the Field Notes from Competitor Visits (Evidence of observation)</span>
+                                <span>Mystery shop 3 local competitors and document</span>
                             </label>
                         </div>
                     </div>
 
                     <button type="submit" class="generate-btn">
-                        Generate Assignment Draft <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        Generate Draft <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </button>
                 </form>
 
@@ -620,68 +839,88 @@
                     <h3 class="text-gradient" style="font-size: 1.4rem; margin-bottom: 1rem;" id="res-title">Assignment Draft</h3>
                     <div style="color: var(--text-primary); line-height: 1.8;">
                         <p><strong>Context:</strong> <span id="res-course"></span></p>
-                        <p style="margin-top: 0.5rem;"><strong>The Task:</strong> Students will partner with a local <span id="res-location" class="result-highlight"></span>.</p>
-                        <p style="margin-top: 0.5rem;"><strong>The Process (Graded Steps):</strong> Instead of only grading the final report, significant weight will be given to <span id="res-action"></span>. This requires students to show their work in real-time.</p>
-                        <p style="margin-top: 0.5rem;"><strong>The Application:</strong> They will then apply <span id="res-concept" class="result-highlight"></span> to this self-generated data.</p>
-                        <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--glass-border); color: var(--text-secondary); font-size: 0.9rem;">
-                            <em>Why this works:</em> AI is a product engine. By grading the <strong>Process</strong> of interacting with a <span id="res-loc-repeat"></span> and gathering raw data, you render the AI tool useful for assistance but incapable of doing the work for them.
-                        </p>
+                        <p style="margin-top: 0.5rem;"><strong>The Task:</strong> Students will partner with a local <span id="res-location" class="result-highlight"></span> to conduct a strategic analysis.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Step 1 (Data Collection):</strong> They must <span id="res-action"></span>. This ensures the data is proprietary, recent, and verified by human interaction.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Step 2 (Analysis):</strong> Using this primary data, they must apply <span id="res-concept" class="result-highlight"></span> to develop actionable recommendations for the client.</p>
                     </div>
-                    <button onclick="window.print()" class="print-btn">
-                        <i class="fa-solid fa-print"></i> Print / Save as PDF
-                    </button>
                 </div>
             </div>
         </section>
+
     </main>
 
     <script>
         // Tab Switching Logic
         function switchTab(tabName) {
-            // Hide all content
-            const sections = ['audit', 'framework', 'workshop'];
+            const sections = ['vulnerable', 'transformation', 'resistant', 'workshop'];
+            
+            // Hide all
             sections.forEach(t => {
-                document.getElementById('content-' + t).classList.add('hidden-content');
-                document.getElementById('content-' + t).classList.remove('fade-in');
-                document.getElementById('tab-' + t).classList.remove('active');
+                const content = document.getElementById('content-' + t);
+                const tab = document.getElementById('tab-' + t);
+                if(content) {
+                    content.classList.add('hidden-content');
+                    content.classList.remove('fade-in');
+                }
+                if(tab) {
+                    tab.classList.remove('active');
+                }
             });
 
-            // Show selected content
+            // Show selected
             const selectedContent = document.getElementById('content-' + tabName);
-            selectedContent.classList.remove('hidden-content');
-            void selectedContent.offsetWidth; // Trigger reflow for animation
-            selectedContent.classList.add('fade-in');
+            if(selectedContent) {
+                selectedContent.classList.remove('hidden-content');
+                selectedContent.classList.add('fade-in');
+            }
             
-            // Activate Tab
-            document.getElementById('tab-' + tabName).classList.add('active');
+            const activeTab = document.getElementById('tab-' + tabName);
+            if(activeTab) {
+                activeTab.classList.add('active');
+            }
         }
 
-        // Audit Logic
-        function runAudit() {
-            const triggers = document.querySelectorAll('.analysis-trigger');
-            const btn = document.getElementById('audit-btn');
-            const summary = document.getElementById('audit-summary');
+        // RISK ANALYSIS (Vulnerable)
+        function analyzeRisk() {
+            const btn = document.getElementById('risk-btn');
+            const report = document.getElementById('risk-report');
+            const triggers = document.querySelectorAll('.trigger-vulnerable');
 
-            // Reset logic for replayability
-            triggers.forEach(el => el.classList.remove('audited'));
-            summary.classList.add('hidden-content');
-
-            // Animation sequence
+            // Trigger visual feedback on list items
             triggers.forEach((el, index) => {
                 setTimeout(() => {
                     el.classList.add('audited');
-                }, index * 600);
+                }, index * 300);
             });
 
-            // Button State
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Scanning...`;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing...`;
             
             setTimeout(() => {
-                btn.innerHTML = `<i class="fa-solid fa-check"></i> Complete`;
-                btn.classList.add('success');
-                summary.classList.remove('hidden-content');
-                summary.classList.add('fade-in');
-            }, triggers.length * 600 + 500);
+                btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Risks Identified`;
+                btn.classList.add('danger-active');
+                report.classList.remove('hidden-content');
+            }, 1000);
+        }
+
+        // RESISTANCE CHECK (Resistant)
+        function verifyResistance() {
+            const btn = document.getElementById('audit-btn-verify');
+            const report = document.getElementById('success-report');
+            const triggers = document.querySelectorAll('.trigger-resistant');
+
+            triggers.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('audited');
+                }, index * 300);
+            });
+
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Verifying...`;
+            
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fa-solid fa-shield-halved"></i> Verified`;
+                btn.classList.add('success-active');
+                report.classList.remove('hidden-content');
+            }, 1000);
         }
 
         // Generator Logic
@@ -700,9 +939,9 @@
             }
 
             const actionMap = {
-                'interview': 'the raw transcripts and notes from the owner interview',
-                'survey': 'the survey design process and raw data collection spreadsheets',
-                'mystery': 'the field notes and photo documentation from competitor visits'
+                'interview': 'conduct an in-depth interview with the owner/manager regarding business goals',
+                'survey': 'design and execute an on-site survey of 25 potential customers',
+                'mystery': 'perform a mystery shopping analysis of 3 direct local competitors'
             };
 
             const actionText = actionMap[actionRadio.value];
@@ -710,7 +949,6 @@
             // Populate Results
             document.getElementById('res-course').textContent = course;
             document.getElementById('res-location').textContent = location;
-            document.getElementById('res-loc-repeat').textContent = location.toLowerCase();
             document.getElementById('res-action').textContent = actionText;
             document.getElementById('res-concept').textContent = concept;
 
@@ -722,7 +960,7 @@
         }
 
         // Initialize
-        switchTab('audit');
+        switchTab('vulnerable');
     </script>
 </body>
 </html>
