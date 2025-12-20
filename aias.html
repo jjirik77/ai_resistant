@@ -351,6 +351,81 @@
             transform: scale(1);
         }
 
+        /* --- New Styles for Assessment Scale --- */
+        .level-card {
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent-cyan);
+        }
+
+        .level-card:nth-child(even) {
+            border-left-color: var(--accent-indigo);
+        }
+
+        .level-badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .level-card:nth-child(even) .level-badge {
+            background: rgba(129, 140, 248, 0.1);
+            color: var(--accent-indigo);
+        }
+
+        .level-meta {
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .decision-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .decision-item {
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .decision-item:hover {
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        .decision-question {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .decision-arrow {
+            color: var(--text-secondary);
+            margin: 0 1rem;
+        }
+
+        .decision-result {
+            color: var(--accent-cyan);
+            font-weight: 700;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+        }
+
         /* Score Gauge */
         .score-panel {
             position: sticky;
@@ -415,6 +490,12 @@
                 bottom: 10px;
             }
             .progress-bar { width: 100%; margin: 0.5rem 0; }
+            .decision-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            .decision-arrow { transform: rotate(90deg); margin: 0; }
         }
     </style>
 </head>
@@ -435,6 +516,9 @@
             <button class="nav-btn active" onclick="switchView('framework')">
                 <i class="fa-solid fa-layer-group"></i> Framework Explorer
             </button>
+            <button class="nav-btn" onclick="switchView('scale')">
+                <i class="fa-solid fa-stairs"></i> Assessment Scale
+            </button>
             <button class="nav-btn" onclick="switchView('auditor')">
                 <i class="fa-solid fa-list-check"></i> Resistance Auditor
             </button>
@@ -452,7 +536,110 @@
             </div>
         </main>
 
-        <!-- VIEW 2: Assessment Auditor -->
+        <!-- VIEW 2: AIAS Scale -->
+        <main id="scale-view" class="view-section">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h2>AI-Resistance Assessment Scale <span class="gradient-text">(AIAS)</span></h2>
+                <p>A 5-level spectrum of AI permission and integration in assessment design.</p>
+            </div>
+
+            <div class="levels-container">
+                <!-- Level 1 -->
+                <div class="glass-card level-card">
+                    <div class="level-badge">Level 1</div>
+                    <h3 class="card-title">No AI</h3>
+                    <div class="level-meta">Controlled environment, no AI access permitted</div>
+                    <ul class="feature-list">
+                        <li>In-person exams, handwritten work, closed-book tests</li>
+                        <li><strong>Use when:</strong> Assessing foundational knowledge without technology</li>
+                    </ul>
+                </div>
+
+                <!-- Level 2 -->
+                <div class="glass-card level-card">
+                    <div class="level-badge">Level 2</div>
+                    <h3 class="card-title">AI-Assisted</h3>
+                    <div class="level-meta">Limited AI use with attribution required</div>
+                    <ul class="feature-list">
+                        <li>AI for brainstorming, grammar checking, research starting points</li>
+                        <li>Students must document all AI use and cite appropriately</li>
+                        <li><strong>Use when:</strong> Teaching responsible AI use and citation practices</li>
+                    </ul>
+                </div>
+
+                <!-- Level 3 -->
+                <div class="glass-card level-card">
+                    <div class="level-badge">Level 3</div>
+                    <h3 class="card-title">AI-Integrated</h3>
+                    <div class="level-meta">AI incorporated with process documentation</div>
+                    <ul class="feature-list">
+                        <li>AI as collaboration tool; students explain decision-making</li>
+                        <li>Process artifacts required (prompts, revisions, reflections)</li>
+                        <li><strong>Use when:</strong> Emphasizing critical evaluation of AI outputs</li>
+                    </ul>
+                </div>
+
+                <!-- Level 4 -->
+                <div class="glass-card level-card">
+                    <div class="level-badge">Level 4</div>
+                    <h3 class="card-title">AI-Collaborative</h3>
+                    <div class="level-meta">AI as partner with human judgment central</div>
+                    <ul class="feature-list">
+                        <li>Students curate, critique, and improve AI-generated content</li>
+                        <li>Focus on evaluation, synthesis, and originality of thought</li>
+                        <li><strong>Use when:</strong> Developing AI literacy and critical thinking skills</li>
+                    </ul>
+                </div>
+
+                <!-- Level 5 -->
+                <div class="glass-card level-card">
+                    <div class="level-badge">Level 5</div>
+                    <h3 class="card-title">AI-Enhanced</h3>
+                    <div class="level-meta">Full AI integration with explicit pedagogical purpose</div>
+                    <ul class="feature-list">
+                        <li>Students explore AI capabilities and limitations</li>
+                        <li>Meta-cognitive reflection on AI's role in learning</li>
+                        <li><strong>Use when:</strong> Teaching about AI itself or advanced digital literacy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Decision Tree -->
+            <div class="glass-card" style="margin-top: 3rem; border-color: var(--accent-indigo);">
+                <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-tree gradient-text"></i> Quick Decision Tree
+                </h3>
+                <div class="decision-tree">
+                    <div class="decision-item">
+                        <span class="decision-question">Can students complete without AI?</span>
+                        <i class="fa-solid fa-arrow-right decision-arrow"></i>
+                        <span class="decision-result">Level 1</span>
+                    </div>
+                    <div class="decision-item">
+                        <span class="decision-question">Need basic AI tools?</span>
+                        <i class="fa-solid fa-arrow-right decision-arrow"></i>
+                        <span class="decision-result">Level 2</span>
+                    </div>
+                    <div class="decision-item">
+                        <span class="decision-question">AI as drafting partner?</span>
+                        <i class="fa-solid fa-arrow-right decision-arrow"></i>
+                        <span class="decision-result">Level 3</span>
+                    </div>
+                    <div class="decision-item">
+                        <span class="decision-question">AI outputs need curation?</span>
+                        <i class="fa-solid fa-arrow-right decision-arrow"></i>
+                        <span class="decision-result">Level 4</span>
+                    </div>
+                    <div class="decision-item">
+                        <span class="decision-question">Teaching about AI?</span>
+                        <i class="fa-solid fa-arrow-right decision-arrow"></i>
+                        <span class="decision-result">Level 5</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- VIEW 3: Assessment Auditor -->
         <main id="auditor-view" class="view-section">
             <div class="glass-card auditor-container">
                 <div style="text-align: center; margin-bottom: 2rem;">
