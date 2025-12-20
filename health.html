@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Trainer: AI-Resistant Assignment Design</title>
+    <title>Master Trainer: Healthcare AI-Resistant Assignment Design</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -54,7 +54,7 @@
         }
 
         .hidden-content {
-            display: none;
+            display: none !important;
             opacity: 0;
         }
 
@@ -77,12 +77,111 @@
             padding: 2rem;
             margin-bottom: 2rem;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .glass-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.3);
             border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .vulnerable-card {
+            border-left: 4px solid var(--accent-danger);
+            box-shadow: 0 0 20px rgba(248, 113, 113, 0.1);
+        }
+
+        .resistant-card {
+            border-left: 4px solid var(--accent-success);
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
+        }
+
+        /* Syllabus Paper Card Style */
+        .syllabus-card {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e293b; /* Dark text for contrast */
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-family: 'Georgia', serif; /* Academic feel */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .syllabus-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #cbd5e1, #94a3b8);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .syllabus-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+            letter-spacing: 1px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .syllabus-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        /* Report Panels */
+        .report-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .report-danger {
+            border: 1px solid rgba(248, 113, 113, 0.3);
+        }
+
+        .report-success {
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .report-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .report-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .report-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .report-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--text-secondary);
         }
 
         /* Header */
@@ -175,11 +274,32 @@
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
         }
 
+        /* Danger Button Variant */
+        .audit-btn.danger {
+            border-color: var(--accent-danger);
+            color: var(--accent-danger);
+        }
+        .audit-btn.danger:hover {
+            background: rgba(248, 113, 113, 0.1);
+            box-shadow: 0 0 15px rgba(248, 113, 113, 0.2);
+        }
+        .audit-btn.danger-active {
+            background: var(--accent-danger);
+            color: #fff;
+        }
+
+        /* Success Button Variant */
         .audit-btn.success {
-            background: var(--accent-success);
             border-color: var(--accent-success);
+            color: var(--accent-success);
+        }
+        .audit-btn.success:hover {
+            background: rgba(52, 211, 153, 0.1);
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
+        }
+        .audit-btn.success-active {
+            background: var(--accent-success);
             color: #0f172a;
-            box-shadow: 0 0 20px rgba(52, 211, 153, 0.4);
         }
 
         .analysis-list {
@@ -220,14 +340,33 @@
             display: inline;
         }
 
-        .analysis-trigger:hover {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+        /* Specific Trigger Styles */
+        .trigger-vulnerable {
+            border-bottom-color: var(--accent-danger);
+            color: var(--text-primary);
+        }
+        .trigger-vulnerable:hover {
+            color: var(--accent-danger);
+            text-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
+        }
+        .trigger-vulnerable.audited {
+            color: var(--accent-danger);
+            border-bottom: 1px solid var(--accent-danger);
+            background: rgba(248, 113, 113, 0.1);
+            padding: 0 4px;
+            border-radius: 4px;
         }
 
-        .analysis-trigger.audited {
-            border-bottom: 1px solid var(--accent-success);
+        .trigger-resistant {
+            border-bottom-color: var(--accent-success);
+        }
+        .trigger-resistant:hover {
             color: var(--accent-success);
+            text-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+        }
+        .trigger-resistant.audited {
+            color: var(--accent-success);
+            border-bottom: 1px solid var(--accent-success);
             background: rgba(52, 211, 153, 0.1);
             padding: 0 4px;
             border-radius: 4px;
@@ -246,7 +385,7 @@
             color: var(--text-primary);
             padding: 0.8rem;
             border-radius: 8px;
-            width: 220px;
+            width: 240px;
             text-align: center;
             font-size: 0.85rem;
             transition: all 0.3s ease;
@@ -272,17 +411,41 @@
             bottom: 125%;
         }
 
-        /* Success Message */
-        .audit-success-msg {
-            background: rgba(52, 211, 153, 0.1);
-            border: 1px solid rgba(52, 211, 153, 0.3);
-            border-radius: 12px;
-            padding: 1.5rem;
+        /* Transformation Button */
+        .transform-btn {
+            display: block;
+            width: 100%;
             margin-top: 2rem;
-            color: var(--accent-success);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            color: #0f172a;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .transform-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+        }
+        
+        /* Secondary Navigation Button */
+        .next-step-btn {
+            margin-top: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--text-secondary);
+            color: var(--text-primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .next-step-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: var(--text-primary);
         }
 
         /* Framework Grid */
@@ -424,150 +587,215 @@
 
     <header class="container">
         <div class="subtitle">Faculty Development Series</div>
-        <h1 class="text-gradient">AI-Resistant Assignment Design</h1>
+        <h1 class="text-gradient">Healthcare AI-Resistant Assignment Design</h1>
         <p class="intro-text">
-            Move beyond "detecting" AI to "designing" around it. Analyze a model healthcare assignment and build your own.
+            Move beyond "detecting" AI to "designing" around it. Follow the journey from a vulnerable prompt to a secure, authentic assessment.
         </p>
     </header>
 
     <main class="container">
         <!-- Navigation -->
         <nav class="nav-tabs">
-            <button onclick="switchTab('audit')" id="tab-audit" class="nav-btn active">
-                1. The Case Study
+            <button onclick="switchTab('vulnerable')" id="tab-vulnerable" class="nav-btn active">
+                1. AI Vulnerable
             </button>
-            <button onclick="switchTab('framework')" id="tab-framework" class="nav-btn">
-                2. The Framework
+            <button onclick="switchTab('transformation')" id="tab-transformation" class="nav-btn">
+                2. Transformation
+            </button>
+            <button onclick="switchTab('resistant')" id="tab-resistant" class="nav-btn">
+                3. AI Resistant
             </button>
             <button onclick="switchTab('workshop')" id="tab-workshop" class="nav-btn">
-                3. Design Workshop
+                4. Apply to Course
             </button>
         </nav>
 
-        <!-- SECTION 1: THE AUDIT -->
-        <section id="content-audit" class="fade-in">
-            <div class="glass-card">
+        <!-- SECTION 1: AI VULNERABLE -->
+        <section id="content-vulnerable" class="fade-in">
+            <div class="glass-card vulnerable-card">
                 <div class="audit-header">
                     <div>
-                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem;">Patient Safety Incident Analysis</h2>
-                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Target: Healthcare/Nursing Students</span>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem; color: var(--accent-danger);">The "Textbook Case"</h2>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Status: Highly Vulnerable</span>
                     </div>
-                    <button onclick="runAudit()" id="audit-btn" class="audit-btn">
-                        <i class="fa-solid fa-magnifying-glass"></i> Scan for AI Resistance
+                    <button onclick="analyzeRisk()" id="risk-btn" class="audit-btn danger">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Identify Vulnerabilities
                     </button>
                 </div>
 
-                <div style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                    <strong>Instructions:</strong> In this module, you will investigate a recent patient safety incident in your clinical setting.
+                <!-- Assignment Description (Syllabus Style) -->
+                <div class="syllabus-card">
+                    <div class="syllabus-header">
+                        <span>NURS 301: Patient Safety & Quality</span>
+                        <span>Spring 2025</span>
+                    </div>
+                    <div class="syllabus-title">Midterm Essay: Error Theory</div>
+                    <p><strong>Instructions:</strong> Write a 4-page paper explaining the "Swiss Cheese Model" of accident causation.</p>
+                    <p style="margin-top:0.5rem">Apply this theory to the "Medication Administration Error at General Hospital" case study found in Chapter 4 of your textbook. Discuss where the system failed.</p>
                 </div>
 
                 <ol class="analysis-list">
                     <li>
-                        <span class="analysis-trigger" data-reason="Confidentiality: LLMs cannot access private, de-identified medical records.">
-                            Select a de-identified case from hospital records (past 6 months).
-                            <span class="tooltip">Reason: Protected Clinical Data</span>
+                        <span class="analysis-trigger trigger-vulnerable">Explain "Swiss Cheese Model".</span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger trigger-vulnerable">Apply to Chapter 4 Textbook Case.</span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger trigger-vulnerable">Write a 4-page standard essay.</span>
+                    </li>
+                </ol>
+
+                <div id="risk-report" class="hidden-content report-panel report-danger fade-in">
+                    <div class="report-title" style="color: var(--accent-danger)">
+                        <i class="fa-solid fa-bug"></i> Vulnerability Report
+                    </div>
+                    <ul class="report-list" style="color: var(--text-primary)">
+                        <li><strong>Training Data Contamination:</strong> The textbook case study (Chapter 4) is likely in the training data of major LLMs. AI knows the "correct" answer already.</li>
+                        <li><strong>Text-Only Output:</strong> The essay format allows AI to generate a fluent, grammatically perfect response in seconds without critical thinking.</li>
+                        <li><strong>Abstract Application:</strong> Applying a theory to a static text description does not require the messy, real-time judgment calls of clinical practice.</li>
+                    </ul>
+                    
+                    <button onclick="switchTab('transformation')" class="next-step-btn">
+                        <i class="fa-solid fa-arrow-right"></i> Proceed to Transformation
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: TRANSFORMATION (FRAMEWORK) -->
+        <section id="content-transformation" class="hidden-content fade-in">
+            <div class="glass-card" style="margin-bottom: 2rem; border-color: var(--accent-cyan);">
+                <h3 style="margin-bottom: 1rem; color: var(--accent-cyan);">The Clinical Shield</h3>
+                <p style="color: var(--text-primary);">
+                    In Healthcare education, we defend against AI by requiring students to engage with real, protected clinical environments and data.
+                </p>
+            </div>
+
+            <div class="framework-grid">
+                <!-- 1. Authentic Data -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-database framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">1. Authentic Data</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Use internal, HIPAA-protected records or real-time clinical events. AI cannot access the specific patient file from your ward yesterday.
+                    </p>
+                </div>
+
+                <!-- 2. Process Focus -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-user-nurse framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">2. Human Process</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Require interaction with staff. Interviews, shift handoffs, and huddles create verbal data that AI cannot forge.
+                    </p>
+                </div>
+
+                <!-- 3. Applied Frameworks -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-stethoscope framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">3. Clinical Application</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Don't ask for definitions. Ask "How did the safety protocol fail in <em>this</em> specific incident on 3-West?"
+                    </p>
+                </div>
+
+                <!-- 4. Singular Context -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-hospital-user framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">4. Singular Context</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Every unit and shift is unique. A student analyzing <em>this</em> near-miss on <em>this</em> shift creates a dataset of one.
+                    </p>
+                </div>
+            </div>
+
+            <!-- THE TRANSFORM BUTTON -->
+            <button onclick="switchTab('resistant')" class="transform-btn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Transform Assignment Now
+            </button>
+        </section>
+
+        <!-- SECTION 3: AI RESISTANT -->
+        <section id="content-resistant" class="hidden-content fade-in">
+            
+            <!-- THE RESULT -->
+            <div class="glass-card resistant-card">
+                <div class="audit-header">
+                    <div>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem; color: var(--accent-success);">The "RCA Project"</h2>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Status: AI Resistant</span>
+                    </div>
+                    <button onclick="verifyResistance()" id="audit-btn-verify" class="audit-btn success">
+                        <i class="fa-solid fa-shield-halved"></i> Run Risk Assessment
+                    </button>
+                </div>
+
+                <!-- Resistant Assignment Description -->
+                <div class="syllabus-card">
+                    <div class="syllabus-header">
+                        <span>NURS 301: Patient Safety & Quality</span>
+                        <span>Spring 2025</span>
+                    </div>
+                    <div class="syllabus-title">Project: Root Cause Analysis (RCA)</div>
+                    <p><strong>Instructions:</strong> Select a de-identified safety event or "near miss" from your current clinical rotation site that occurred in the past 6 months.</p>
+                    <ul style="margin-top:0.5rem; padding-left: 1.2rem; font-size: 0.95rem;">
+                        <li><strong>Data Collection:</strong> Interview 2 staff members involved in the workflow regarding the event.</li>
+                        <li><strong>Observation:</strong> Observe the physical environment where the event occurred and document layout/distractions.</li>
+                        <li><strong>Analysis:</strong> Submit a completed RCA diagram and a 2-page executive summary of your findings.</li>
+                    </ul>
+                </div>
+
+                <ol class="analysis-list">
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Select a de-identified internal case (past 6 months).
                         </span>
                     </li>
                     <li>
-                        <span class="analysis-trigger" data-reason="Professional Insight: AI lacks the tacit knowledge held by practicing staff.">
-                            Interview 2-3 healthcare professionals involved in the incident.
-                            <span class="tooltip">Reason: Professional Insight</span>
+                        <span class="analysis-trigger trigger-resistant">
+                            Interview 2 staff members involved in the workflow.
                         </span>
                     </li>
                     <li>
-                        <span class="analysis-trigger" data-reason="Physical Context: AI cannot observe the physical layout or workflow of a specific ward.">
-                            Observe relevant clinical processes and the physical environment.
-                            <span class="tooltip">Reason: Physical Observation</span>
-                        </span>
-                    </li>
-                    <li>
-                        <span class="analysis-trigger" data-reason="Clinical Application: Applying protocols to a unique event creates a unique outcome.">
-                            Apply safety frameworks (Swiss Cheese Model, RCA) to analyze the incident.
-                            <span class="tooltip">Reason: Clinical Application</span>
+                        <span class="analysis-trigger trigger-resistant">
+                            Observe physical environment (layout, distractions).
                         </span>
                     </li>
                 </ol>
 
-                <div id="audit-summary" class="hidden-content audit-success-msg">
-                    <i class="fa-solid fa-check-circle" style="font-size: 1.5rem;"></i>
-                    <div>
-                        <strong style="display: block; margin-bottom: 0.2rem;">Audit Complete: High Resistance</strong>
-                        <span style="font-size: 0.9rem; color: var(--text-secondary);">This assignment rates <strong>High</strong>. It relies on protected clinical data (HIPAA) and requires physical presence in the clinical setting.</span>
+                <div id="success-report" class="hidden-content report-panel report-success fade-in">
+                    <div class="report-title" style="color: var(--accent-success)">
+                        <i class="fa-solid fa-lock"></i> Verification Successful
                     </div>
-                </div>
-            </div>
-
-            <div style="text-align: center;">
-                <button onclick="switchTab('framework')" style="background: none; border: none; color: var(--accent-indigo); cursor: pointer; font-size: 1rem;">
-                    Why does this work? View the Framework <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </div>
-        </section>
-
-        <!-- SECTION 2: THE FRAMEWORK -->
-        <section id="content-framework" class="hidden-content fade-in">
-            <div class="framework-grid">
-                <!-- Authentic -->
-                <div class="glass-card">
-                    <i class="fa-solid fa-fingerprint framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Authentic</h3>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Data must be clinical and real. If the case study is generic or online, AI can solve it. Use internal, de-identified patient records.
+                    <p style="margin-bottom:0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                        This assignment successfully applies the Clinical Shield strategies:
                     </p>
+                    <ul class="report-list" style="color: var(--text-primary)">
+                        <li><strong>Authentic Data:</strong> Uses HIPAA-protected internal records that AI cannot access.</li>
+                        <li><strong>Process Focus:</strong> Interviews and observations require physical presence and human interaction.</li>
+                        <li><strong>Singular Context:</strong> The analysis is tied to a specific unit, time, and physical layout unique to the student's clinical site.</li>
+                    </ul>
                 </div>
-
-                <!-- Iterative -->
-                <div class="glass-card">
-                    <i class="fa-solid fa-layer-group framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Iterative</h3>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Focus on the investigation process. Require interview notes, root cause diagrams, and draft reports before the final analysis.
-                    </p>
-                </div>
-
-                <!-- Applied -->
-                <div class="glass-card">
-                    <i class="fa-solid fa-screwdriver-wrench framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Applied</h3>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Don't ask "What is the Swiss Cheese Model?" Ask "How did the safety layers fail in <em>this</em> specific medication error?"
-                    </p>
-                </div>
-
-                <!-- Singular -->
-                <div class="glass-card">
-                    <i class="fa-solid fa-puzzle-piece framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Singular</h3>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Every patient and unit is unique. A student analyzing <em>this</em> fall on <em>this</em> ward creates a dataset of one.
-                    </p>
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 2rem;">
-                <button onclick="switchTab('workshop')" style="background: none; border: none; color: var(--accent-indigo); cursor: pointer; font-size: 1rem;">
-                    Ready to apply this? Go to Workshop <i class="fa-solid fa-arrow-right"></i>
-                </button>
             </div>
         </section>
 
-        <!-- SECTION 3: WORKSHOP BUILDER -->
+        <!-- SECTION 4: WORKSHOP (Apply to Course) -->
         <section id="content-workshop" class="hidden-content fade-in">
+            <!-- WORKSHOP BUILDER -->
             <div class="glass-card">
                 <div style="border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; margin-bottom: 2rem;">
-                    <h2 style="font-size: 1.5rem;">Assignment Builder</h2>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Adapt the "Patient Safety" model to your specific course context.</p>
+                    <h2 style="font-size: 1.5rem;">Apply to Your Course</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Build your own Healthcare Shield assignment.</p>
                 </div>
 
                 <form id="builder-form" onsubmit="generateAssignment(event)">
-                    <!-- Step 1 -->
                     <div class="form-group">
                         <label>1. Your Context</label>
                         <input type="text" id="inp-course" placeholder="Course Name (e.g., Clinical Nursing I)" style="margin-bottom: 1rem;">
                         <input type="text" id="inp-concept" placeholder="Safety Framework (e.g., Root Cause Analysis)">
                     </div>
 
-                    <!-- Step 2 -->
                     <div class="form-group">
                         <label>2. Clinical Setting (Authentic Data)</label>
                         <div class="helper-text">Where will students access real clinical scenarios?</div>
@@ -582,7 +810,6 @@
                         </select>
                     </div>
 
-                    <!-- Step 3 -->
                     <div class="form-group">
                         <label>3. Human Element (Verification)</label>
                         <div class="helper-text">How will they interact with staff/patients?</div>
@@ -603,7 +830,7 @@
                     </div>
 
                     <button type="submit" class="generate-btn">
-                        Generate Assignment Draft <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        Generate Draft <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </button>
                 </form>
 
@@ -615,65 +842,85 @@
                         <p style="margin-top: 0.5rem;"><strong>The Task:</strong> Students will investigate a safety incident within the <span id="res-location" class="result-highlight"></span>.</p>
                         <p style="margin-top: 0.5rem;"><strong>Step 1 (Data Collection):</strong> They must <span id="res-action"></span>. This ensures the data is strictly local, confidential, and verified by staff.</p>
                         <p style="margin-top: 0.5rem;"><strong>Step 2 (Analysis):</strong> Using this specific case data, they must apply <span id="res-concept" class="result-highlight"></span> to determine the root cause or safety gap.</p>
-                        <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--glass-border); color: var(--text-secondary); font-size: 0.9rem;">
-                            <em>Why this works:</em> AI cannot access the de-identified patient records in your <span id="res-loc-repeat"></span> or replicate the insights of the staff on duty.
-                        </p>
                     </div>
-                    <button onclick="window.print()" class="print-btn">
-                        <i class="fa-solid fa-print"></i> Print / Save as PDF
-                    </button>
                 </div>
             </div>
         </section>
+
     </main>
 
     <script>
         // Tab Switching Logic
         function switchTab(tabName) {
-            // Hide all content
-            const sections = ['audit', 'framework', 'workshop'];
+            const sections = ['vulnerable', 'transformation', 'resistant', 'workshop'];
+            
+            // Hide all
             sections.forEach(t => {
-                document.getElementById('content-' + t).classList.add('hidden-content');
-                document.getElementById('content-' + t).classList.remove('fade-in');
-                document.getElementById('tab-' + t).classList.remove('active');
+                const content = document.getElementById('content-' + t);
+                const tab = document.getElementById('tab-' + t);
+                if(content) {
+                    content.classList.add('hidden-content');
+                    content.classList.remove('fade-in');
+                }
+                if(tab) {
+                    tab.classList.remove('active');
+                }
             });
 
-            // Show selected content
+            // Show selected
             const selectedContent = document.getElementById('content-' + tabName);
-            selectedContent.classList.remove('hidden-content');
-            void selectedContent.offsetWidth; // Trigger reflow for animation
-            selectedContent.classList.add('fade-in');
+            if(selectedContent) {
+                selectedContent.classList.remove('hidden-content');
+                selectedContent.classList.add('fade-in');
+            }
             
-            // Activate Tab
-            document.getElementById('tab-' + tabName).classList.add('active');
+            const activeTab = document.getElementById('tab-' + tabName);
+            if(activeTab) {
+                activeTab.classList.add('active');
+            }
         }
 
-        // Audit Logic
-        function runAudit() {
-            const triggers = document.querySelectorAll('.analysis-trigger');
-            const btn = document.getElementById('audit-btn');
-            const summary = document.getElementById('audit-summary');
+        // RISK ANALYSIS (Vulnerable)
+        function analyzeRisk() {
+            const btn = document.getElementById('risk-btn');
+            const report = document.getElementById('risk-report');
+            const triggers = document.querySelectorAll('.trigger-vulnerable');
 
-            // Reset logic for replayability
-            triggers.forEach(el => el.classList.remove('audited'));
-            summary.classList.add('hidden-content');
-
-            // Animation sequence
+            // Trigger visual feedback on list items
             triggers.forEach((el, index) => {
                 setTimeout(() => {
                     el.classList.add('audited');
-                }, index * 600);
+                }, index * 300);
             });
 
-            // Button State
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Scanning...`;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing...`;
             
             setTimeout(() => {
-                btn.innerHTML = `<i class="fa-solid fa-check"></i> Complete`;
-                btn.classList.add('success');
-                summary.classList.remove('hidden-content');
-                summary.classList.add('fade-in');
-            }, triggers.length * 600 + 500);
+                btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Risks Identified`;
+                btn.classList.add('danger-active');
+                report.classList.remove('hidden-content');
+            }, 1000);
+        }
+
+        // RESISTANCE CHECK (Resistant)
+        function verifyResistance() {
+            const btn = document.getElementById('audit-btn-verify');
+            const report = document.getElementById('success-report');
+            const triggers = document.querySelectorAll('.trigger-resistant');
+
+            triggers.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('audited');
+                }, index * 300);
+            });
+
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Verifying...`;
+            
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fa-solid fa-shield-halved"></i> Verified`;
+                btn.classList.add('success-active');
+                report.classList.remove('hidden-content');
+            }, 1000);
         }
 
         // Generator Logic
@@ -702,7 +949,6 @@
             // Populate Results
             document.getElementById('res-course').textContent = course;
             document.getElementById('res-location').textContent = location;
-            document.getElementById('res-loc-repeat').textContent = location.toLowerCase();
             document.getElementById('res-action').textContent = actionText;
             document.getElementById('res-concept').textContent = concept;
 
@@ -714,7 +960,7 @@
         }
 
         // Initialize
-        switchTab('audit');
+        switchTab('vulnerable');
     </script>
 </body>
 </html>
