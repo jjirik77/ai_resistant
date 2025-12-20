@@ -215,13 +215,49 @@
         .step-card {
             display: flex;
             flex-direction: column;
-            height: 100%;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .step-header-wrap {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .step-icon {
             font-size: 2rem;
-            margin-bottom: 1rem;
             color: var(--accent-indigo);
+        }
+        
+        .step-chevron {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .step-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.4s ease;
+            opacity: 0;
+        }
+
+        .step-card.open .step-details {
+            max-height: 400px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+        
+        .step-card.open .step-chevron {
+            transform: rotate(180deg);
+            color: var(--accent-cyan);
+        }
+        
+        .step-card.open {
+            border-color: var(--accent-indigo);
+            background: rgba(30, 41, 59, 0.8);
         }
 
         /* --- SECTION 3: STRATEGIES (ACCORDION) --- */
@@ -275,38 +311,87 @@
             background: rgba(30, 41, 59, 0.85);
         }
 
-        /* --- SECTION 4: IMPLEMENTATION & BENEFITS --- */
-        .tips-container {
+        /* --- SECTION 4: IMPLEMENTATION & BENEFITS (REDESIGNED) --- */
+        .implementation-wrapper {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
+            grid-template-columns: 1.2fr 2fr;
+            gap: 2rem;
         }
 
-        .tip-item {
+        @media(max-width: 900px) {
+            .implementation-wrapper { grid-template-columns: 1fr; }
+        }
+
+        /* Timeline Action Plan */
+        .action-plan {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+        }
+        
+        .action-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .action-marker {
+            width: 32px;
+            height: 32px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-        }
-
-        .tip-number {
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: var(--accent-indigo);
-            min-width: 40px;
-        }
-
-        .benefit-tag {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            margin: 0.25rem;
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent-cyan);
-            border-radius: 6px;
+            justify-content: center;
+            font-weight: bold;
             font-size: 0.9rem;
-            border: 1px solid rgba(56, 189, 248, 0.2);
+            color: var(--accent-cyan);
+            z-index: 2;
+            flex-shrink: 0;
+        }
+        
+        .action-content {
+            background: rgba(255,255,255,0.02);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            flex-grow: 1;
+        }
+        
+        .action-content strong {
+            display: block;
+            color: var(--accent-indigo);
+            margin-bottom: 0.25rem;
+        }
+        
+        /* Benefits Grid */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .benefit-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .benefit-card:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(56, 189, 248, 0.05);
+        }
+        
+        .benefit-icon {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            display: inline-block;
         }
 
         /* --- RESPONSIVE --- */
@@ -377,47 +462,62 @@
         <div id="framework" class="tab-content">
             <div class="section-header">
                 <h2>The 3 Pillars of Process</h2>
-                <p>Documenting these stages creates the learning narrative.</p>
+                <p>Click a pillar to explore the stages.</p>
             </div>
 
             <div class="process-steps">
                 <!-- Step 1 -->
-                <div class="glass-card step-card">
-                    <div class="step-icon"><i class="fa-solid fa-compass-drafting"></i></div>
-                    <h3>1. Pre-Work & Planning</h3>
-                    <p>Before the "doing" begins, capture the thinking.</p>
-                    <ul class="list-check" style="font-size: 0.9rem;">
-                        <li>Initial brainstorming / concept maps</li>
-                        <li>Research notes & source evaluation</li>
-                        <li>Outlines with rationale</li>
-                        <li>Problem analysis</li>
-                    </ul>
+                <div class="glass-card step-card" onclick="toggleFramework(this)">
+                    <div class="step-header-wrap">
+                        <div class="step-icon"><i class="fa-solid fa-compass-drafting"></i></div>
+                        <h3>1. Pre-Work & Planning</h3>
+                        <i class="fa-solid fa-chevron-down step-chevron"></i>
+                    </div>
+                    <div class="step-details">
+                        <p>Before the "doing" begins, capture the thinking.</p>
+                        <ul class="list-check" style="font-size: 0.9rem;">
+                            <li>Initial brainstorming / concept maps</li>
+                            <li>Research notes & source evaluation</li>
+                            <li>Outlines with rationale</li>
+                            <li>Problem analysis</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <!-- Step 2 -->
-                <div class="glass-card step-card">
-                    <div class="step-icon"><i class="fa-solid fa-code-branch"></i></div>
-                    <h3>2. Iterative Development</h3>
-                    <p>Show the evolution, not just the revolution.</p>
-                    <ul class="list-check" style="font-size: 0.9rem;">
-                        <li>Multiple drafts showing changes</li>
-                        <li>Feedback incorporation logs</li>
-                        <li>Revision justifications</li>
-                        <li>Dead-end explorations</li>
-                    </ul>
+                <div class="glass-card step-card" onclick="toggleFramework(this)">
+                    <div class="step-header-wrap">
+                        <div class="step-icon"><i class="fa-solid fa-code-branch"></i></div>
+                        <h3>2. Iterative Development</h3>
+                        <i class="fa-solid fa-chevron-down step-chevron"></i>
+                    </div>
+                    <div class="step-details">
+                        <p>Show the evolution, not just the revolution.</p>
+                        <ul class="list-check" style="font-size: 0.9rem;">
+                            <li>Multiple drafts showing changes</li>
+                            <li>Feedback incorporation logs</li>
+                            <li>Revision justifications</li>
+                            <li>Dead-end explorations</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <!-- Step 3 -->
-                <div class="glass-card step-card">
-                    <div class="step-icon"><i class="fa-solid fa-brain"></i></div>
-                    <h3>3. Metacognitive Reflection</h3>
-                    <p>Thinking about the thinking.</p>
-                    <ul class="list-check" style="font-size: 0.9rem;">
-                        <li>Learning process analysis</li>
-                        <li>Strategy evaluation</li>
-                        <li>Identifying breakthroughs</li>
-                        <li>Connecting to prior knowledge</li>
-                    </ul>
+                <div class="glass-card step-card" onclick="toggleFramework(this)">
+                    <div class="step-header-wrap">
+                        <div class="step-icon"><i class="fa-solid fa-brain"></i></div>
+                        <h3>3. Metacognitive Reflection</h3>
+                        <i class="fa-solid fa-chevron-down step-chevron"></i>
+                    </div>
+                    <div class="step-details">
+                        <p>Thinking about the thinking.</p>
+                        <ul class="list-check" style="font-size: 0.9rem;">
+                            <li>Learning process analysis</li>
+                            <li>Strategy evaluation</li>
+                            <li>Identifying breakthroughs</li>
+                            <li>Connecting to prior knowledge</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -500,58 +600,72 @@
 
         <!-- TAB 4: IMPLEMENTATION -->
         <div id="implementation" class="tab-content">
-            <div class="grid grid-2" style="gap: 2rem;">
-                <!-- Tips -->
+            <div class="implementation-wrapper">
+                
+                <!-- Left: Action Plan -->
                 <div>
-                    <h3 class="gradient-text" style="margin-bottom: 1.5rem;">Implementation Tips</h3>
-                    <div class="tips-container">
-                        <div class="tip-item">
-                            <span class="tip-number">01</span>
-                            <div>
+                    <h3 class="gradient-text" style="margin-bottom: 1.5rem;">Action Plan</h3>
+                    <div class="action-plan">
+                        <div class="action-item">
+                            <div class="action-marker">1</div>
+                            <div class="action-content">
                                 <strong>Start Small</strong>
-                                <p style="margin:0; font-size: 0.9rem;">Begin with one process element in existing assignments.</p>
+                                <span style="color: var(--text-secondary); font-size: 0.9rem;">Begin with one process element in existing assignments.</span>
                             </div>
                         </div>
-                        <div class="tip-item">
-                            <span class="tip-number">02</span>
-                            <div>
+                        <div class="action-item">
+                            <div class="action-marker">2</div>
+                            <div class="action-content">
                                 <strong>Scaffold Thoroughly</strong>
-                                <p style="margin:0; font-size: 0.9rem;">Provide templates and examples for process documentation.</p>
+                                <span style="color: var(--text-secondary); font-size: 0.9rem;">Provide templates and examples for process documentation.</span>
                             </div>
                         </div>
-                        <div class="tip-item">
-                            <span class="tip-number">03</span>
-                            <div>
+                        <div class="action-item">
+                            <div class="action-marker">3</div>
+                            <div class="action-content">
                                 <strong>Value Authentically</strong>
-                                <p style="margin:0; font-size: 0.9rem;">Assign meaningful points (40-60%) to process components.</p>
+                                <span style="color: var(--text-secondary); font-size: 0.9rem;">Assign meaningful points (40-60%) to process components.</span>
                             </div>
                         </div>
-                        <div class="tip-item">
-                            <span class="tip-number">04</span>
-                            <div>
+                        <div class="action-item">
+                            <div class="action-marker">4</div>
+                            <div class="action-content">
                                 <strong>Embrace Messiness</strong>
-                                <p style="margin:0; font-size: 0.9rem;">Real process is non-linear. Value honest documentation over polish.</p>
+                                <span style="color: var(--text-secondary); font-size: 0.9rem;">Real process is non-linear. Value honest documentation over polish.</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Benefits -->
-                <div class="glass-card">
-                    <h3 class="gradient-text" style="margin-bottom: 1rem;">The Learning Benefits</h3>
-                    <p>Process-focused assessment isn't just about AI resistance.</p>
-                    
-                    <div style="margin-top: 2rem;">
-                        <span class="benefit-tag"><i class="fa-solid fa-eye"></i> Makes thinking visible</span>
-                        <span class="benefit-tag"><i class="fa-solid fa-arrow-up-right-dots"></i> Growth mindset</span>
-                        <span class="benefit-tag"><i class="fa-solid fa-briefcase"></i> Professional habits</span>
-                        <span class="benefit-tag"><i class="fa-solid fa-magnifying-glass"></i> Reveals struggles early</span>
-                        <span class="benefit-tag"><i class="fa-solid fa-user-graduate"></i> Metacognitive awareness</span>
-                    </div>
-
-                    <div style="margin-top: 2rem; padding: 1rem; border: 1px dashed var(--accent-indigo); border-radius: 12px; text-align: center;">
-                        <p style="margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Shift from Performance to Growth</p>
-                        <p style="font-size: 0.9rem;">When students know the journey matters as much as the destination, they engage more deeply.</p>
+                <!-- Right: Benefits Grid -->
+                <div>
+                    <h3 class="gradient-text" style="margin-bottom: 1.5rem;">The Learning Benefits</h3>
+                    <div class="benefits-grid">
+                        <div class="benefit-card">
+                            <i class="fa-solid fa-eye benefit-icon"></i>
+                            <h4>Visible Thinking</h4>
+                            <p style="font-size: 0.8rem; margin:0;">Makes internal cognition visible for feedback.</p>
+                        </div>
+                        <div class="benefit-card">
+                            <i class="fa-solid fa-arrow-up-right-dots benefit-icon"></i>
+                            <h4>Growth Mindset</h4>
+                            <p style="font-size: 0.8rem; margin:0;">Shifts focus from performance to improvement.</p>
+                        </div>
+                        <div class="benefit-card">
+                            <i class="fa-solid fa-briefcase benefit-icon"></i>
+                            <h4>Pro Habits</h4>
+                            <p style="font-size: 0.8rem; margin:0;">Teaches professional documentation skills.</p>
+                        </div>
+                        <div class="benefit-card">
+                            <i class="fa-solid fa-magnifying-glass benefit-icon"></i>
+                            <h4>Early Detection</h4>
+                            <p style="font-size: 0.8rem; margin:0;">Reveals learning struggles before final submission.</p>
+                        </div>
+                        <div class="benefit-card">
+                            <i class="fa-solid fa-user-graduate benefit-icon"></i>
+                            <h4>Metacognition</h4>
+                            <p style="font-size: 0.8rem; margin:0;">Builds self-awareness of learning strategies.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -581,16 +695,36 @@
             if(activeBtn) activeBtn.classList.add('active');
         }
 
-        // Accordion Logic for Strategies
-        function toggleStrategy(card) {
-            // Optional: Close others when opening one (Accordion style)
-            // const allCards = document.querySelectorAll('.strategy-card');
-            // allCards.forEach(c => {
-            //     if (c !== card) c.classList.remove('open');
-            // });
+        // Framework Accordion Logic (One at a time)
+        function toggleFramework(selectedCard) {
+            const allCards = document.querySelectorAll('.step-card');
+            
+            // Check if the clicked card is already open
+            const isOpen = selectedCard.classList.contains('open');
 
-            // Toggle current
-            card.classList.toggle('open');
+            // Close all cards first
+            allCards.forEach(card => card.classList.remove('open'));
+
+            // If it wasn't open before, open it now
+            if (!isOpen) {
+                selectedCard.classList.add('open');
+            }
+        }
+
+        // Strategies Accordion Logic (One at a time)
+        function toggleStrategy(selectedCard) {
+            const allCards = document.querySelectorAll('.strategy-card');
+            
+            // Check if the clicked card is already open
+            const isOpen = selectedCard.classList.contains('open');
+
+            // Close all cards
+            allCards.forEach(card => card.classList.remove('open'));
+
+            // If it wasn't open before, open it now
+            if (!isOpen) {
+                selectedCard.classList.add('open');
+            }
         }
     </script>
 </body>
