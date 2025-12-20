@@ -426,7 +426,7 @@
         <div class="subtitle">Faculty Development Series</div>
         <h1 class="text-gradient">AI-Resistant Assignment Design</h1>
         <p class="intro-text">
-            Move beyond "detecting" AI to "designing" around it. Analyze a model business assignment and build your own.
+            Move beyond "detecting" AI to "designing" around it. Analyze a model business assignment and build your own using the <strong>Process vs Product</strong> approach.
         </p>
     </header>
 
@@ -437,7 +437,7 @@
                 1. The Case Study
             </button>
             <button onclick="switchTab('framework')" id="tab-framework" class="nav-btn">
-                2. The Framework
+                2. Process vs Product
             </button>
             <button onclick="switchTab('workshop')" id="tab-workshop" class="nav-btn">
                 3. Design Workshop
@@ -463,27 +463,27 @@
 
                 <ol class="analysis-list">
                     <li>
-                        <span class="analysis-trigger" data-reason="Real-World Partner: LLMs don't know the specific financials or daily struggles of the local bakery.">
+                        <span class="analysis-trigger" data-reason="Real-World Relationships: AI cannot navigate the social process of building trust with a local owner.">
                             Select a local small business willing to collaborate on this project.
-                            <span class="tooltip">Reason: Real-World Partner</span>
+                            <span class="tooltip">Reason: Real-World Relationships</span>
                         </span>
                     </li>
                     <li>
-                        <span class="analysis-trigger" data-reason="Human Context: AI cannot replicate the specific goals and nuances of a real client interview.">
+                        <span class="analysis-trigger" data-reason="Primary Research Process: AI cannot perform the human action of interviewing and recording nuances.">
                             Interview the owner about their specific business challenges and goals.
-                            <span class="tooltip">Reason: Primary Source Data</span>
+                            <span class="tooltip">Reason: Primary Research Process</span>
                         </span>
                     </li>
                     <li>
-                        <span class="analysis-trigger" data-reason="New Data: The student is generating new dataset (survey results) that didn't exist before.">
+                        <span class="analysis-trigger" data-reason="Generating New Data: The 'Product' (the data) is created by the student's 'Process' (surveying), not retrieved from a database.">
                             Survey 25+ potential customers in the target market.
-                            <span class="tooltip">Reason: Active Data Collection</span>
+                            <span class="tooltip">Reason: Generating New Data</span>
                         </span>
                     </li>
                     <li>
-                        <span class="analysis-trigger" data-reason="Local Context: Competitor analysis requires physical visits and local community knowledge.">
+                        <span class="analysis-trigger" data-reason="Contextual Application: Applying a framework is a process of judgment, not just definition.">
                             Analyze competitor offerings and present findings to the business owner.
-                            <span class="tooltip">Reason: Local Competitive Context</span>
+                            <span class="tooltip">Reason: Contextual Application</span>
                         </span>
                     </li>
                 </ol>
@@ -492,54 +492,62 @@
                     <i class="fa-solid fa-check-circle" style="font-size: 1.5rem;"></i>
                     <div>
                         <strong style="display: block; margin-bottom: 0.2rem;">Audit Complete: High Resistance</strong>
-                        <span style="font-size: 0.9rem; color: var(--text-secondary);">This assignment rates <strong>High</strong>. It relies on real-time local data, human client interaction, and the generation of new primary research.</span>
+                        <span style="font-size: 0.9rem; color: var(--text-secondary);">This assignment rates <strong>High</strong>. It values the <strong>Process</strong> (interviewing, surveying, consulting) over just a final written <strong>Product</strong>.</span>
                     </div>
                 </div>
             </div>
 
             <div style="text-align: center;">
                 <button onclick="switchTab('framework')" style="background: none; border: none; color: var(--accent-indigo); cursor: pointer; font-size: 1rem;">
-                    Why does this work? View the Framework <i class="fa-solid fa-arrow-right"></i>
+                    Why does this work? View the Process Framework <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </section>
 
         <!-- SECTION 2: THE FRAMEWORK -->
         <section id="content-framework" class="hidden-content fade-in">
-            <div class="framework-grid">
-                <!-- Authentic -->
-                <div class="glass-card">
-                    <i class="fa-solid fa-fingerprint framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Authentic</h3>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Data must be local and real. If the case is a famous company (Apple/Tesla), AI has the data. Use a local bakery or tech startup instead.
-                    </p>
-                </div>
+            <div class="glass-card" style="margin-bottom: 2rem; border-color: var(--accent-cyan);">
+                <h3 style="margin-bottom: 1rem; color: var(--accent-cyan);">The Core Shift</h3>
+                <p style="color: var(--text-primary);">
+                    Generative AI is a <strong>Product Engine</strong>—it creates essays, code, and summaries instantly. 
+                    To resist AI, we must become <strong>Process Assessors</strong>. We grade the journey, the friction, and the evolution of ideas, not just the final file.
+                </p>
+            </div>
 
-                <!-- Iterative -->
+            <div class="framework-grid">
+                <!-- 1. Scaffolding -->
                 <div class="glass-card">
                     <i class="fa-solid fa-layer-group framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Iterative</h3>
+                    <h3 style="margin-bottom: 0.5rem;">Scaffolding</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Focus on the consulting process. Require client interview notes, survey design drafts, and feedback loops before the final strategy deck.
+                        Break the "Product" (Final Paper) into visible "Processes" (Topic Proposal, Annotated Bibliography, Outline). AI is great at the finish line, but bad at showing the steps to get there.
                     </p>
                 </div>
 
-                <!-- Applied -->
+                <!-- 2. Original Data -->
                 <div class="glass-card">
-                    <i class="fa-solid fa-screwdriver-wrench framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Applied</h3>
+                    <i class="fa-solid fa-magnifying-glass-chart framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">Original Data</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Don't ask "What is SWOT?" Ask "How does the 'Threat of Substitutes' apply to <em>this</em> specific coffee shop's pricing strategy?"
+                        AI relies on <em>existing</em> internet data. Force students to generate <em>new</em> data through interviews, surveys, or experiments. The value is in the collection process.
                     </p>
                 </div>
 
-                <!-- Singular -->
+                <!-- 3. Friction & Struggle -->
                 <div class="glass-card">
-                    <i class="fa-solid fa-puzzle-piece framework-icon"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Singular</h3>
+                    <i class="fa-solid fa-mountain framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">Friction</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Every business and neighborhood is unique. A student analyzing <em>this</em> gym in <em>this</em> zip code creates a dataset of one.
+                        Learning involves friction—confusion, dead ends, and revision. AI is frictionless. Ask students to document their "stuck points" and how they overcame them.
+                    </p>
+                </div>
+
+                <!-- 4. Metacognition -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-brain framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">Metacognition</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Ask "How did you write this?" instead of just "Write this." Reflections, version histories, and oral defenses prove the student did the thinking.
                     </p>
                 </div>
             </div>
@@ -555,8 +563,8 @@
         <section id="content-workshop" class="hidden-content fade-in">
             <div class="glass-card">
                 <div style="border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; margin-bottom: 2rem;">
-                    <h2 style="font-size: 1.5rem;">Assignment Builder</h2>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Adapt the "Market Research" model to your specific course context.</p>
+                    <h2 style="font-size: 1.5rem;">Process-Based Assignment Builder</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Adapt the Market Research model to value the learning journey over the final output.</p>
                 </div>
 
                 <form id="builder-form" onsubmit="generateAssignment(event)">
@@ -569,10 +577,10 @@
 
                     <!-- Step 2 -->
                     <div class="form-group">
-                        <label>2. Local Business Partner (Authentic Data)</label>
-                        <div class="helper-text">Who will the student collaborate with?</div>
+                        <label>2. The "Original Data" Source</label>
+                        <div class="helper-text">What real-world entity will they partner with to generate new data?</div>
                         <select id="inp-location">
-                            <option value="">Select a business type...</option>
+                            <option value="">Select a partner type...</option>
                             <option value="Independent Cafe/Restaurant">Independent Cafe/Restaurant</option>
                             <option value="Boutique Retail Store">Boutique Retail Store</option>
                             <option value="Local Non-Profit">Local Non-Profit Organization</option>
@@ -584,20 +592,20 @@
 
                     <!-- Step 3 -->
                     <div class="form-group">
-                        <label>3. Human Element (Client Interaction)</label>
-                        <div class="helper-text">How will they gather primary data?</div>
+                        <label>3. The "Visible Process" (Assessment)</label>
+                        <div class="helper-text">How will you grade the journey, not just the destination?</div>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="human-action" value="interview">
-                                <span>Interview owner/manager (Audio/Transcript required)</span>
+                                <span>Grade the Interview Notes & Transcripts (Evidence of interaction)</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="human-action" value="survey">
-                                <span>Survey 25 potential customers on-site</span>
+                                <span>Grade the Survey Design & Raw Data Collection (Evidence of research)</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="human-action" value="mystery">
-                                <span>Mystery shop 3 local competitors and document</span>
+                                <span>Grade the Field Notes from Competitor Visits (Evidence of observation)</span>
                             </label>
                         </div>
                     </div>
@@ -612,11 +620,11 @@
                     <h3 class="text-gradient" style="font-size: 1.4rem; margin-bottom: 1rem;" id="res-title">Assignment Draft</h3>
                     <div style="color: var(--text-primary); line-height: 1.8;">
                         <p><strong>Context:</strong> <span id="res-course"></span></p>
-                        <p style="margin-top: 0.5rem;"><strong>The Task:</strong> Students will partner with a local <span id="res-location" class="result-highlight"></span> to conduct a market analysis.</p>
-                        <p style="margin-top: 0.5rem;"><strong>Step 1 (Data Collection):</strong> They must <span id="res-action"></span>. This ensures the data is proprietary, recent, and verified by human interaction.</p>
-                        <p style="margin-top: 0.5rem;"><strong>Step 2 (Analysis):</strong> Using this primary data, they must apply <span id="res-concept" class="result-highlight"></span> to develop actionable recommendations for the client.</p>
+                        <p style="margin-top: 0.5rem;"><strong>The Task:</strong> Students will partner with a local <span id="res-location" class="result-highlight"></span>.</p>
+                        <p style="margin-top: 0.5rem;"><strong>The Process (Graded Steps):</strong> Instead of only grading the final report, significant weight will be given to <span id="res-action"></span>. This requires students to show their work in real-time.</p>
+                        <p style="margin-top: 0.5rem;"><strong>The Application:</strong> They will then apply <span id="res-concept" class="result-highlight"></span> to this self-generated data.</p>
                         <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--glass-border); color: var(--text-secondary); font-size: 0.9rem;">
-                            <em>Why this works:</em> AI cannot access the internal challenges of your local <span id="res-loc-repeat"></span> or predict the real-time feedback of their actual customers.
+                            <em>Why this works:</em> AI is a product engine. By grading the <strong>Process</strong> of interacting with a <span id="res-loc-repeat"></span> and gathering raw data, you render the AI tool useful for assistance but incapable of doing the work for them.
                         </p>
                     </div>
                     <button onclick="window.print()" class="print-btn">
@@ -692,9 +700,9 @@
             }
 
             const actionMap = {
-                'interview': 'conduct an in-depth interview with the owner/manager regarding business goals',
-                'survey': 'design and execute an on-site survey of 25 potential customers',
-                'mystery': 'perform a mystery shopping analysis of 3 direct local competitors'
+                'interview': 'the raw transcripts and notes from the owner interview',
+                'survey': 'the survey design process and raw data collection spreadsheets',
+                'mystery': 'the field notes and photo documentation from competitor visits'
             };
 
             const actionText = actionMap[actionRadio.value];
