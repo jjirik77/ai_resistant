@@ -351,79 +351,206 @@
             transform: scale(1);
         }
 
-        /* --- New Styles for Assessment Scale --- */
-        .level-card {
-            margin-bottom: 1.5rem;
-            border-left: 4px solid var(--accent-cyan);
+        /* --- TIMELINE Design for Assessment Scale --- */
+        .timeline-container {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-top: 2rem;
         }
 
-        .level-card:nth-child(even) {
-            border-left-color: var(--accent-indigo);
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 20px;
+            bottom: 20px;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-indigo), var(--accent-danger));
+            border-radius: 2px;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
         }
 
-        .level-badge {
-            display: inline-block;
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent-cyan);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--radius-pill);
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.6s var(--ease-custom);
         }
 
-        .level-card:nth-child(even) .level-badge {
-            background: rgba(129, 140, 248, 0.1);
-            color: var(--accent-indigo);
+        .timeline-dot {
+            position: absolute;
+            left: -2.5rem;
+            top: 1.8rem;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: 3px solid var(--accent-cyan);
+            z-index: 2;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            transition: transform 0.3s;
+        }
+        
+        .timeline-item:hover .timeline-dot {
+            transform: scale(1.3);
+            background: var(--accent-cyan);
         }
 
-        .level-meta {
-            color: var(--text-secondary);
-            font-style: italic;
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+        /* Differentiate Level Dots */
+        .timeline-item:nth-child(1) .timeline-dot { border-color: var(--accent-cyan); }
+        .timeline-item:nth-child(2) .timeline-dot { border-color: #5bb2e8; }
+        .timeline-item:nth-child(3) .timeline-dot { border-color: var(--accent-indigo); }
+        .timeline-item:nth-child(4) .timeline-dot { border-color: #bf80b8; }
+        .timeline-item:nth-child(5) .timeline-dot { border-color: var(--accent-danger); box-shadow: 0 0 10px rgba(248, 113, 113, 0.5); }
+
+        .timeline-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-card);
+            padding: 2rem;
+            position: relative;
+            transition: transform 0.3s, border-color 0.3s;
         }
 
-        .decision-tree {
+        .timeline-card::before {
+            /* Connector Line */
+            content: '';
+            position: absolute;
+            left: -1rem;
+            top: 2.3rem;
+            width: 1rem;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .timeline-item:hover .timeline-card {
+            transform: translateX(5px);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        .level-header {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
             gap: 1rem;
         }
 
-        .decision-item {
-            padding: 1rem;
-            background: rgba(30, 41, 59, 0.3);
-            border-radius: 8px;
+        .level-number {
+            font-size: 3rem;
+            font-weight: 800;
+            opacity: 0.1;
+            position: absolute;
+            right: 1.5rem;
+            top: 0.5rem;
+            user-select: none;
+        }
+
+        .use-when-box {
+            background: rgba(30, 41, 59, 0.6);
+            border-left: 3px solid var(--accent-cyan);
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .timeline-item:nth-child(5) .use-when-box { border-color: var(--accent-danger); }
+
+        /* --- FLOWCHART Design for Decision Tree --- */
+        .flow-container {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            transition: background 0.3s;
+            padding: 2rem 0;
+            position: relative;
         }
 
-        .decision-item:hover {
-            background: rgba(56, 189, 248, 0.05);
+        /* Central line */
+        .flow-container::before {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 50px; left: 50%;
+            width: 2px;
+            background: var(--glass-border);
+            transform: translateX(-50%);
+            z-index: 0;
+            border: 1px dashed rgba(255,255,255,0.1);
         }
 
-        .decision-question {
-            color: var(--text-primary);
-            font-weight: 500;
+        .flow-step {
+            display: grid;
+            grid-template-columns: 1fr 60px 1fr;
+            width: 100%;
+            max-width: 800px;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
         }
 
-        .decision-arrow {
+        .flow-question-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent-indigo);
+            padding: 1.25rem;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .flow-question-box::after {
+            /* Down arrow for No */
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
             color: var(--text-secondary);
-            margin: 0 1rem;
+            font-size: 0.8rem;
+            background: var(--bg-primary);
+            padding: 0 5px;
         }
 
-        .decision-result {
+        /* Remove arrow for last item */
+        .flow-step:last-child .flow-question-box::after { display: none; }
+
+        .flow-connector {
+            height: 2px;
+            background: var(--accent-cyan);
+            position: relative;
+        }
+        
+        .flow-connector::after {
+            content: 'YES';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.6rem;
+            font-weight: 800;
             color: var(--accent-cyan);
-            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .flow-result-box {
             background: rgba(56, 189, 248, 0.1);
-            padding: 0.25rem 0.75rem;
-            border-radius: 6px;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .flow-step:hover .flow-result-box {
+            background: var(--accent-cyan);
+            color: var(--bg-primary);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
         }
 
         /* Score Gauge */
@@ -490,12 +617,27 @@
                 bottom: 10px;
             }
             .progress-bar { width: 100%; margin: 0.5rem 0; }
-            .decision-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
+            
+            /* Flowchart Mobile */
+            .flow-step {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+                margin-bottom: 3.5rem;
             }
-            .decision-arrow { transform: rotate(90deg); margin: 0; }
+            .flow-connector {
+                height: 30px;
+                width: 2px;
+                margin: 0 auto;
+                background: linear-gradient(to bottom, var(--accent-indigo), var(--accent-cyan));
+            }
+            .flow-connector::after {
+                top: 50%;
+                left: 10px;
+                transform: translateY(-50%);
+            }
+            .flow-container::before { display: none; }
+            .flow-question-box::after { bottom: -70px; }
         }
     </style>
 </head>
@@ -532,7 +674,7 @@
             
             <div class="glass-card" style="margin-top: 3rem; text-align: center; border-color: rgba(255,255,255,0.05);">
                 <h3 class="gradient-text">Why use AIAS?</h3>
-                <p>Traditional "write an essay" assignments are vulnerable. The most effective AI-resistant assignments incorporate multiple pillars below. Even adding one significantly increases assignment integrity.</p>
+                <p>Traditional "write an essay" assignments are vulnerable. The most effective AI-resistant assignments incorporate multiple pillars shown above. Even adding one significantly increases assignment integrity.</p>
             </div>
         </main>
 
@@ -543,98 +685,144 @@
                 <p>A 5-level spectrum of AI permission and integration in assessment design.</p>
             </div>
 
-            <div class="levels-container">
+            <!-- New Timeline Design -->
+            <div class="timeline-container">
+                
                 <!-- Level 1 -->
-                <div class="glass-card level-card">
-                    <div class="level-badge">Level 1</div>
-                    <h3 class="card-title">No AI</h3>
-                    <div class="level-meta">Controlled environment, no AI access permitted</div>
-                    <ul class="feature-list">
-                        <li>In-person exams, handwritten work, closed-book tests</li>
-                        <li><strong>Use when:</strong> Assessing foundational knowledge without technology</li>
-                    </ul>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="level-number">01</div>
+                        <div class="level-header">
+                            <h3 style="color: var(--accent-cyan); margin:0;">No AI</h3>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);"><i class="fa-solid fa-lock"></i> Controlled Environment</span>
+                        </div>
+                        <p>In-person exams, handwritten work, closed-book tests. No AI access permitted.</p>
+                        <div class="use-when-box">
+                            <strong>Use when:</strong> Assessing foundational knowledge without technology.
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Level 2 -->
-                <div class="glass-card level-card">
-                    <div class="level-badge">Level 2</div>
-                    <h3 class="card-title">AI-Assisted</h3>
-                    <div class="level-meta">Limited AI use with attribution required</div>
-                    <ul class="feature-list">
-                        <li>AI for brainstorming, grammar checking, research starting points</li>
-                        <li>Students must document all AI use and cite appropriately</li>
-                        <li><strong>Use when:</strong> Teaching responsible AI use and citation practices</li>
-                    </ul>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="level-number">02</div>
+                        <div class="level-header">
+                            <h3 style="color: #5bb2e8; margin:0;">AI-Assisted</h3>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);"><i class="fa-solid fa-hand-holding-hand"></i> Limited Use</span>
+                        </div>
+                        <p>AI for brainstorming, grammar checking, research starting points. Attribution required.</p>
+                        <div class="use-when-box" style="border-color: #5bb2e8;">
+                            <strong>Use when:</strong> Teaching responsible AI use and citation practices.
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Level 3 -->
-                <div class="glass-card level-card">
-                    <div class="level-badge">Level 3</div>
-                    <h3 class="card-title">AI-Integrated</h3>
-                    <div class="level-meta">AI incorporated with process documentation</div>
-                    <ul class="feature-list">
-                        <li>AI as collaboration tool; students explain decision-making</li>
-                        <li>Process artifacts required (prompts, revisions, reflections)</li>
-                        <li><strong>Use when:</strong> Emphasizing critical evaluation of AI outputs</li>
-                    </ul>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="level-number">03</div>
+                        <div class="level-header">
+                            <h3 style="color: var(--accent-indigo); margin:0;">AI-Integrated</h3>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);"><i class="fa-solid fa-file-contract"></i> Process Focus</span>
+                        </div>
+                        <p>AI as collaboration tool. Students must explain decision-making and submit artifacts.</p>
+                        <div class="use-when-box" style="border-color: var(--accent-indigo);">
+                            <strong>Use when:</strong> Emphasizing critical evaluation of AI outputs.
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Level 4 -->
-                <div class="glass-card level-card">
-                    <div class="level-badge">Level 4</div>
-                    <h3 class="card-title">AI-Collaborative</h3>
-                    <div class="level-meta">AI as partner with human judgment central</div>
-                    <ul class="feature-list">
-                        <li>Students curate, critique, and improve AI-generated content</li>
-                        <li>Focus on evaluation, synthesis, and originality of thought</li>
-                        <li><strong>Use when:</strong> Developing AI literacy and critical thinking skills</li>
-                    </ul>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="level-number">04</div>
+                        <div class="level-header">
+                            <h3 style="color: #bf80b8; margin:0;">AI-Collaborative</h3>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);"><i class="fa-solid fa-people-arrows"></i> Partner Level</span>
+                        </div>
+                        <p>Students curate, critique, and improve AI-generated content. Focus on human synthesis.</p>
+                        <div class="use-when-box" style="border-color: #bf80b8;">
+                            <strong>Use when:</strong> Developing AI literacy and critical thinking skills.
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Level 5 -->
-                <div class="glass-card level-card">
-                    <div class="level-badge">Level 5</div>
-                    <h3 class="card-title">AI-Enhanced</h3>
-                    <div class="level-meta">Full AI integration with explicit pedagogical purpose</div>
-                    <ul class="feature-list">
-                        <li>Students explore AI capabilities and limitations</li>
-                        <li>Meta-cognitive reflection on AI's role in learning</li>
-                        <li><strong>Use when:</strong> Teaching about AI itself or advanced digital literacy</li>
-                    </ul>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="level-number">05</div>
+                        <div class="level-header">
+                            <h3 style="color: var(--accent-danger); margin:0;">AI-Enhanced</h3>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);"><i class="fa-solid fa-rocket"></i> Full Integration</span>
+                        </div>
+                        <p>Meta-cognitive reflection on AI's role. Students explore capabilities and limitations.</p>
+                        <div class="use-when-box" style="border-color: var(--accent-danger);">
+                            <strong>Use when:</strong> Teaching about AI itself or advanced digital literacy.
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
-            <!-- Decision Tree -->
-            <div class="glass-card" style="margin-top: 3rem; border-color: var(--accent-indigo);">
-                <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
-                    <i class="fa-solid fa-tree gradient-text"></i> Quick Decision Tree
+            <!-- New Flowchart Decision Tree -->
+            <div class="glass-card" style="margin-top: 4rem; border-color: rgba(255,255,255,0.1); background: rgba(15, 23, 42, 0.4);">
+                <h3 style="text-align: center; margin-bottom: 2rem;">
+                    <i class="fa-solid fa-diagram-project gradient-text"></i> Decision Flow
                 </h3>
-                <div class="decision-tree">
-                    <div class="decision-item">
-                        <span class="decision-question">Can students complete without AI?</span>
-                        <i class="fa-solid fa-arrow-right decision-arrow"></i>
-                        <span class="decision-result">Level 1</span>
+                
+                <div class="flow-container">
+                    
+                    <!-- Step 1 -->
+                    <div class="flow-step">
+                        <div class="flow-question-box">
+                            Can students complete this without AI?
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-result-box">Level 1</div>
                     </div>
-                    <div class="decision-item">
-                        <span class="decision-question">Need basic AI tools?</span>
-                        <i class="fa-solid fa-arrow-right decision-arrow"></i>
-                        <span class="decision-result">Level 2</span>
+
+                    <!-- Step 2 -->
+                    <div class="flow-step">
+                        <div class="flow-question-box">
+                            Do they only need basic tools (grammar/ideas)?
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-result-box">Level 2</div>
                     </div>
-                    <div class="decision-item">
-                        <span class="decision-question">AI as drafting partner?</span>
-                        <i class="fa-solid fa-arrow-right decision-arrow"></i>
-                        <span class="decision-result">Level 3</span>
+
+                    <!-- Step 3 -->
+                    <div class="flow-step">
+                        <div class="flow-question-box">
+                            Is AI acting as a drafting partner?
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-result-box">Level 3</div>
                     </div>
-                    <div class="decision-item">
-                        <span class="decision-question">AI outputs need curation?</span>
-                        <i class="fa-solid fa-arrow-right decision-arrow"></i>
-                        <span class="decision-result">Level 4</span>
+
+                    <!-- Step 4 -->
+                    <div class="flow-step">
+                        <div class="flow-question-box">
+                            Does the output need heavy curation?
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-result-box">Level 4</div>
                     </div>
-                    <div class="decision-item">
-                        <span class="decision-question">Teaching about AI?</span>
-                        <i class="fa-solid fa-arrow-right decision-arrow"></i>
-                        <span class="decision-result">Level 5</span>
+
+                    <!-- Step 5 -->
+                    <div class="flow-step">
+                        <div class="flow-question-box">
+                            Is the goal to teach about AI itself?
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-result-box">Level 5</div>
                     </div>
+
                 </div>
             </div>
         </main>
