@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Trainer: Mathematics AI-Resistant Assignment Design</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent-cyan: #38bdf8;
+            --accent-indigo: #818cf8;
+            --accent-danger: #f87171;
+            --accent-success: #34d399;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.1) 0%, transparent 20%);
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hidden-content {
+            display: none !important;
+            opacity: 0;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glass Components */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.3);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .vulnerable-card {
+            border-left: 4px solid var(--accent-danger);
+            box-shadow: 0 0 20px rgba(248, 113, 113, 0.1);
+        }
+
+        .resistant-card {
+            border-left: 4px solid var(--accent-success);
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
+        }
+
+        /* Syllabus Paper Card Style */
+        .syllabus-card {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e293b; /* Dark text for contrast */
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-family: 'Georgia', serif; /* Academic feel */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .syllabus-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #cbd5e1, #94a3b8);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .syllabus-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+            letter-spacing: 1px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .syllabus-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        /* Report Panels */
+        .report-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .report-danger {
+            border: 1px solid rgba(248, 113, 113, 0.3);
+        }
+
+        .report-success {
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .report-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .report-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .report-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .report-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--text-secondary);
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .intro-text {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 0.75rem 2rem;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            color: #0f172a; /* Dark text on bright gradient */
+            border-color: transparent;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Audit Section Styles */
+        .audit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .audit-btn {
+            background: transparent;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 0.6rem 1.5rem;
+            border-radius: 99px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .audit-btn:hover {
+            background: rgba(56, 189, 248, 0.1);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+        }
+
+        /* Danger Button Variant */
+        .audit-btn.danger {
+            border-color: var(--accent-danger);
+            color: var(--accent-danger);
+        }
+        .audit-btn.danger:hover {
+            background: rgba(248, 113, 113, 0.1);
+            box-shadow: 0 0 15px rgba(248, 113, 113, 0.2);
+        }
+        .audit-btn.danger-active {
+            background: var(--accent-danger);
+            color: #fff;
+        }
+
+        /* Success Button Variant */
+        .audit-btn.success {
+            border-color: var(--accent-success);
+            color: var(--accent-success);
+        }
+        .audit-btn.success:hover {
+            background: rgba(52, 211, 153, 0.1);
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
+        }
+        .audit-btn.success-active {
+            background: var(--accent-success);
+            color: #0f172a;
+        }
+
+        .analysis-list {
+            list-style: none;
+            padding: 0;
+            counter-reset: audit-counter;
+        }
+
+        .analysis-list li {
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 3rem;
+            counter-increment: audit-counter;
+        }
+
+        .analysis-list li::before {
+            content: counter(audit-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        .analysis-trigger {
+            border-bottom: 1px dashed var(--accent-cyan);
+            cursor: help;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline;
+        }
+
+        /* Specific Trigger Styles */
+        .trigger-vulnerable {
+            border-bottom-color: var(--accent-danger);
+            color: var(--text-primary);
+        }
+        .trigger-vulnerable:hover {
+            color: var(--accent-danger);
+            text-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
+        }
+        .trigger-vulnerable.audited {
+            color: var(--accent-danger);
+            border-bottom: 1px solid var(--accent-danger);
+            background: rgba(248, 113, 113, 0.1);
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+
+        .trigger-resistant {
+            border-bottom-color: var(--accent-success);
+        }
+        .trigger-resistant:hover {
+            color: var(--accent-success);
+            text-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+        }
+        .trigger-resistant.audited {
+            color: var(--accent-success);
+            border-bottom: 1px solid var(--accent-success);
+            background: rgba(52, 211, 153, 0.1);
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 140%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 0.8rem;
+            border-radius: 8px;
+            width: 240px;
+            text-align: center;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--bg-secondary) transparent transparent transparent;
+        }
+
+        .analysis-trigger:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+            bottom: 125%;
+        }
+
+        /* Transformation Button */
+        .transform-btn {
+            display: block;
+            width: 100%;
+            margin-top: 2rem;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            color: #0f172a;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .transform-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+        }
+        
+        /* Secondary Navigation Button */
+        .next-step-btn {
+            margin-top: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--text-secondary);
+            color: var(--text-primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .next-step-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: var(--text-primary);
+        }
+
+        /* Framework Grid */
+        .framework-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .framework-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--accent-cyan);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .helper-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            padding: 1rem;
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-indigo);
+            box-shadow: 0 0 15px rgba(129, 140, 248, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Custom Radio */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .radio-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .radio-option input {
+            margin-right: 1rem;
+            accent-color: var(--accent-cyan);
+        }
+
+        .generate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            color: #0f172a;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Results Area */
+        .result-card {
+            border-left: 4px solid var(--accent-cyan);
+            margin-top: 2rem;
+        }
+
+        .result-highlight {
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        .print-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .print-btn:hover {
+            color: var(--accent-cyan);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .nav-tabs { flex-direction: column; gap: 0.5rem; }
+            .nav-btn { width: 100%; text-align: center; }
+            .audit-header { flex-direction: column; align-items: flex-start; }
+            .tooltip { bottom: auto; top: 120%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container">
+        <div class="subtitle">Faculty Development Series</div>
+        <h1 class="text-gradient">Mathematics AI-Resistant Assignment Design</h1>
+        <p class="intro-text">
+            Move beyond "detecting" AI to "designing" around it. Follow the journey from a vulnerable prompt to a secure, authentic assessment in Mathematics.
+        </p>
+    </header>
+
+    <main class="container">
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button onclick="switchTab('vulnerable')" id="tab-vulnerable" class="nav-btn active">
+                1. AI Vulnerable
+            </button>
+            <button onclick="switchTab('transformation')" id="tab-transformation" class="nav-btn">
+                2. Transformation
+            </button>
+            <button onclick="switchTab('resistant')" id="tab-resistant" class="nav-btn">
+                3. AI Resistant
+            </button>
+            <button onclick="switchTab('workshop')" id="tab-workshop" class="nav-btn">
+                4. Apply to Course
+            </button>
+        </nav>
+
+        <!-- SECTION 1: AI VULNERABLE -->
+        <section id="content-vulnerable" class="fade-in">
+            <div class="glass-card vulnerable-card">
+                <div class="audit-header">
+                    <div>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem; color: var(--accent-danger);">The "Problem Set"</h2>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Status: Highly Vulnerable</span>
+                    </div>
+                    <button onclick="analyzeRisk()" id="risk-btn" class="audit-btn danger">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Identify Vulnerabilities
+                    </button>
+                </div>
+
+                <!-- Assignment Description (Syllabus Style) -->
+                <div class="syllabus-card">
+                    <div class="syllabus-header">
+                        <span>MATH 101: Calculus I</span>
+                        <span>Spring 2025</span>
+                    </div>
+                    <div class="syllabus-title">Homework Set 4: Derivatives</div>
+                    <p><strong>Instructions:</strong> Solve problems 1-20 in Chapter 3.4 of the textbook (The Chain Rule).</p>
+                    <p style="margin-top:0.5rem">Calculate the derivatives of the given functions. You must show your work step-by-step for full credit.</p>
+                </div>
+
+                <ol class="analysis-list">
+                    <li>
+                        <span class="analysis-trigger trigger-vulnerable">Solve 20 standard problems.</span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger trigger-vulnerable">Apply Chain Rule formulas.</span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger trigger-vulnerable">Show work (step-by-step).</span>
+                    </li>
+                </ol>
+
+                <div id="risk-report" class="hidden-content report-panel report-danger fade-in">
+                    <div class="report-title" style="color: var(--accent-danger)">
+                        <i class="fa-solid fa-bug"></i> Vulnerability Report
+                    </div>
+                    <ul class="report-list" style="color: var(--text-primary)">
+                        <li><strong>Calculator Solvable:</strong> Tools like Photomath, WolframAlpha, and ChatGPT can solve these instantly, showing every step required for credit.</li>
+                        <li><strong>Zero Context:</strong> Abstract variables (x, y) have no meaning. AI excels at manipulating symbols without understanding.</li>
+                        <li><strong>Replication:</strong> These exact textbook problems likely exist in the AI's training data verbatim.</li>
+                    </ul>
+                    
+                    <button onclick="switchTab('transformation')" class="next-step-btn">
+                        <i class="fa-solid fa-arrow-right"></i> Proceed to Transformation
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: TRANSFORMATION (FRAMEWORK) -->
+        <section id="content-transformation" class="hidden-content fade-in">
+            <div class="glass-card" style="margin-bottom: 2rem; border-color: var(--accent-cyan);">
+                <h3 style="margin-bottom: 1rem; color: var(--accent-cyan);">The Mathematical Shield</h3>
+                <p style="color: var(--text-primary);">
+                    In Math, we defend against AI by moving from abstract calculation to applied modeling, where the "problem" is undefined and data must be collected physically.
+                </p>
+            </div>
+
+            <div class="framework-grid">
+                <!-- 1. Real-World Modeling -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-earth-americas framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">1. Real-World Modeling</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Shift from finding "x" to modeling "Traffic Flow at Main St." The difficulty lies in translating reality into math, which AI struggles with.
+                    </p>
+                </div>
+
+                <!-- 2. Data Collection -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-stopwatch framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">2. Data Collection</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Require students to count cars, measure shadows, or survey peers. A unique, messy dataset prevents lookup or auto-generation.
+                    </p>
+                </div>
+
+                <!-- 3. Stakeholder Comms -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-user-tie framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">3. Stakeholder Focus</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Explain the findings to a non-expert (e.g., the Mayor or Principal). This forces conceptual translation rather than just symbolic manipulation.
+                    </p>
+                </div>
+
+                <!-- 4. Meta-Reflection -->
+                <div class="glass-card">
+                    <i class="fa-solid fa-chart-line framework-icon"></i>
+                    <h3 style="margin-bottom: 0.5rem;">4. Meta-Reflection</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Discuss the limitations. "Why might our linear model fail in a real-world crisis?" This requires critical evaluation of the math itself.
+                    </p>
+                </div>
+            </div>
+
+            <!-- THE TRANSFORM BUTTON -->
+            <button onclick="switchTab('resistant')" class="transform-btn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Transform Assignment Now
+            </button>
+        </section>
+
+        <!-- SECTION 3: AI RESISTANT -->
+        <section id="content-resistant" class="hidden-content fade-in">
+            
+            <!-- THE RESULT -->
+            <div class="glass-card resistant-card">
+                <div class="audit-header">
+                    <div>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem; color: var(--accent-success);">The "Modeling Project"</h2>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Status: AI Resistant</span>
+                    </div>
+                    <button onclick="verifyResistance()" id="audit-btn-verify" class="audit-btn success">
+                        <i class="fa-solid fa-shield-halved"></i> Run Risk Assessment
+                    </button>
+                </div>
+
+                <!-- Resistant Assignment Description -->
+                <div class="syllabus-card">
+                    <div class="syllabus-header">
+                        <span>MATH 101: Calculus I</span>
+                        <span>Spring 2025</span>
+                    </div>
+                    <div class="syllabus-title">Project: Community Optimization</div>
+                    <p><strong>Instructions:</strong> Identify a rate-of-change problem in your local community (e.g., cafeteria line speed, parking lot filling).</p>
+                    <ul style="margin-top:0.5rem; padding-left: 1.2rem; font-size: 0.95rem;">
+                        <li><strong>Data:</strong> Collect original data points over 3 days (time vs. quantity).</li>
+                        <li><strong>Model:</strong> Create a function to model this rate using derivatives.</li>
+                        <li><strong>Report:</strong> Submit a 1-page recommendation to a stakeholder (e.g., Manager) explaining how to optimize the flow.</li>
+                    </ul>
+                </div>
+
+                <ol class="analysis-list">
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Identify problem & collect original data.
+                        </span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Model rate using calculus concepts.
+                        </span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Present to stakeholder & reflect on limits.
+                        </span>
+                    </li>
+                </ol>
+
+                <div id="success-report" class="hidden-content report-panel report-success fade-in">
+                    <div class="report-title" style="color: var(--accent-success)">
+                        <i class="fa-solid fa-lock"></i> Verification Successful
+                    </div>
+                    <p style="margin-bottom:0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                        This assignment successfully applies the Math Shield strategies:
+                    </p>
+                    <ul class="report-list" style="color: var(--text-primary)">
+                        <li><strong>Real-World Modeling:</strong> Forces translation of physical reality into mathematical terms (AI struggles to "see" the problem).</li>
+                        <li><strong>Data Collection:</strong> The unique, messy dataset prevents the use of pre-trained solutions.</li>
+                        <li><strong>Reflection:</strong> Discussing <em>why</em> the model is imperfect requires higher-order evaluative thinking.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: WORKSHOP (Apply to Course) -->
+        <section id="content-workshop" class="hidden-content fade-in">
+            <!-- WORKSHOP BUILDER -->
+            <div class="glass-card">
+                <div style="border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.5rem;">Apply to Your Course</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Build your own Math Shield assignment.</p>
+                </div>
+
+                <form id="builder-form" onsubmit="generateAssignment(event)">
+                    <div class="form-group">
+                        <label>1. Course Level</label>
+                        <select id="inp-program" style="margin-bottom: 1rem;">
+                            <option value="Algebra">Algebra</option>
+                            <option value="Calculus">Calculus</option>
+                            <option value="Statistics">Statistics</option>
+                            <option value="Geometry">Geometry</option>
+                            <option value="Quantitative Reasoning">Quantitative Reasoning</option>
+                        </select>
+                        <input type="text" id="inp-skill" placeholder="Math Concept (e.g., Optimization, Probability)">
+                    </div>
+
+                    <div class="form-group">
+                        <label>2. Real-World Context</label>
+                        <div class="helper-text">Where will they gather data?</div>
+                        <select id="inp-object">
+                            <option value="">Select a context...</option>
+                            <option value="School Traffic/Lines">School Traffic/Cafeteria Lines</option>
+                            <option value="Sports Statistics">Local Sports Game Statistics</option>
+                            <option value="Construction/Architecture">Campus Architecture/Construction</option>
+                            <option value="Financial Budgeting">Personal/Club Financial Budgeting</option>
+                            <option value="Weather Patterns">Local Weather Patterns</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>3. Output Format</label>
+                        <div class="helper-text">How will they communicate findings?</div>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="human-action" value="report">
+                                <span><strong>Stakeholder Report:</strong> A non-technical memo to a decision maker (Principal, Mayor)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="human-action" value="infographic">
+                                <span><strong>Data Infographic:</strong> Visual representation of the model and predictions</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="human-action" value="video">
+                                <span><strong>Video Explainer:</strong> 2-minute video teaching the concept using the data</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="generate-btn">
+                        Generate Draft <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </button>
+                </form>
+
+                <!-- RESULTS AREA -->
+                <div id="result-area" class="hidden-content result-card glass-card">
+                    <h3 class="text-gradient" style="font-size: 1.4rem; margin-bottom: 1rem;" id="res-title">Assignment Draft</h3>
+                    <div style="color: var(--text-primary); line-height: 1.8;">
+                        <p><strong>Course:</strong> <span id="res-program"></span></p>
+                        <p style="margin-top: 0.5rem;"><strong>The Task:</strong> Students will apply <span id="res-skill" class="result-highlight"></span> to analyze real data from <span id="res-object" class="result-highlight"></span>.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Deliverable:</strong> Instead of a problem set, they will produce a <span id="res-action"></span>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Tab Switching Logic
+        function switchTab(tabName) {
+            const sections = ['vulnerable', 'transformation', 'resistant', 'workshop'];
+            
+            // Hide all
+            sections.forEach(t => {
+                const content = document.getElementById('content-' + t);
+                const tab = document.getElementById('tab-' + t);
+                if(content) {
+                    content.classList.add('hidden-content');
+                    content.classList.remove('fade-in');
+                }
+                if(tab) {
+                    tab.classList.remove('active');
+                }
+            });
+
+            // Show selected
+            const selectedContent = document.getElementById('content-' + tabName);
+            if(selectedContent) {
+                selectedContent.classList.remove('hidden-content');
+                selectedContent.classList.add('fade-in');
+            }
+            
+            const activeTab = document.getElementById('tab-' + tabName);
+            if(activeTab) {
+                activeTab.classList.add('active');
+            }
+        }
+
+        // RISK ANALYSIS (Vulnerable)
+        function analyzeRisk() {
+            const btn = document.getElementById('risk-btn');
+            const report = document.getElementById('risk-report');
+            const triggers = document.querySelectorAll('.trigger-vulnerable');
+
+            // Trigger visual feedback on list items
+            triggers.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('audited');
+                }, index * 300);
+            });
+
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing...`;
+            
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Risks Identified`;
+                btn.classList.add('danger-active');
+                report.classList.remove('hidden-content');
+            }, 1000);
+        }
+
+        // RESISTANCE CHECK (Resistant)
+        function verifyResistance() {
+            const btn = document.getElementById('audit-btn-verify');
+            const report = document.getElementById('success-report');
+            const triggers = document.querySelectorAll('.trigger-resistant');
+
+            triggers.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('audited');
+                }, index * 300);
+            });
+
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Verifying...`;
+            
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fa-solid fa-shield-halved"></i> Verified`;
+                btn.classList.add('success-active');
+                report.classList.remove('hidden-content');
+            }, 1000);
+        }
+
+        // Generator Logic
+        function generateAssignment(e) {
+            e.preventDefault();
+            
+            // Get values
+            const program = document.getElementById('inp-program').value;
+            const skill = document.getElementById('inp-skill').value || "Core Concept";
+            const object = document.getElementById('inp-object').value;
+            const actionRadio = document.querySelector('input[name="human-action"]:checked');
+            
+            if (!object || !actionRadio) {
+                alert("Please select a real-world context and an output format.");
+                return;
+            }
+
+            const actionMap = {
+                'report': 'formal recommendation report addressed to a specific community stakeholder',
+                'infographic': 'data-rich infographic visualizing the model and predictions',
+                'video': '2-minute video explainer translating the math for a general audience'
+            };
+
+            const actionText = actionMap[actionRadio.value];
+
+            // Populate Results
+            document.getElementById('res-program').textContent = program;
+            document.getElementById('res-skill').textContent = skill;
+            document.getElementById('res-object').textContent = object;
+            document.getElementById('res-action').textContent = actionText;
+
+            // Show Results
+            const resArea = document.getElementById('result-area');
+            resArea.classList.remove('hidden-content');
+            resArea.scrollIntoView({ behavior: 'smooth' });
+            resArea.classList.add('fade-in');
+        }
+
+        // Initialize
+        switchTab('vulnerable');
+    </script>
+</body>
+</html>
