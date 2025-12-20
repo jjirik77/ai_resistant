@@ -15,7 +15,7 @@
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --card-radius: 16px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
         }
 
@@ -65,51 +65,16 @@
         main {
             flex: 1;
             padding: 2rem;
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             width: 100%;
         }
 
-        /* Controls */
-        .controls {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .btn {
-            background: transparent;
-            border: 1px solid var(--text-secondary);
-            color: var(--text-secondary);
-            padding: 0.75rem 1.5rem;
-            border-radius: 99px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: var(--transition);
-            margin: 0 0.5rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn:hover {
-            color: var(--text-primary);
-            background: rgba(255,255,255,0.05);
-            border-color: var(--text-primary);
-        }
-
-        .btn.active {
-            background: var(--accent-primary);
-            border-color: var(--accent-primary);
-            color: var(--bg-primary);
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-        }
-
-        /* Interactive Grid */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
+        /* Stack Layout for Accordion */
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
             margin-bottom: 3rem;
         }
 
@@ -129,7 +94,7 @@
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateX(8px);
             border-color: var(--accent-primary);
             box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.2);
         }
@@ -137,17 +102,19 @@
         .card.active {
             border-color: var(--accent-secondary);
             background: rgba(30, 41, 59, 0.95);
+            transform: scale(1.02);
+            z-index: 10;
         }
 
         .card-header {
             display: flex;
-            align-items: flex-start;
-            margin-bottom: 1rem;
+            align-items: center; /* Centered vertically */
+            margin-bottom: 0; /* Reset margin for cleaner collapse state */
         }
 
         .card-icon {
-            font-size: 2rem;
-            margin-right: 1rem;
+            font-size: 1.8rem;
+            margin-right: 1.5rem;
             color: var(--accent-primary);
             width: 50px;
             height: 50px;
@@ -156,13 +123,13 @@
             justify-content: center;
             background: rgba(56, 189, 248, 0.1);
             border-radius: 12px;
+            flex-shrink: 0;
         }
 
         .card h2 {
             font-size: 1.35rem;
             color: var(--text-primary);
             flex: 1;
-            padding-top: 5px;
             font-weight: 600;
         }
 
@@ -171,18 +138,31 @@
             color: var(--text-secondary);
             transition: transform 0.4s ease;
             margin-left: 10px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
         }
 
         .card.active .toggle-icon {
             transform: rotate(180deg);
             color: var(--accent-secondary);
+            background: rgba(129, 140, 248, 0.1);
         }
 
         .card-summary {
             font-size: 1.05rem;
             color: var(--text-secondary);
-            margin-bottom: 1rem;
+            margin-top: 1rem;
             line-height: 1.6;
+            padding-left: calc(50px + 1.5rem); /* Align with text */
+        }
+        
+        @media (max-width: 600px) {
+            .card-summary { padding-left: 0; }
         }
 
         /* Hidden detailed content */
@@ -190,15 +170,21 @@
             max-height: 0;
             overflow: hidden;
             opacity: 0;
-            transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out;
+            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1), opacity 0.4s ease-in-out;
+            padding-left: calc(50px + 1.5rem); /* Align with text */
+        }
+
+        @media (max-width: 600px) {
+            .card-details { padding-left: 0; }
         }
 
         .card.active .card-details {
-            max-height: 800px; 
+            max-height: 1000px; 
             opacity: 1;
             margin-top: 1.5rem;
             padding-top: 1.5rem;
             border-top: 1px solid rgba(255,255,255,0.1);
+            transition: max-height 0.6s cubic-bezier(1, 0, 1, 0), opacity 0.4s ease-in-out;
         }
 
         .card-details p strong {
@@ -232,20 +218,21 @@
         }
 
         .card-cta {
-            margin-top: auto;
-            text-align: center;
+            margin-top: 1.5rem;
+            text-align: right;
             font-weight: 600;
             color: var(--text-secondary);
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            padding-top: 1.5rem;
-            opacity: 0.7;
             transition: opacity 0.3s;
         }
         
+        .card.active .card-cta {
+            display: none; /* Hide prompt when active */
+        }
+        
         .card:hover .card-cta {
-            opacity: 1;
             color: var(--accent-primary);
         }
 
@@ -294,7 +281,8 @@
             header h1 { font-size: 1.8rem; }
             header { padding: 3rem 1rem; }
             main { margin-top: 0; padding: 1rem; }
-            .grid-container { grid-template-columns: 1fr; }
+            .card:hover { transform: none; }
+            .card.active { transform: scale(1); }
             .bottom-line p { font-size: 1.1rem; }
         }
     </style>
@@ -307,19 +295,10 @@
 </header>
 
 <main>
-    <div class="controls">
-        <button class="btn active" id="btn-view" onclick="expandAll()">
-            <i class="fas fa-expand-alt"></i> Expand All
-        </button>
-        <button class="btn" id="btn-collapse" onclick="collapseAll()">
-            <i class="fas fa-compress-alt"></i> Collapse All
-        </button>
-    </div>
-
-    <div class="grid-container" id="cardsContainer">
+    <div class="card-container" id="cardsContainer">
         
         <!-- Card 1 -->
-        <div class="card" onclick="toggleCard(this)">
+        <div class="card active" onclick="toggleCard(this)">
             <div class="card-header">
                 <div class="card-icon"><i class="fas fa-user-shield"></i></div>
                 <h2>Preserving Academic Integrity <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span></h2>
@@ -398,70 +377,20 @@
 </main>
 
 <script>
-    function toggleCard(element) {
-        // Toggle the 'active' class on the clicked card
-        const wasActive = element.classList.contains('active');
-        
-        if (!wasActive) {
-            element.classList.add('active');
-        } else {
-            element.classList.remove('active');
-        }
-        
-        updateCta(element, !wasActive);
-        updateControlButtons();
-    }
+    function toggleCard(clickedCard) {
+        // Check if the clicked card is currently active
+        const isAlreadyActive = clickedCard.classList.contains('active');
 
-    function updateCta(card, isActive) {
-        const cta = card.querySelector('.card-cta');
-        if (isActive) {
-            cta.textContent = "Click to Collapse";
-            cta.style.color = "#f87171"; // Accent Danger for collapse
-        } else {
-            cta.textContent = "Click to Explore";
-            cta.style.color = ""; // Reset
-        }
-    }
-
-    function expandAll() {
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(card => {
-            card.classList.add('active');
-            updateCta(card, true);
-        });
-        updateControlButtons(true);
-    }
-
-    function collapseAll() {
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(card => {
+        // Close ALL cards
+        const allCards = document.querySelectorAll('.card');
+        allCards.forEach(card => {
             card.classList.remove('active');
-            updateCta(card, false);
         });
-        updateControlButtons(false);
-    }
 
-    function updateControlButtons(forceState) {
-        const viewBtn = document.getElementById('btn-view');
-        const collBtn = document.getElementById('btn-collapse');
-        
-        // Simple logic: if forced true (expand all clicked), set active.
-        if (forceState === true) {
-            viewBtn.classList.add('active');
-            collBtn.classList.remove('active');
-        } else if (forceState === false) {
-            viewBtn.classList.remove('active');
-            collBtn.classList.add('active');
-        } else {
-            // Check manual state
-            const allActive = document.querySelectorAll('.card.active').length === 3;
-            if (allActive) {
-                viewBtn.classList.add('active');
-                collBtn.classList.remove('active');
-            } else {
-                viewBtn.classList.remove('active');
-                collBtn.classList.remove('active');
-            }
+        // If the clicked card wasn't already active, open it.
+        // If it WAS active, it stays closed (standard accordion toggle behavior).
+        if (!isAlreadyActive) {
+            clickedCard.classList.add('active');
         }
     }
 </script>
