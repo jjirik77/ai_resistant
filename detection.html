@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Class: AI-Resistant Assignments</title>
+    <!-- Tailwind CSS for layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-cyan: #38bdf8;
+            --accent-indigo: #818cf8;
+            --accent-red: #f87171;
+            --accent-green: #34d399; /* Added for success states */
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --card-radius: 16px;
+            --btn-radius: 99px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            /* Subtle radial gradient for depth */
+            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 70%);
+            min-height: 100vh;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-secondary); 
+            border-radius: 4px;
+            border: 1px solid var(--glass-border);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary); 
+        }
+
+        /* Utilities */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius);
+        }
+
+        /* Header */
+        header {
+            background: rgba(15, 23, 42, 0.8) !important; /* Overriding Tailwind bg-white */
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border) !important;
+        }
+
+        /* Buttons & Tabs */
+        .tab-btn {
+            border-radius: var(--btn-radius);
+            transition: var(--transition);
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+        }
+        
+        .tab-btn:hover {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active-tab {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(129, 140, 248, 0.2));
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            color: #0f172a;
+            border-radius: var(--btn-radius);
+            font-weight: 700;
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Flip Card Styles */
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+            height: 260px; /* Increased slightly for spacing */
+            cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            border-radius: var(--card-radius);
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: var(--card-radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        
+        .flip-card-front {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+        }
+        
+        .flip-card-front:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+        }
+
+        .flip-card-back {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: var(--text-primary);
+            transform: rotateY(180deg);
+            border: 1px solid var(--accent-cyan);
+        }
+        
+        /* Tool Card Styles */
+        .tool-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius);
+            transition: var(--transition);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.3);
+        }
+
+        /* Specific border colors for tool types to keep differentiation but in neon */
+        .tool-card.fobizz { border-left: 4px solid #f472b6; }
+        .tool-card.brisk { border-left: 4px solid #fbbf24; }
+        .tool-card.diffit { border-left: 4px solid #34d399; }
+        .tool-card.magic { border-left: 4px solid #a78bfa; }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(255,255,255,0.1);
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-indigo));
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Tab Transitions */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Custom Checkbox */
+        .checklist-item {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+        
+        .checklist-item:hover {
+            background: rgba(56, 189, 248, 0.05);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .custom-checkbox:checked + div {
+            background: rgba(52, 211, 153, 0.1);
+            border-color: var(--accent-green);
+        }
+        
+        .checkbox-circle {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: var(--text-secondary);
+        }
+        
+        .custom-checkbox:checked + div .checkbox-circle {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            box-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
+        }
+
+        .check-icon {
+            color: #0f172a;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: var(--transition);
+        }
+        
+        .custom-checkbox:checked + div .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Alert/Info Boxes */
+        .info-box {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 0 var(--card-radius) var(--card-radius) 0;
+        }
+        
+        .warning-box {
+            background: rgba(248, 113, 113, 0.1);
+            border-left: 4px solid var(--accent-red);
+            border-radius: 0 var(--card-radius) var(--card-radius) 0;
+        }
+
+        .success-box {
+            background: rgba(52, 211, 153, 0.1);
+            border-left: 4px solid var(--accent-green);
+            border-radius: 0 var(--card-radius) var(--card-radius) 0;
+        }
+
+    </style>
+</head>
+<body class="flex flex-col">
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 flex items-center justify-center mr-3 shadow-lg shadow-cyan-500/20">
+                        <i class="fa-solid fa-graduation-cap text-slate-900 text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gradient">AI Detection Limits</h1>
+                    </div>
+                </div>
+                <!-- Progress Indicator -->
+                <div class="hidden md:flex items-center space-x-4 glass-panel px-4 py-2">
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Progress</span>
+                    <div class="w-32 h-1.5 progress-container rounded-full overflow-hidden">
+                        <div id="overallProgress" class="progress-bar h-full w-0"></div>
+                    </div>
+                    <span id="progressText" class="text-sm font-bold text-cyan-400">0%</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+        
+        <!-- Navigation Tabs -->
+        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mb-10 p-1 glass-panel inline-flex w-full sm:w-auto">
+            <button onclick="switchTab('detection')" id="btn-detection" class="tab-btn flex-1 py-3 px-6 font-semibold flex items-center justify-center">
+                <i class="fa-solid fa-ban mr-2"></i> Detection Limits
+            </button>
+            <button onclick="switchTab('tools')" id="btn-tools" class="tab-btn flex-1 py-3 px-6 font-semibold flex items-center justify-center">
+                <i class="fa-solid fa-shield-halved mr-2"></i> Secure Tools
+            </button>
+            <button onclick="switchTab('security')" id="btn-security" class="tab-btn flex-1 py-3 px-6 font-semibold flex items-center justify-center">
+                <i class="fa-solid fa-lock mr-2"></i> Protocol
+            </button>
+        </div>
+
+        <!-- SECTION 1: Understanding AI Detection Limitations -->
+        <div id="detection" class="tab-content active">
+            <div class="warning-box p-6 mb-8 backdrop-blur-md">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fa-solid fa-circle-exclamation text-red-400 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-red-400 font-bold text-lg mb-1">Core Concept: The Detection Trap</h3>
+                        <p class="text-slate-300 leading-relaxed">
+                            AI detection tools are unreliable and can actively harm student trust. Click the cards below to uncover the research.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Card 1 -->
+                <div class="flip-card" onclick="flipCard(this)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front group">
+                            <div class="w-14 h-14 bg-red-500/10 rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition-transform border border-red-500/30">
+                                <i class="fa-solid fa-bug text-red-400 text-2xl"></i>
+                            </div>
+                            <h3 class="font-bold text-xl mb-2 text-slate-100">False Positives</h3>
+                            <p class="text-sm text-slate-400">Who is affected most?</p>
+                            <span class="mt-auto pt-4 text-xs text-cyan-400 font-bold uppercase tracking-wider">Click to Reveal</span>
+                        </div>
+                        <div class="flip-card-back">
+                            <h3 class="font-bold text-lg mb-3 pb-2 border-b border-white/10 text-red-400">High Error Rates</h3>
+                            <p class="text-sm leading-relaxed text-slate-300">Detection tools frequently flag human-written work as AI-generated. This disproportionately affects <strong class="text-white">multilingual learners</strong> and <strong class="text-white">neurodivergent students</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="flip-card" onclick="flipCard(this)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front group">
+                            <div class="w-14 h-14 bg-orange-500/10 rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition-transform border border-orange-500/30">
+                                <i class="fa-solid fa-robot text-orange-400 text-2xl"></i>
+                            </div>
+                            <h3 class="font-bold text-xl mb-2 text-slate-100">Unreliable Tech</h3>
+                            <p class="text-sm text-slate-400">Can creators detect it?</p>
+                            <span class="mt-auto pt-4 text-xs text-cyan-400 font-bold uppercase tracking-wider">Click to Reveal</span>
+                        </div>
+                        <div class="flip-card-back">
+                            <h3 class="font-bold text-lg mb-3 pb-2 border-b border-white/10 text-orange-400">No Reliable Method</h3>
+                            <p class="text-sm leading-relaxed text-slate-300">Even tools created by AI companies themselves cannot reliably distinguish AI-generated text from human-generated text.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="flip-card" onclick="flipCard(this)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front group">
+                            <div class="w-14 h-14 bg-yellow-500/10 rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition-transform border border-yellow-500/30">
+                                <i class="fa-solid fa-handshake-slash text-yellow-400 text-2xl"></i>
+                            </div>
+                            <h3 class="font-bold text-xl mb-2 text-slate-100">Integrity</h3>
+                            <p class="text-sm text-slate-400">Impact on culture?</p>
+                            <span class="mt-auto pt-4 text-xs text-cyan-400 font-bold uppercase tracking-wider">Click to Reveal</span>
+                        </div>
+                        <div class="flip-card-back">
+                            <h3 class="font-bold text-lg mb-3 pb-2 border-b border-white/10 text-yellow-400">Adversarial Culture</h3>
+                            <p class="text-sm leading-relaxed text-slate-300">Relying on detection creates an adversarial relationship with students rather than a supportive learning environment.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="flip-card" onclick="flipCard(this)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front group">
+                            <div class="w-14 h-14 bg-green-500/10 rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition-transform border border-green-500/30">
+                                <i class="fa-solid fa-lightbulb text-green-400 text-2xl"></i>
+                            </div>
+                            <h3 class="font-bold text-xl mb-2 text-slate-100">Better Way</h3>
+                            <p class="text-sm text-slate-400">What is the solution?</p>
+                            <span class="mt-auto pt-4 text-xs text-cyan-400 font-bold uppercase tracking-wider">Click to Reveal</span>
+                        </div>
+                        <div class="flip-card-back">
+                            <h3 class="font-bold text-lg mb-3 pb-2 border-b border-white/10 text-green-400">Process-Based</h3>
+                            <p class="text-sm leading-relaxed text-slate-300">Focus on <strong class="text-white">authentic assessment</strong>. Make unauthorized AI use unproductive by emphasizing the process of creation.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="mt-12 text-center">
+                 <button onclick="markSectionComplete('detection', 'tools')" class="action-btn py-3 px-8 text-lg shadow-lg shadow-cyan-500/30">
+                    I Understand the Risks <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Secure AI Tools -->
+        <div id="tools" class="tab-content">
+            <div class="info-box p-6 mb-8 backdrop-blur-md">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fa-solid fa-shield-halved text-cyan-400 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-cyan-400 font-bold text-lg mb-1">Approved Toolkit</h3>
+                        <p class="text-slate-300">Use these privacy-respecting platforms instead of open consumer tools.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Fobizz -->
+                <div class="tool-card fobizz p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <i class="fa-solid fa-user-shield text-8xl text-pink-400"></i>
+                    </div>
+                    <div class="flex items-center mb-4 relative z-10">
+                        <span class="bg-pink-500/10 text-pink-400 p-3 rounded-xl mr-4 border border-pink-500/20"><i class="fa-solid fa-graduation-cap text-xl"></i></span>
+                        <h3 class="text-2xl font-bold text-white">Fobizz</h3>
+                    </div>
+                    <p class="text-slate-400 mb-6 relative z-10">GDPR-compliant AI tools specifically designed for education.</p>
+                    <div class="flex flex-wrap gap-2 relative z-10">
+                        <span class="text-xs font-bold bg-pink-500/10 text-pink-300 px-3 py-1 rounded-full border border-pink-500/20">GDPR Compliant</span>
+                        <span class="text-xs font-bold bg-pink-500/10 text-pink-300 px-3 py-1 rounded-full border border-pink-500/20">Tools Suite</span>
+                    </div>
+                </div>
+
+                <!-- Brisk Teaching -->
+                <div class="tool-card brisk p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <i class="fa-solid fa-chalkboard-user text-8xl text-amber-400"></i>
+                    </div>
+                    <div class="flex items-center mb-4 relative z-10">
+                        <span class="bg-amber-500/10 text-amber-400 p-3 rounded-xl mr-4 border border-amber-500/20"><i class="fa-solid fa-bolt text-xl"></i></span>
+                        <h3 class="text-2xl font-bold text-white">Brisk Teaching</h3>
+                    </div>
+                    <p class="text-slate-400 mb-6 relative z-10">Teacher-focused AI assistant with robust student data protection.</p>
+                    <div class="flex flex-wrap gap-2 relative z-10">
+                        <span class="text-xs font-bold bg-amber-500/10 text-amber-300 px-3 py-1 rounded-full border border-amber-500/20">Teacher Assistant</span>
+                        <span class="text-xs font-bold bg-amber-500/10 text-amber-300 px-3 py-1 rounded-full border border-amber-500/20">Data Protection</span>
+                    </div>
+                </div>
+
+                <!-- Diffit -->
+                <div class="tool-card diffit p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <i class="fa-solid fa-layer-group text-8xl text-emerald-400"></i>
+                    </div>
+                    <div class="flex items-center mb-4 relative z-10">
+                        <span class="bg-emerald-500/10 text-emerald-400 p-3 rounded-xl mr-4 border border-emerald-500/20"><i class="fa-solid fa-sliders text-xl"></i></span>
+                        <h3 class="text-2xl font-bold text-white">Diffit</h3>
+                    </div>
+                    <p class="text-slate-400 mb-6 relative z-10">Differentiation tool with built-in privacy controls.</p>
+                    <div class="flex flex-wrap gap-2 relative z-10">
+                        <span class="text-xs font-bold bg-emerald-500/10 text-emerald-300 px-3 py-1 rounded-full border border-emerald-500/20">Differentiation</span>
+                        <span class="text-xs font-bold bg-emerald-500/10 text-emerald-300 px-3 py-1 rounded-full border border-emerald-500/20">Privacy Controls</span>
+                    </div>
+                </div>
+
+                <!-- MagicSchool AI -->
+                <div class="tool-card magic p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <i class="fa-solid fa-wand-magic-sparkles text-8xl text-violet-400"></i>
+                    </div>
+                    <div class="flex items-center mb-4 relative z-10">
+                        <span class="bg-violet-500/10 text-violet-400 p-3 rounded-xl mr-4 border border-violet-500/20"><i class="fa-solid fa-school text-xl"></i></span>
+                        <h3 class="text-2xl font-bold text-white">MagicSchool AI</h3>
+                    </div>
+                    <p class="text-slate-400 mb-6 relative z-10">Educator-specific tools with FERPA compliance.</p>
+                    <div class="flex flex-wrap gap-2 relative z-10">
+                        <span class="text-xs font-bold bg-violet-500/10 text-violet-300 px-3 py-1 rounded-full border border-violet-500/20">FERPA Compliant</span>
+                        <span class="text-xs font-bold bg-violet-500/10 text-violet-300 px-3 py-1 rounded-full border border-violet-500/20">Educator Focused</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <button onclick="markSectionComplete('tools', 'security')" class="action-btn py-3 px-8 text-lg shadow-lg shadow-cyan-500/30">
+                   Explore Security Protocol <i class="fa-solid fa-arrow-right ml-2"></i>
+               </button>
+           </div>
+        </div>
+
+        <!-- SECTION 3: Key Security Considerations -->
+        <div id="security" class="tab-content">
+            <div class="success-box p-6 mb-8 backdrop-blur-md">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fa-solid fa-clipboard-check text-emerald-400 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-emerald-400 font-bold text-lg mb-1">Protocol Check</h3>
+                        <p class="text-slate-300">Before deploying any assignment involving AI, you must satisfy these four security pillars.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel overflow-hidden">
+                <div class="p-6 border-b border-gray-700/50 bg-black/20">
+                    <h3 class="text-xl font-bold text-white">Pre-Assignment Security Checklist</h3>
+                    <p class="text-sm text-slate-400">Check all items to verify safety.</p>
+                </div>
+                
+                <div class="p-6 space-y-4">
+                    
+                    <!-- Checklist Item 1 -->
+                    <label class="block relative cursor-pointer group">
+                        <input type="checkbox" class="custom-checkbox hidden" onchange="checkProgress()">
+                        <div class="checklist-item flex items-center p-5 rounded-xl">
+                            <div class="w-8 h-8 rounded-full border-2 checkbox-circle flex items-center justify-center mr-5 flex-shrink-0 transition-all">
+                                <i class="fa-solid fa-check text-sm check-icon"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-200 text-lg">Data Minimization</h4>
+                                <p class="text-sm text-slate-400 mt-1">I will only input non-sensitive, non-personally identifiable information.</p>
+                            </div>
+                        </div>
+                    </label>
+
+                    <!-- Checklist Item 2 -->
+                    <label class="block relative cursor-pointer group">
+                        <input type="checkbox" class="custom-checkbox hidden" onchange="checkProgress()">
+                        <div class="checklist-item flex items-center p-5 rounded-xl">
+                            <div class="w-8 h-8 rounded-full border-2 checkbox-circle flex items-center justify-center mr-5 flex-shrink-0 transition-all">
+                                <i class="fa-solid fa-check text-sm check-icon"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-200 text-lg">Institutional Agreements</h4>
+                                <p class="text-sm text-slate-400 mt-1">I am using AI tools that have proper data protection agreements with my institution.</p>
+                            </div>
+                        </div>
+                    </label>
+
+                    <!-- Checklist Item 3 -->
+                    <label class="block relative cursor-pointer group">
+                        <input type="checkbox" class="custom-checkbox hidden" onchange="checkProgress()">
+                        <div class="checklist-item flex items-center p-5 rounded-xl">
+                            <div class="w-8 h-8 rounded-full border-2 checkbox-circle flex items-center justify-center mr-5 flex-shrink-0 transition-all">
+                                <i class="fa-solid fa-check text-sm check-icon"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-200 text-lg">Student Privacy</h4>
+                                <p class="text-sm text-slate-400 mt-1">I will <span class="text-red-400 font-bold uppercase tracking-wider">never</span> input student names, IDs, or sensitive info into commercial AI tools.</p>
+                            </div>
+                        </div>
+                    </label>
+
+                    <!-- Checklist Item 4 -->
+                    <label class="block relative cursor-pointer group">
+                        <input type="checkbox" class="custom-checkbox hidden" onchange="checkProgress()">
+                        <div class="checklist-item flex items-center p-5 rounded-xl">
+                            <div class="w-8 h-8 rounded-full border-2 checkbox-circle flex items-center justify-center mr-5 flex-shrink-0 transition-all">
+                                <i class="fa-solid fa-check text-sm check-icon"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-200 text-lg">Transparency</h4>
+                                <p class="text-sm text-slate-400 mt-1">I have informed students when and how AI is being used in this educational experience.</p>
+                            </div>
+                        </div>
+                    </label>
+
+                </div>
+            </div>
+
+            <!-- Completion Banner -->
+            <div id="completion-banner" class="hidden mt-10 transform transition-all duration-500 scale-95 opacity-0">
+                <div class="bg-gradient-to-r from-cyan-600/20 to-indigo-600/20 backdrop-blur-xl border border-cyan-500/50 rounded-2xl p-10 text-center shadow-2xl shadow-cyan-500/10">
+                    <div class="text-6xl mb-6 animate-bounce">🎉</div>
+                    <h2 class="text-4xl font-bold mb-4 text-white text-shadow-glow">Training Complete!</h2>
+                    <p class="text-cyan-100 text-lg mb-8">You are now equipped to design secure, AI-resistant assignments.</p>
+                    <button onclick="location.reload()" class="bg-white text-slate-900 font-bold py-3 px-8 rounded-full hover:bg-cyan-50 hover:shadow-lg hover:shadow-cyan-500/50 transition-all transform hover:-translate-y-1">
+                        Restart Training
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="border-t border-gray-800 bg-black/40 text-gray-500 py-8 text-center mt-auto backdrop-blur-sm">
+        <p class="text-sm">© 2024 AI Detection Limits Master Class. <span class="text-cyan-600">Designed for Educators.</span></p>
+    </footer>
+
+    <script>
+        // State management
+        const state = {
+            currentTab: 'detection',
+            progress: {
+                detection: false,
+                tools: false,
+                security: false
+            }
+        };
+
+        function switchTab(tabId) {
+            // Update Tab UI
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active-tab');
+            });
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.classList.add('active-tab');
+
+            // Update Content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Add slight delay for animation
+            setTimeout(() => {
+                document.getElementById(tabId).classList.add('active');
+            }, 50);
+            
+            state.currentTab = tabId;
+        }
+
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        function markSectionComplete(currentSection, nextSectionId) {
+            state.progress[currentSection] = true;
+            updateOverallProgress();
+            
+            // Short delay for visual effect then switch
+            if(nextSectionId) {
+                setTimeout(() => {
+                    switchTab(nextSectionId);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 300);
+            }
+        }
+
+        function checkProgress() {
+            const checkboxes = document.querySelectorAll('.custom-checkbox');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            
+            if (allChecked) {
+                state.progress.security = true;
+                updateOverallProgress();
+                
+                const banner = document.getElementById('completion-banner');
+                banner.classList.remove('hidden');
+                // Trigger reflow
+                void banner.offsetWidth;
+                banner.classList.remove('scale-95', 'opacity-0');
+            }
+        }
+
+        function updateOverallProgress() {
+            const totalSections = 3;
+            let completed = 0;
+            if (state.progress.detection) completed++;
+            if (state.progress.tools) completed++;
+            if (state.progress.security) completed++;
+
+            const percentage = Math.round((completed / totalSections) * 100);
+            
+            document.getElementById('overallProgress').style.width = `${percentage}%`;
+            document.getElementById('progressText').innerText = `${percentage}%`;
+        }
+
+        // Initialize first tab
+        switchTab('detection');
+    </script>
+</body>
+</html>
