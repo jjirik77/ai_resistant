@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Trainer: AI-Resistant Assignment Design</title>
+    <title>Master Trainer: CTE AI-Resistant Assignment Design</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -54,7 +54,7 @@
         }
 
         .hidden-content {
-            display: none;
+            display: none !important;
             opacity: 0;
         }
 
@@ -77,12 +77,111 @@
             padding: 2rem;
             margin-bottom: 2rem;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .glass-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.3);
             border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .vulnerable-card {
+            border-left: 4px solid var(--accent-danger);
+            box-shadow: 0 0 20px rgba(248, 113, 113, 0.1);
+        }
+
+        .resistant-card {
+            border-left: 4px solid var(--accent-success);
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
+        }
+
+        /* Syllabus Paper Card Style */
+        .syllabus-card {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e293b; /* Dark text for contrast */
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-family: 'Georgia', serif; /* Academic feel */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .syllabus-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #cbd5e1, #94a3b8);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .syllabus-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+            letter-spacing: 1px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .syllabus-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        /* Report Panels */
+        .report-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .report-danger {
+            border: 1px solid rgba(248, 113, 113, 0.3);
+        }
+
+        .report-success {
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .report-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .report-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .report-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .report-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--text-secondary);
         }
 
         /* Header */
@@ -175,11 +274,32 @@
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
         }
 
+        /* Danger Button Variant */
+        .audit-btn.danger {
+            border-color: var(--accent-danger);
+            color: var(--accent-danger);
+        }
+        .audit-btn.danger:hover {
+            background: rgba(248, 113, 113, 0.1);
+            box-shadow: 0 0 15px rgba(248, 113, 113, 0.2);
+        }
+        .audit-btn.danger-active {
+            background: var(--accent-danger);
+            color: #fff;
+        }
+
+        /* Success Button Variant */
         .audit-btn.success {
-            background: var(--accent-success);
             border-color: var(--accent-success);
+            color: var(--accent-success);
+        }
+        .audit-btn.success:hover {
+            background: rgba(52, 211, 153, 0.1);
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
+        }
+        .audit-btn.success-active {
+            background: var(--accent-success);
             color: #0f172a;
-            box-shadow: 0 0 20px rgba(52, 211, 153, 0.4);
         }
 
         .analysis-list {
@@ -220,14 +340,33 @@
             display: inline;
         }
 
-        .analysis-trigger:hover {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+        /* Specific Trigger Styles */
+        .trigger-vulnerable {
+            border-bottom-color: var(--accent-danger);
+            color: var(--text-primary);
+        }
+        .trigger-vulnerable:hover {
+            color: var(--accent-danger);
+            text-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
+        }
+        .trigger-vulnerable.audited {
+            color: var(--accent-danger);
+            border-bottom: 1px solid var(--accent-danger);
+            background: rgba(248, 113, 113, 0.1);
+            padding: 0 4px;
+            border-radius: 4px;
         }
 
-        .analysis-trigger.audited {
-            border-bottom: 1px solid var(--accent-success);
+        .trigger-resistant {
+            border-bottom-color: var(--accent-success);
+        }
+        .trigger-resistant:hover {
             color: var(--accent-success);
+            text-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+        }
+        .trigger-resistant.audited {
+            color: var(--accent-success);
+            border-bottom: 1px solid var(--accent-success);
             background: rgba(52, 211, 153, 0.1);
             padding: 0 4px;
             border-radius: 4px;
@@ -246,7 +385,7 @@
             color: var(--text-primary);
             padding: 0.8rem;
             border-radius: 8px;
-            width: 220px;
+            width: 240px;
             text-align: center;
             font-size: 0.85rem;
             transition: all 0.3s ease;
@@ -272,23 +411,47 @@
             bottom: 125%;
         }
 
-        /* Success Message */
-        .audit-success-msg {
-            background: rgba(52, 211, 153, 0.1);
-            border: 1px solid rgba(52, 211, 153, 0.3);
-            border-radius: 12px;
-            padding: 1.5rem;
+        /* Transformation Button */
+        .transform-btn {
+            display: block;
+            width: 100%;
             margin-top: 2rem;
-            color: var(--accent-success);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+            color: #0f172a;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .transform-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+        }
+        
+        /* Secondary Navigation Button */
+        .next-step-btn {
+            margin-top: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--text-secondary);
+            color: var(--text-primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .next-step-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: var(--text-primary);
         }
 
         /* Framework Grid */
         .framework-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
         }
 
@@ -424,92 +587,88 @@
 
     <header class="container">
         <div class="subtitle">Faculty Development Series</div>
-        <h1 class="text-gradient">AI-Resistant Assignment Design</h1>
+        <h1 class="text-gradient">CTE AI-Resistant Assignment Design</h1>
         <p class="intro-text">
-            Move beyond "detecting" AI to "designing" around it. Analyze a model CTE (Career & Technical Education) assignment using the <strong>Performance-Based Verification</strong> framework.
+            Move beyond "detecting" AI to "designing" around it. Follow the journey from a vulnerable prompt to a secure, authentic assessment in Career & Technical Education.
         </p>
     </header>
 
     <main class="container">
         <!-- Navigation -->
         <nav class="nav-tabs">
-            <button onclick="switchTab('audit')" id="tab-audit" class="nav-btn active">
-                1. The Case Study
+            <button onclick="switchTab('vulnerable')" id="tab-vulnerable" class="nav-btn active">
+                1. AI Vulnerable
             </button>
-            <button onclick="switchTab('framework')" id="tab-framework" class="nav-btn">
-                2. Performance Framework
+            <button onclick="switchTab('transformation')" id="tab-transformation" class="nav-btn">
+                2. Transformation
+            </button>
+            <button onclick="switchTab('resistant')" id="tab-resistant" class="nav-btn">
+                3. AI Resistant
             </button>
             <button onclick="switchTab('workshop')" id="tab-workshop" class="nav-btn">
-                3. CTE Builder
+                4. Apply to Course
             </button>
         </nav>
 
-        <!-- SECTION 1: THE AUDIT -->
-        <section id="content-audit" class="fade-in">
-            <div class="glass-card">
+        <!-- SECTION 1: AI VULNERABLE -->
+        <section id="content-vulnerable" class="fade-in">
+            <div class="glass-card vulnerable-card">
                 <div class="audit-header">
                     <div>
-                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem;">Automotive Fault Diagnosis</h2>
-                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Target: Automotive Technology / CTE</span>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem; color: var(--accent-danger);">The "Written Process"</h2>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Status: Highly Vulnerable</span>
                     </div>
-                    <button onclick="runAudit()" id="audit-btn" class="audit-btn">
-                        <i class="fa-solid fa-magnifying-glass"></i> Scan for AI Resistance
+                    <button onclick="analyzeRisk()" id="risk-btn" class="audit-btn danger">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Identify Vulnerabilities
                     </button>
                 </div>
 
-                <div style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                    <strong>Instructions:</strong> Diagnose and repair a "Customer Vehicle" (lab car) with a specific, physical engine fault.
+                <!-- Assignment Description (Syllabus Style) -->
+                <div class="syllabus-card">
+                    <div class="syllabus-header">
+                        <span>AUTO 102: Engine Performance</span>
+                        <span>Spring 2025</span>
+                    </div>
+                    <div class="syllabus-title">Written Report: Diagnostic Procedure</div>
+                    <p><strong>Instructions:</strong> Write a 3-page report describing the step-by-step procedure for diagnosing a check engine light with Code P0300 (Random Misfire).</p>
+                    <p style="margin-top:0.5rem">Explain the potential causes (fuel, spark, compression) and describe how you would test each system using a multimeter and scan tool.</p>
                 </div>
 
                 <ol class="analysis-list">
                     <li>
-                        <span class="analysis-trigger" data-reason="Physicality: AI cannot hold a wrench, connect an OBD-II scanner, or physically inspect a frayed wire.">
-                            Perform manual inspection and OBD-II scan on the physical lab vehicle.
-                            <span class="tooltip">Strategy: Physical Interaction</span>
-                        </span>
+                        <span class="analysis-trigger trigger-vulnerable">Describe diagnostic steps.</span>
                     </li>
                     <li>
-                        <span class="analysis-trigger" data-reason="Visual Evidence: Video logs prove the student performed the work themselves, preventing AI generation.">
-                            Record a 3-minute 'Tech Video' narrating the root cause discovery process.
-                            <span class="tooltip">Strategy: Visual Evidence</span>
-                        </span>
+                        <span class="analysis-trigger trigger-vulnerable">Explain potential causes.</span>
                     </li>
                     <li>
-                        <span class="analysis-trigger" data-reason="Real-Time Logic: AI can list codes, but cannot troubleshoot a unique, randomized mechanical failure in real-time.">
-                            Trace the electrical fault using a multimeter and circuit diagram.
-                            <span class="tooltip">Strategy: Diagnostic Reasoning</span>
-                        </span>
-                    </li>
-                    <li>
-                        <span class="analysis-trigger" data-reason="Soft Skills: Explaining complex repairs to a layperson requires real-time synthesis and verbal adaptability.">
-                            Explain the repair and cost estimate to the 'customer' (instructor) in a roleplay.
-                            <span class="tooltip">Strategy: Client Simulation</span>
-                        </span>
+                        <span class="analysis-trigger trigger-vulnerable">Write a standard procedure report.</span>
                     </li>
                 </ol>
 
-                <div id="audit-summary" class="hidden-content audit-success-msg">
-                    <i class="fa-solid fa-check-circle" style="font-size: 1.5rem;"></i>
-                    <div>
-                        <strong style="display: block; margin-bottom: 0.2rem;">Audit Complete: Maximum Resistance</strong>
-                        <span style="font-size: 0.9rem; color: var(--text-secondary);">This assignment rates <strong>Maximum</strong>. CTE offers the ultimate defense: the requirement for physical skill demonstration, visual logging, and oral communication.</span>
+                <div id="risk-report" class="hidden-content report-panel report-danger fade-in">
+                    <div class="report-title" style="color: var(--accent-danger)">
+                        <i class="fa-solid fa-bug"></i> Vulnerability Report
                     </div>
+                    <ul class="report-list" style="color: var(--text-primary)">
+                        <li><strong>Manual-Based Data:</strong> Repair manuals are fully digitized online. AI can recite the textbook procedure perfectly without the student ever touching a tool.</li>
+                        <li><strong>Text-Only Output:</strong> Writing about a physical task is not the same as doing it. AI can fake the knowledge without the skill.</li>
+                        <li><strong>Generic Troubleshooting:</strong> AI provides the "book answer," not the nuanced, sensory reality of a specific engine's quirks or rust issues.</li>
+                    </ul>
+                    
+                    <button onclick="switchTab('transformation')" class="next-step-btn">
+                        <i class="fa-solid fa-arrow-right"></i> Proceed to Transformation
+                    </button>
                 </div>
-            </div>
-
-            <div style="text-align: center;">
-                <button onclick="switchTab('framework')" style="background: none; border: none; color: var(--accent-indigo); cursor: pointer; font-size: 1rem;">
-                    Why does this work? View the Framework <i class="fa-solid fa-arrow-right"></i>
-                </button>
             </div>
         </section>
 
-        <!-- SECTION 2: THE FRAMEWORK -->
-        <section id="content-framework" class="hidden-content fade-in">
+        <!-- SECTION 2: TRANSFORMATION (FRAMEWORK) -->
+        <section id="content-transformation" class="hidden-content fade-in">
             <div class="glass-card" style="margin-bottom: 2rem; border-color: var(--accent-cyan);">
                 <h3 style="margin-bottom: 1rem; color: var(--accent-cyan);">The Performance Standard</h3>
                 <p style="color: var(--text-primary);">
-                    In Career & Technical Education, we don't just ask "What do you know?" We ask "What can you do?" This performance-based approach is inherently AI-resistant.
+                    In CTE, we don't just ask "What do you know?" We ask "What can you do?" This performance-based approach is inherently AI-resistant.
                 </p>
             </div>
 
@@ -532,12 +691,12 @@
                     </p>
                 </div>
 
-                <!-- 3. Diagnostic Reasoning -->
+                <!-- 3. Diagnostic Logic -->
                 <div class="glass-card">
                     <i class="fa-solid fa-stethoscope framework-icon"></i>
                     <h3 style="margin-bottom: 0.5rem;">3. Diagnostic Logic</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        AI is good at general theory, but poor at troubleshooting specific, random physical faults (e.g., "Why is <em>this</em> specific sauce breaking?").
+                        AI is good at general theory, but poor at troubleshooting specific, random physical faults (e.g., "Why is <em>this</em> specific wire corroded?").
                     </p>
                 </div>
 
@@ -550,24 +709,87 @@
                     </p>
                 </div>
             </div>
+
+            <!-- THE TRANSFORM BUTTON -->
+            <button onclick="switchTab('resistant')" class="transform-btn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Transform Assignment Now
+            </button>
+        </section>
+
+        <!-- SECTION 3: AI RESISTANT -->
+        <section id="content-resistant" class="hidden-content fade-in">
             
-            <div style="text-align: center; margin-top: 2rem;">
-                <button onclick="switchTab('workshop')" style="background: none; border: none; color: var(--accent-indigo); cursor: pointer; font-size: 1rem;">
-                    Ready to apply this? Go to Workshop <i class="fa-solid fa-arrow-right"></i>
-                </button>
+            <!-- THE RESULT -->
+            <div class="glass-card resistant-card">
+                <div class="audit-header">
+                    <div>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.2rem; color: var(--accent-success);">The "Live Diagnosis"</h2>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Status: AI Resistant</span>
+                    </div>
+                    <button onclick="verifyResistance()" id="audit-btn-verify" class="audit-btn success">
+                        <i class="fa-solid fa-shield-halved"></i> Run Risk Assessment
+                    </button>
+                </div>
+
+                <!-- Resistant Assignment Description -->
+                <div class="syllabus-card">
+                    <div class="syllabus-header">
+                        <span>AUTO 102: Engine Performance</span>
+                        <span>Spring 2025</span>
+                    </div>
+                    <div class="syllabus-title">Project: Customer Fault Diagnosis (Live Lab)</div>
+                    <p><strong>Instructions:</strong> You are assigned a "Customer Vehicle" (Lab Car #4) with a live check engine light. Diagnose the root cause using shop tools.</p>
+                    <ul style="margin-top:0.5rem; padding-left: 1.2rem; font-size: 0.95rem;">
+                        <li><strong>Verification:</strong> Verify the concern and pull diagnostic codes (DTCs).</li>
+                        <li><strong>Tech Video:</strong> Record a 3-minute video narrating your diagnostic path, showing your multimeter/scan tool readings in real-time.</li>
+                        <li><strong>Customer Roleplay:</strong> Verbalize your findings, the required repair, and the cost estimate to the Service Writer (Instructor).</li>
+                    </ul>
+                </div>
+
+                <ol class="analysis-list">
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Diagnose physical bug on lab vehicle.
+                        </span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Record "Tech Video" of diagnostic steps.
+                        </span>
+                    </li>
+                    <li>
+                        <span class="analysis-trigger trigger-resistant">
+                            Roleplay explanation to customer.
+                        </span>
+                    </li>
+                </ol>
+
+                <div id="success-report" class="hidden-content report-panel report-success fade-in">
+                    <div class="report-title" style="color: var(--accent-success)">
+                        <i class="fa-solid fa-lock"></i> Verification Successful
+                    </div>
+                    <p style="margin-bottom:0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                        This assignment successfully applies the Performance Standard strategies:
+                    </p>
+                    <ul class="report-list" style="color: var(--text-primary)">
+                        <li><strong>Physicality:</strong> AI cannot interact with the physical vehicle or hold the tools needed to diagnose the live bug.</li>
+                        <li><strong>Visual Evidence:</strong> The "Tech Video" explicitly proves the student performed the work and understands the readings.</li>
+                        <li><strong>Client Simulation:</strong> Real-time roleplay prevents the student from relying on a pre-generated script.</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
-        <!-- SECTION 3: WORKSHOP BUILDER -->
+        <!-- SECTION 4: WORKSHOP (Apply to Course) -->
         <section id="content-workshop" class="hidden-content fade-in">
+            <!-- WORKSHOP BUILDER -->
             <div class="glass-card">
                 <div style="border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; margin-bottom: 2rem;">
-                    <h2 style="font-size: 1.5rem;">CTE Assignment Builder</h2>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Design a hands-on, verification-heavy assignment for your technical program.</p>
+                    <h2 style="font-size: 1.5rem;">Apply to Your Course</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Build your own CTE Shield assignment.</p>
                 </div>
 
                 <form id="builder-form" onsubmit="generateAssignment(event)">
-                    <!-- Step 1 -->
                     <div class="form-group">
                         <label>1. CTE Program Area</label>
                         <select id="inp-program" style="margin-bottom: 1rem;">
@@ -582,7 +804,6 @@
                         <input type="text" id="inp-skill" placeholder="Specific Skill (e.g., Brake Caliper Replacement)">
                     </div>
 
-                    <!-- Step 2 -->
                     <div class="form-group">
                         <label>2. The Physical Task (The "Anti-AI" Core)</label>
                         <div class="helper-text">What physical object or system must they manipulate?</div>
@@ -597,7 +818,6 @@
                         </select>
                     </div>
 
-                    <!-- Step 3 -->
                     <div class="form-group">
                         <label>3. Verification Method (Evidence)</label>
                         <div class="helper-text">How will you verify the process?</div>
@@ -618,7 +838,7 @@
                     </div>
 
                     <button type="submit" class="generate-btn">
-                        Generate Assignment Draft <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        Generate Draft <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </button>
                 </form>
 
@@ -629,65 +849,85 @@
                         <p><strong>Program:</strong> <span id="res-program"></span></p>
                         <p style="margin-top: 0.5rem;"><strong>The Task:</strong> Students must demonstrate competency in <span id="res-skill" class="result-highlight"></span> by physically manipulating a <span id="res-object" class="result-highlight"></span>.</p>
                         <p style="margin-top: 0.5rem;"><strong>Verification Strategy:</strong> Instead of a written summary, assessment will rely on <span id="res-action"></span>.</p>
-                        <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--glass-border); color: var(--text-secondary); font-size: 0.9rem;">
-                            <em>Why this works:</em> By centering the grade on physical performance and visual/verbal evidence, you render text-generation tools irrelevant. AI cannot manipulate <span id="res-obj-repeat"></span> or replicate the student's unique voice in a live demonstration.
-                        </p>
                     </div>
-                    <button onclick="window.print()" class="print-btn">
-                        <i class="fa-solid fa-print"></i> Print / Save as PDF
-                    </button>
                 </div>
             </div>
         </section>
+
     </main>
 
     <script>
         // Tab Switching Logic
         function switchTab(tabName) {
-            // Hide all content
-            const sections = ['audit', 'framework', 'workshop'];
+            const sections = ['vulnerable', 'transformation', 'resistant', 'workshop'];
+            
+            // Hide all
             sections.forEach(t => {
-                document.getElementById('content-' + t).classList.add('hidden-content');
-                document.getElementById('content-' + t).classList.remove('fade-in');
-                document.getElementById('tab-' + t).classList.remove('active');
+                const content = document.getElementById('content-' + t);
+                const tab = document.getElementById('tab-' + t);
+                if(content) {
+                    content.classList.add('hidden-content');
+                    content.classList.remove('fade-in');
+                }
+                if(tab) {
+                    tab.classList.remove('active');
+                }
             });
 
-            // Show selected content
+            // Show selected
             const selectedContent = document.getElementById('content-' + tabName);
-            selectedContent.classList.remove('hidden-content');
-            void selectedContent.offsetWidth; // Trigger reflow for animation
-            selectedContent.classList.add('fade-in');
+            if(selectedContent) {
+                selectedContent.classList.remove('hidden-content');
+                selectedContent.classList.add('fade-in');
+            }
             
-            // Activate Tab
-            document.getElementById('tab-' + tabName).classList.add('active');
+            const activeTab = document.getElementById('tab-' + tabName);
+            if(activeTab) {
+                activeTab.classList.add('active');
+            }
         }
 
-        // Audit Logic
-        function runAudit() {
-            const triggers = document.querySelectorAll('.analysis-trigger');
-            const btn = document.getElementById('audit-btn');
-            const summary = document.getElementById('audit-summary');
+        // RISK ANALYSIS (Vulnerable)
+        function analyzeRisk() {
+            const btn = document.getElementById('risk-btn');
+            const report = document.getElementById('risk-report');
+            const triggers = document.querySelectorAll('.trigger-vulnerable');
 
-            // Reset logic for replayability
-            triggers.forEach(el => el.classList.remove('audited'));
-            summary.classList.add('hidden-content');
-
-            // Animation sequence
+            // Trigger visual feedback on list items
             triggers.forEach((el, index) => {
                 setTimeout(() => {
                     el.classList.add('audited');
-                }, index * 600);
+                }, index * 300);
             });
 
-            // Button State
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Scanning...`;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing...`;
             
             setTimeout(() => {
-                btn.innerHTML = `<i class="fa-solid fa-check"></i> Complete`;
-                btn.classList.add('success');
-                summary.classList.remove('hidden-content');
-                summary.classList.add('fade-in');
-            }, triggers.length * 600 + 500);
+                btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Risks Identified`;
+                btn.classList.add('danger-active');
+                report.classList.remove('hidden-content');
+            }, 1000);
+        }
+
+        // RESISTANCE CHECK (Resistant)
+        function verifyResistance() {
+            const btn = document.getElementById('audit-btn-verify');
+            const report = document.getElementById('success-report');
+            const triggers = document.querySelectorAll('.trigger-resistant');
+
+            triggers.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('audited');
+                }, index * 300);
+            });
+
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Verifying...`;
+            
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fa-solid fa-shield-halved"></i> Verified`;
+                btn.classList.add('success-active');
+                report.classList.remove('hidden-content');
+            }, 1000);
         }
 
         // Generator Logic
@@ -717,7 +957,6 @@
             document.getElementById('res-program').textContent = program;
             document.getElementById('res-skill').textContent = skill;
             document.getElementById('res-object').textContent = object;
-            document.getElementById('res-obj-repeat').textContent = object.toLowerCase();
             document.getElementById('res-action').textContent = actionText;
 
             // Show Results
@@ -728,7 +967,7 @@
         }
 
         // Initialize
-        switchTab('audit');
+        switchTab('vulnerable');
     </script>
 </body>
 </html>
