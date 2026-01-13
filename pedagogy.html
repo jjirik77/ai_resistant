@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pedagogical Convergence: AI & Learning</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Merriweather -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #1e293b;
+        }
+        h1, h2, h3, .serif {
+            font-family: 'Merriweather', serif;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .hidden-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            pointer-events: none;
+            height: 0;
+            overflow: hidden;
+        }
+        .visible-section {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            height: auto;
+            overflow: visible;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        .pulse-ring {
+            animation: ring 2s infinite;
+        }
+        @keyframes ring {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header / Hero -->
+    <header class="bg-slate-900 text-white pt-12 pb-24 px-6 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10">
+            <i class="fas fa-network-wired text-9xl absolute -top-10 -right-10"></i>
+            <i class="fas fa-brain text-9xl absolute bottom-0 left-10"></i>
+        </div>
+        <div class="max-w-4xl mx-auto relative z-10 text-center">
+            <span class="inline-block py-1 px-3 rounded-full bg-indigo-500 text-xs font-bold tracking-wider uppercase mb-4">Instructional Design Module</span>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">Beyond Integrity: <br/><span class="text-indigo-400">Better Learning</span></h1>
+            <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                AI-resistant assignments aren't just workarounds. They are a return to evidence-based pedagogical principles.
+            </p>
+            <div class="mt-8 animate-bounce">
+                <i class="fas fa-chevron-down text-indigo-400 text-2xl"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow -mt-16 px-4 pb-20">
+        <div class="max-w-5xl mx-auto">
+            
+            <!-- Introduction Card -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-12 border-l-4 border-indigo-500">
+                <h2 class="text-2xl font-bold text-slate-800 mb-4">The Convergence</h2>
+                <p class="text-slate-600 mb-4 leading-relaxed">
+                    AI forces us back to pedagogical fundamentals. Superficial learning—which AI can simulate—was never real learning. 
+                </p>
+                <p class="text-slate-600 font-semibold">
+                    <i class="fas fa-info-circle text-indigo-500 mr-2"></i>Task: Activate the three pillars below to reveal the Key Insight.
+                </p>
+            </div>
+
+            <!-- The Three Pillars (Interactive) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12" id="pillar-container">
+                
+                <!-- Pillar 1: Authentic Assessment -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover cursor-pointer border border-slate-100 relative group" onclick="activatePillar(1)">
+                    <div class="h-2 bg-emerald-500 w-full"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xl">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <i class="fas fa-check-circle text-gray-200 text-2xl group-hover:text-emerald-200 transition-colors" id="check-1"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Authentic Assessment</h3>
+                        <p class="text-sm text-slate-500 uppercase tracking-widest font-bold mb-3">Wiggins, 1990</p>
+                        <p class="text-slate-600 text-sm">Mirroring real-world complexity and judgment in context.</p>
+                        <div class="mt-4 pt-4 border-t border-slate-100 text-emerald-600 font-semibold text-sm flex items-center">
+                            <span>Explore Connection</span>
+                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pillar 2: Constructivism -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover cursor-pointer border border-slate-100 relative group" onclick="activatePillar(2)">
+                    <div class="h-2 bg-blue-500 w-full"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <i class="fas fa-check-circle text-gray-200 text-2xl group-hover:text-blue-200 transition-colors" id="check-2"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Constructivism</h3>
+                        <p class="text-sm text-slate-500 uppercase tracking-widest font-bold mb-3">Piaget, Vygotsky</p>
+                        <p class="text-slate-600 text-sm">Knowledge is actively constructed through experience, not passively received.</p>
+                        <div class="mt-4 pt-4 border-t border-slate-100 text-blue-600 font-semibold text-sm flex items-center">
+                            <span>Explore Connection</span>
+                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pillar 3: Transfer of Learning -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover cursor-pointer border border-slate-100 relative group" onclick="activatePillar(3)">
+                    <div class="h-2 bg-purple-500 w-full"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-xl">
+                                <i class="fas fa-random"></i>
+                            </div>
+                            <i class="fas fa-check-circle text-gray-200 text-2xl group-hover:text-purple-200 transition-colors" id="check-3"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Transfer of Learning</h3>
+                        <p class="text-sm text-slate-500 uppercase tracking-widest font-bold mb-3">Bransford et al., 2000</p>
+                        <p class="text-slate-600 text-sm">Requires deep processing and metacognitive awareness.</p>
+                        <div class="mt-4 pt-4 border-t border-slate-100 text-purple-600 font-semibold text-sm flex items-center">
+                            <span>Explore Connection</span>
+                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detail Modal (Dynamic Content) -->
+            <div id="detail-area" class="hidden-section mb-12">
+                <div class="bg-slate-800 text-white rounded-xl p-8 shadow-2xl relative overflow-hidden">
+                    <!-- Background decoration -->
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-32 -mt-32"></div>
+                    
+                    <button onclick="closeDetail()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+
+                    <div id="detail-content">
+                        <!-- Content injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Application Check -->
+            <div id="application-section" class="hidden-section bg-white rounded-xl shadow-lg border border-slate-200 p-8 mb-12">
+                <div class="flex items-center mb-8">
+                    <div class="bg-indigo-100 p-3 rounded-lg mr-4 text-indigo-700">
+                        <i class="fas fa-flask text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">Apply the Theory</h2>
+                        <p class="text-slate-500">Transform these three vulnerable assignments into AI-resistant learning experiences.</p>
+                    </div>
+                </div>
+
+                <!-- Challenge 1: Authentic Assessment -->
+                <div class="mb-12 border-b border-slate-100 pb-12">
+                    <div class="flex items-center mb-4">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider mr-2">Theory 1</span>
+                        <h3 class="font-bold text-slate-700">Authentic Assessment</h3>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                        <!-- Bad Assignment -->
+                        <div class="bg-red-50 border border-red-100 rounded-lg p-6 relative">
+                            <div class="absolute -top-3 left-4 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">VULNERABLE</div>
+                            <p class="text-slate-700 italic font-serif mb-2">"Write a marketing plan for a generic coffee shop."</p>
+                            <div class="text-xs text-red-600 font-semibold"><i class="fas fa-times mr-1"></i> Generic context = easy for AI hallucination.</div>
+                        </div>
+
+                        <!-- Choices -->
+                        <div class="space-y-3">
+                            <button onclick="checkChallenge(1, false, 'feedback-1', this, 'Handwriting changes the physical medium, not the cognitive task. Students can still use AI to generate the text and simply copy it by hand.')" class="w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors group">
+                                <div class="flex items-start">
+                                    <div class="mt-1 mr-3 text-slate-400 group-hover:text-slate-600 icon-container"><i class="far fa-square"></i></div>
+                                    <div class="text-sm">
+                                        <span class="font-semibold block text-slate-700">Require the plan to be handwritten in class.</span>
+                                        <span class="text-xs text-slate-500">Changes the medium, not the cognitive task.</span>
+                                    </div>
+                                </div>
+                            </button>
+                            <button onclick="checkChallenge(1, true, 'feedback-1', this, 'By anchoring the task in a specific, messy reality (actual reviews, local context), you force the student to use judgment. AI struggles with specific, non-public, real-time context.')" class="w-full text-left p-4 rounded-lg border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50 transition-colors group">
+                                <div class="flex items-start">
+                                    <div class="mt-1 mr-3 text-slate-400 group-hover:text-emerald-500 transition-colors icon-container"><i class="far fa-square"></i></div>
+                                    <div class="text-sm">
+                                        <span class="font-semibold block text-slate-700 group-hover:text-emerald-900 transition-colors">Analyze this specific local struggling café and propose a plan addressing their actual Yelp reviews.</span>
+                                        <span class="text-xs text-slate-500 group-hover:text-emerald-700 transition-colors">Requires judgment in a specific, messy, real-world context.</span>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Feedback 1 -->
+                    <div id="feedback-1" class="hidden mt-4 p-3 rounded-lg text-sm fade-in"></div>
+                </div>
+
+                <!-- Challenge 2: Constructivism -->
+                <div class="mb-12 border-b border-slate-100 pb-12">
+                    <div class="flex items-center mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider mr-2">Theory 2</span>
+                        <h3 class="font-bold text-slate-700">Constructivism</h3>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                        <!-- Bad Assignment -->
+                        <div class="bg-red-50 border border-red-100 rounded-lg p-6 relative">
+                            <div class="absolute -top-3 left-4 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">VULNERABLE</div>
+                            <p class="text-slate-700 italic font-serif mb-2">"Define the three branches of government."</p>
+                            <div class="text-xs text-red-600 font-semibold"><i class="fas fa-times mr-1"></i> Passive fact retrieval.</div>
+                        </div>
+
+                        <!-- Choices -->
+                        <div class="space-y-3">
+                            <button onclick="checkChallenge(2, true, 'feedback-2', this, 'The learning happens in the real-time social interaction and the internal reflection on that process—two things AI cannot authentically simulate for the student.')" class="w-full text-left p-4 rounded-lg border border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-colors group">
+                                <div class="flex items-start">
+                                    <div class="mt-1 mr-3 text-slate-400 group-hover:text-blue-500 transition-colors icon-container"><i class="far fa-square"></i></div>
+                                    <div class="text-sm">
+                                        <span class="font-semibold block text-slate-700 group-hover:text-blue-900 transition-colors">Debate a specific policy in class, then reflect on how the discussion shifted your perspective.</span>
+                                        <span class="text-xs text-slate-500 group-hover:text-blue-700 transition-colors">Knowledge constructed through social interaction and reflection.</span>
+                                    </div>
+                                </div>
+                            </button>
+                            <button onclick="checkChallenge(2, false, 'feedback-2', this, 'This uses technology to police the student rather than redesigning the assessment. It focuses on catching cheating rather than promoting the construction of knowledge.')" class="w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors group">
+                                <div class="flex items-start">
+                                    <div class="mt-1 mr-3 text-slate-400 group-hover:text-slate-600 icon-container"><i class="far fa-square"></i></div>
+                                    <div class="text-sm">
+                                        <span class="font-semibold block text-slate-700">Use a lockdown browser for a timed quiz on definitions.</span>
+                                        <span class="text-xs text-slate-500">Focuses on surveillance, not the learning process.</span>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Feedback 2 -->
+                    <div id="feedback-2" class="hidden mt-4 p-3 rounded-lg text-sm fade-in"></div>
+                </div>
+
+                <!-- Challenge 3: Transfer of Learning -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <span class="bg-purple-100 text-purple-800 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider mr-2">Theory 3</span>
+                        <h3 class="font-bold text-slate-700">Transfer of Learning</h3>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                        <!-- Bad Assignment -->
+                        <div class="bg-red-50 border border-red-100 rounded-lg p-6 relative">
+                            <div class="absolute -top-3 left-4 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">VULNERABLE</div>
+                            <p class="text-slate-700 italic font-serif mb-2">"Write a Python script to sort a list of numbers."</p>
+                            <div class="text-xs text-red-600 font-semibold"><i class="fas fa-times mr-1"></i> Standard product output.</div>
+                        </div>
+
+                        <!-- Choices -->
+                        <div class="space-y-3">
+                            <button onclick="checkChallenge(3, false, 'feedback-3', this, 'Rote memorization is a surface-level strategy. It does not require the deep processing or metacognition needed for meaningful transfer of learning.')" class="w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors group">
+                                <div class="flex items-start">
+                                    <div class="mt-1 mr-3 text-slate-400 group-hover:text-slate-600 icon-container"><i class="far fa-square"></i></div>
+                                    <div class="text-sm">
+                                        <span class="font-semibold block text-slate-700">Memorize the sorting algorithm and write it on paper.</span>
+                                        <span class="text-xs text-slate-500">Rote memorization, low transfer value.</span>
+                                    </div>
+                                </div>
+                            </button>
+                            <button onclick="checkChallenge(3, true, 'feedback-3', this, 'Critique requires a higher level of cognitive processing (Evaluative Judgment) than simple generation. It forces students to understand the logic, not just produce syntax.')" class="w-full text-left p-4 rounded-lg border border-slate-200 hover:border-purple-500 hover:bg-purple-50 transition-colors group">
+                                <div class="flex items-start">
+                                    <div class="mt-1 mr-3 text-slate-400 group-hover:text-purple-500 transition-colors icon-container"><i class="far fa-square"></i></div>
+                                    <div class="text-sm">
+                                        <span class="font-semibold block text-slate-700 group-hover:text-purple-900 transition-colors">Critique this buggy AI-generated code. Explain the error logic and rewrite it.</span>
+                                        <span class="text-xs text-slate-500 group-hover:text-purple-700 transition-colors">Requires metacognition and evaluative judgment.</span>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Feedback 3 -->
+                    <div id="feedback-3" class="hidden mt-4 p-3 rounded-lg text-sm fade-in"></div>
+                </div>
+
+            </div>
+
+            <!-- Final Insight (Locked until progress complete) -->
+            <div id="final-insight" class="hidden-section text-center py-12">
+                <div class="inline-block p-4 rounded-full bg-indigo-100 text-indigo-600 mb-6 text-3xl pulse-ring">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-6 font-serif">The Key Insight</h2>
+                <div class="bg-gradient-to-br from-indigo-900 to-slate-800 text-white p-8 md:p-12 rounded-2xl shadow-2xl max-w-3xl mx-auto relative">
+                    <i class="fas fa-quote-left text-indigo-500 text-4xl absolute top-6 left-6 opacity-30"></i>
+                    <p class="text-xl md:text-2xl leading-relaxed serif italic relative z-10">
+                        "When we design assignments that resist AI, we're not creating workarounds—we're implementing assessment practices that learning science has validated for 50+ years."
+                    </p>
+                    <div class="mt-8 flex justify-center items-center space-x-2">
+                        <div class="h-1 w-12 bg-indigo-500 rounded"></div>
+                        <span class="text-indigo-300 text-sm uppercase tracking-widest font-semibold">Pedagogy > Policing</span>
+                        <div class="h-1 w-12 bg-indigo-500 rounded"></div>
+                    </div>
+                </div>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="mt-12 text-slate-500 hover:text-indigo-600 transition-colors flex items-center justify-center mx-auto text-sm font-semibold uppercase tracking-wider">
+                    <i class="fas fa-arrow-up mr-2"></i> Return to Top
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-8 text-center text-slate-500 text-sm">
+        <p>Research references: Wiggins (1990), Black & Wiliam (1998), Bransford et al. (2000).</p>
+    </footer>
+
+    <!-- Logic -->
+    <script>
+        // State
+        const state = {
+            pillarsViewed: new Set(),
+            appSectionUnlocked: false,
+            insightUnlocked: false,
+            challengesSolved: new Set()
+        };
+
+        // Data for the theories
+        const theoryData = {
+            1: {
+                title: "Authentic Assessment Theory",
+                author: "Wiggins, 1990",
+                icon: "fa-briefcase",
+                colorClass: "text-emerald-400",
+                desc: "Assessments should mirror real-world complexity.",
+                connection: "AI generates generic 'products.' Authentic assessment requires judgment in context. When a task is specific to a real-world scenario (e.g., 'Develop a marketing plan for this specific struggling local business' vs 'Explain marketing principles'), AI struggles to provide the necessary contextual nuance.",
+                quote: "Studies consistently show that authentic, process-oriented assessments produce deeper learning."
+            },
+            2: {
+                title: "Constructivist Learning Theory",
+                author: "Piaget, Vygotsky",
+                icon: "fa-layer-group",
+                colorClass: "text-blue-400",
+                desc: "Knowledge is actively constructed, not passively received.",
+                connection: "AI excels at outputting received knowledge (facts/summaries). Constructivism focuses on the *process* of building that knowledge. By assessing the rough drafts, the peer feedback, and the iteration (the construction process), we render the AI final product irrelevant.",
+                quote: "Process-oriented assessments reveal this construction."
+            },
+            3: {
+                title: "Transfer of Learning",
+                author: "Bransford et al., 2000",
+                icon: "fa-random",
+                colorClass: "text-purple-400",
+                desc: "Learning requires deep processing and metacognition.",
+                connection: "Transfer happens when students reflect on *how* they learned. Asking students to critique an AI response or explain their own logic requires metacognitive awareness—something AI simulates poorly because it lacks 'self'.",
+                quote: "Learning that transfers requires deep processing and practice in varied contexts."
+            }
+        };
+
+        // Activate a pillar card
+        function activatePillar(id) {
+            // Update UI State
+            state.pillarsViewed.add(id);
+            document.getElementById(`check-${id}`).className = "fas fa-check-circle text-green-500 text-2xl transition-colors";
+
+            // Render Detail Modal
+            const data = theoryData[id];
+            const contentDiv = document.getElementById('detail-content');
+            
+            contentDiv.innerHTML = `
+                <div class="md:flex items-start">
+                    <div class="mb-6 md:mb-0 md:mr-8 flex-shrink-0">
+                        <i class="fas ${data.icon} text-6xl ${data.colorClass} opacity-80"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-bold font-serif mb-2">${data.title}</h3>
+                        <p class="text-slate-400 uppercase tracking-widest text-sm font-bold mb-6">${data.author}</p>
+                        
+                        <div class="bg-white/10 rounded-lg p-6 mb-6">
+                            <h4 class="text-indigo-300 font-bold mb-2 uppercase text-xs tracking-wider">The Theory</h4>
+                            <p class="text-lg leading-relaxed text-slate-200">${data.desc}</p>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-indigo-600/50 to-slate-700/50 rounded-lg p-6 border-l-4 border-indigo-400">
+                            <h4 class="text-indigo-300 font-bold mb-2 uppercase text-xs tracking-wider">The AI Resistance Connection</h4>
+                            <p class="leading-relaxed text-white font-medium">${data.connection}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Show Modal
+            const detailArea = document.getElementById('detail-area');
+            detailArea.classList.remove('hidden-section');
+            detailArea.classList.add('visible-section');
+            
+            // Scroll to detail slightly
+            detailArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            checkProgress();
+        }
+
+        function closeDetail() {
+            const detailArea = document.getElementById('detail-area');
+            detailArea.classList.remove('visible-section');
+            detailArea.classList.add('hidden-section');
+        }
+
+        // Check if user has viewed all 3 to unlock application section
+        function checkProgress() {
+            if (state.pillarsViewed.size === 3 && !state.appSectionUnlocked) {
+                state.appSectionUnlocked = true;
+                setTimeout(() => {
+                    const appSection = document.getElementById('application-section');
+                    appSection.classList.remove('hidden-section');
+                    appSection.classList.add('visible-section');
+                    // close detail to focus attention
+                    // closeDetail(); 
+                    appSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 1500);
+            }
+        }
+
+        // Handle the Quiz/Check
+        function checkChallenge(id, isCorrect, feedbackId, btnElement, explanation) {
+            // 1. Reset sibling buttons in this group
+            const parent = btnElement.closest('.space-y-3');
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => {
+                // Reset basic classes
+                b.className = "w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors group";
+                // Reset Icon
+                const iconContainer = b.querySelector('.icon-container');
+                iconContainer.className = "mt-1 mr-3 text-slate-400 group-hover:text-slate-600 icon-container";
+                iconContainer.innerHTML = '<i class="far fa-square"></i>';
+            });
+
+            // 2. Highlight selected button
+            btnElement.classList.remove('border-slate-200', 'hover:bg-slate-50');
+            const iconDiv = btnElement.querySelector('.icon-container');
+
+            if (isCorrect) {
+                btnElement.classList.add('border-2', 'border-emerald-500', 'bg-emerald-50');
+                iconDiv.className = "mt-1 mr-3 text-emerald-600 icon-container";
+                iconDiv.innerHTML = '<i class="fas fa-check-square"></i>';
+            } else {
+                btnElement.classList.add('border-2', 'border-rose-500', 'bg-rose-50');
+                iconDiv.className = "mt-1 mr-3 text-rose-600 icon-container";
+                iconDiv.innerHTML = '<i class="fas fa-times-circle"></i>';
+            }
+
+            // 3. Show Feedback
+            const feedbackEl = document.getElementById(feedbackId);
+            feedbackEl.classList.remove('hidden');
+            feedbackEl.className = `hidden mt-4 p-4 rounded-lg text-sm fade-in flex items-start ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`;
+            feedbackEl.classList.remove('hidden'); // Ensure it's visible after class reset
+            
+            feedbackEl.innerHTML = `
+                <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-exclamation-circle'} text-xl mr-3 mt-0.5"></i>
+                <div>
+                    <span class="font-bold block mb-1">${isCorrect ? 'Correct!' : 'Try Again'}</span>
+                    <p>${explanation}</p>
+                </div>
+            `;
+
+            // 4. Update Logic
+            if (isCorrect) {
+                state.challengesSolved.add(id);
+                
+                if (state.challengesSolved.size === 3 && !state.insightUnlocked) {
+                    state.insightUnlocked = true;
+                    setTimeout(() => {
+                        const final = document.getElementById('final-insight');
+                        final.classList.remove('hidden-section');
+                        final.classList.add('visible-section');
+                        final.scrollIntoView({ behavior: 'smooth' });
+                    }, 1500);
+                }
+            }
+        }
+
+    </script>
+</body>
+</html>
