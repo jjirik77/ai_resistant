@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedagogical Foundations of AI-Resistant Assessment</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        h1, h2, h3, .serif {
+            font-family: 'Merriweather', serif;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        .pillar-active {
+            ring: 2px solid #2563eb;
+            background-color: #eff6ff;
+        }
+
+        /* Tab Transition */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <i class="ph ph-brain text-3xl text-blue-400"></i>
+                    <span class="font-bold text-xl tracking-tight">Pedagogy<span class="text-blue-400">Lab</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <button onclick="switchTab('dashboard')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium bg-slate-800 text-white hover:bg-slate-700 transition">Dashboard</button>
+                        <button onclick="switchTab('framework')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition">The AIAS Framework</button>
+                        <button onclick="switchTab('process')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition">Process vs Product</button>
+                        <button onclick="switchTab('library')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition">Reference Library</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- DASHBOARD VIEW -->
+        <div id="dashboard" class="tab-content active fade-in">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h1 class="text-4xl font-bold text-slate-900 mb-4">Pedagogical Foundations of <br/><span class="text-blue-600">AI-Resistant Assessment</span></h1>
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    AI-resistance is not a separate technical concern—it is a by-product of good pedagogy. 
+                    This interactive tool connects 50+ years of learning science to modern assessment strategies.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 card-hover cursor-pointer" onclick="switchTab('framework')">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
+                        <i class="ph ph-columns text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">The AIAS Framework</h3>
+                    <p class="text-slate-600 text-sm">Explore the four pillars: Authentic, Iterative, Applied, and Singular, and their theoretical roots.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 card-hover cursor-pointer" onclick="switchTab('process')">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4 text-purple-600">
+                        <i class="ph ph-steps text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Process vs. Product</h3>
+                    <p class="text-slate-600 text-sm">Understand why assessing the "journey" validates learning in ways AI cannot replicate.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 card-hover cursor-pointer" onclick="switchTab('library')">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mb-4 text-emerald-600">
+                        <i class="ph ph-books text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Research Library</h3>
+                    <p class="text-slate-600 text-sm">Access the foundational texts (1981–2008) that validate these strategies.</p>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-8">
+                <h2 class="text-2xl font-bold mb-4 serif">Why Theory Matters</h2>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3">
+                        <i class="ph ph-check-circle text-blue-600 text-xl mt-1"></i>
+                        <span class="text-slate-700"><strong>Adapt principles</strong> to your specific discipline and context.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="ph ph-check-circle text-blue-600 text-xl mt-1"></i>
+                        <span class="text-slate-700"><strong>Defend choices</strong> to administrators and colleagues with evidence.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="ph ph-check-circle text-blue-600 text-xl mt-1"></i>
+                        <span class="text-slate-700"><strong>Recognize</strong> that AI reveals which assessments were never measuring genuine learning.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- FRAMEWORK VIEW -->
+        <div id="framework" class="tab-content fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-slate-900 serif">The AIAS Framework</h2>
+                <button onclick="switchTab('dashboard')" class="text-sm text-slate-500 hover:text-blue-600 flex items-center gap-1"><i class="ph ph-arrow-left"></i> Back</button>
+            </div>
+            
+            <p class="mb-8 text-slate-600">Click on a pillar to reveal its theoretical foundation and AI-resistance mechanism.</p>
+
+            <div class="grid lg:grid-cols-12 gap-6 h-auto lg:h-[600px]">
+                <!-- Interactive Sidebar/Grid -->
+                <div class="lg:col-span-4 grid grid-cols-1 gap-4 h-full content-start">
+                    <button onclick="renderPillar('authentic')" id="btn-authentic" class="pillar-btn text-left p-5 rounded-lg border border-slate-200 bg-white hover:bg-blue-50 transition group pillar-active">
+                        <div class="flex items-center gap-3 mb-1">
+                            <div class="p-2 bg-blue-100 text-blue-700 rounded-md group-hover:bg-blue-200"><i class="ph ph-globe-hemisphere-west"></i></div>
+                            <h3 class="font-bold text-lg text-slate-800">Authentic</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 pl-11">Situated Learning Theory</p>
+                    </button>
+
+                    <button onclick="renderPillar('iterative')" id="btn-iterative" class="pillar-btn text-left p-5 rounded-lg border border-slate-200 bg-white hover:bg-purple-50 transition group">
+                        <div class="flex items-center gap-3 mb-1">
+                            <div class="p-2 bg-purple-100 text-purple-700 rounded-md group-hover:bg-purple-200"><i class="ph ph-arrows-clockwise"></i></div>
+                            <h3 class="font-bold text-lg text-slate-800">Iterative</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 pl-11">Formative Assessment</p>
+                    </button>
+
+                    <button onclick="renderPillar('applied')" id="btn-applied" class="pillar-btn text-left p-5 rounded-lg border border-slate-200 bg-white hover:bg-emerald-50 transition group">
+                        <div class="flex items-center gap-3 mb-1">
+                            <div class="p-2 bg-emerald-100 text-emerald-700 rounded-md group-hover:bg-emerald-200"><i class="ph ph-wrench"></i></div>
+                            <h3 class="font-bold text-lg text-slate-800">Applied</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 pl-11">Deliberate Practice</p>
+                    </button>
+
+                    <button onclick="renderPillar('singular')" id="btn-singular" class="pillar-btn text-left p-5 rounded-lg border border-slate-200 bg-white hover:bg-orange-50 transition group">
+                        <div class="flex items-center gap-3 mb-1">
+                            <div class="p-2 bg-orange-100 text-orange-700 rounded-md group-hover:bg-orange-200"><i class="ph ph-fingerprint"></i></div>
+                            <h3 class="font-bold text-lg text-slate-800">Singular</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 pl-11">Cognitive Load Theory</p>
+                    </button>
+                </div>
+
+                <!-- Content Display Area -->
+                <div class="lg:col-span-8 bg-white border border-slate-200 rounded-xl p-8 shadow-sm flex flex-col relative overflow-hidden" id="pillar-content">
+                    <!-- Dynamic Content Injected Here via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- PROCESS VS PRODUCT VIEW -->
+        <div id="process" class="tab-content fade-in">
+             <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-slate-900 serif">Process vs. Product</h2>
+                <button onclick="switchTab('dashboard')" class="text-sm text-slate-500 hover:text-blue-600 flex items-center gap-1"><i class="ph ph-arrow-left"></i> Back</button>
+            </div>
+
+            <div class="bg-slate-900 text-white rounded-xl p-8 mb-8">
+                <h3 class="text-xl font-bold mb-2">The Expertise Research Gap</h3>
+                <p class="text-slate-300 max-w-3xl">
+                    "Experts differ from novices in their problem-solving PROCESS, not just their final products." 
+                    <br><span class="text-sm text-slate-400 italic">— Chi, Feltovich, & Glaser (1981)</span>
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- AI Side -->
+                <div class="bg-white border-2 border-slate-100 rounded-xl p-6 relative">
+                    <div class="absolute -top-3 left-6 bg-slate-200 text-slate-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">The AI Shortcut</div>
+                    <div class="text-center py-8 opacity-50">
+                        <i class="ph ph-robot text-6xl text-slate-300 mb-4"></i>
+                        <h4 class="text-2xl font-bold text-slate-400">Statistical Pattern Matching</h4>
+                        <p class="mt-4 text-sm text-slate-500">Generates polished outputs instantly.</p>
+                        <div class="mt-6 p-4 bg-slate-50 rounded border border-slate-200">
+                            <p class="font-mono text-xs text-slate-400">Output Generated...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Human Side -->
+                <div class="bg-white border-2 border-blue-100 rounded-xl p-6 shadow-lg relative">
+                     <div class="absolute -top-3 left-6 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Human Expertise</div>
+                     <h4 class="text-xl font-bold text-blue-900 mt-4 mb-4">Recursive Cognitive Process</h4>
+                     <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-bold">1</div>
+                            <div>
+                                <strong class="text-slate-800">Planning & Analysis</strong>
+                                <p class="text-sm text-slate-600">Experts spend more time front-loading before producing.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-bold">2</div>
+                            <div>
+                                <strong class="text-slate-800">Metacognitive Monitoring</strong>
+                                <p class="text-sm text-slate-600">Checking one's own thinking throughout the work.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-bold">3</div>
+                            <div>
+                                <strong class="text-slate-800">Strategic Pivoting</strong>
+                                <p class="text-sm text-slate-600">Recognizing failure and adjusting strategies.</p>
+                            </div>
+                        </li>
+                     </ul>
+                </div>
+            </div>
+
+            <div class="mt-8 p-6 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-4">
+                <i class="ph ph-lightbulb text-amber-600 text-2xl"></i>
+                <div>
+                    <h4 class="font-bold text-amber-900">Why AI Cannot Replicate This</h4>
+                    <p class="text-amber-800 text-sm mt-1">
+                        AI generates outputs through probability, not reasoning. While it can simulate a polished product, it cannot authentically document a student's developing understanding or their struggle with the material.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIBRARY VIEW -->
+        <div id="library" class="tab-content fade-in">
+             <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-slate-900 serif">Reference Library</h2>
+                <button onclick="switchTab('dashboard')" class="text-sm text-slate-500 hover:text-blue-600 flex items-center gap-1"><i class="ph ph-arrow-left"></i> Back</button>
+            </div>
+            <p class="mb-8 text-slate-600">Primary sources for the theories underpinning the AIAS framework. Click the button to access the source.</p>
+
+            <div class="bg-white shadow rounded-lg overflow-hidden border border-slate-200">
+                <div class="divide-y divide-slate-200" id="reference-list">
+                    <!-- References injected via JS -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="fixed bottom-0 w-full bg-blue-600 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-center items-center">
+            <p class="text-white text-lg md:text-xl font-serif italic font-medium">"AI-resistance is a by-product of good pedagogy."</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Data Models
+        const pillars = {
+            authentic: {
+                title: "Authentic Pillar",
+                theory: "Situated Learning (Lave & Wenger, 1991) & Authentic Assessment (Wiggins, 1990)",
+                principle: "Knowledge is inseparable from the context in which it's learned. Learning situated in authentic, real-world complexity is more robust.",
+                enhance: "Students develop deeper understanding when they engage with problems as they exist in professional contexts, not sanitized textbook examples.",
+                resist: "Generative AI has limited access to local, specific, and current contexts. It cannot interview your neighbor, observe your workplace, or analyze unique community data.",
+                icon: "ph-globe-hemisphere-west",
+                color: "blue"
+            },
+            iterative: {
+                title: "Iterative Pillar",
+                theory: "Formative Assessment (Black & Wiliam, 1998) & Metacognition (Flavell, 1979)",
+                principle: "Learning happens through cycles of performance, feedback, and revision. Monitoring one's own thinking is essential.",
+                enhance: "Feedback loops accelerate learning more than any other intervention. Revision deepens conceptual understanding.",
+                resist: "AI can generate a polished product but cannot authentically show the recursive process of human thinking, decision-making, and iterative refinement over time.",
+                icon: "ph-arrows-clockwise",
+                color: "purple"
+            },
+            applied: {
+                title: "Applied Pillar",
+                theory: "Deliberate Practice (Ericsson, 2008) & Transfer of Learning (Perkins & Salomon, 1992)",
+                principle: "Expertise requires structured practice with immediate feedback in varied contexts mirroring professional application.",
+                enhance: "Domain-specific competence develops through repeated application with coaching, not through passive knowledge acquisition.",
+                resist: "Discipline-specific judgment and skill application require tacit knowledge AI cannot fully replicate, especially with instructor-specific criteria.",
+                icon: "ph-wrench",
+                color: "emerald"
+            },
+            singular: {
+                title: "Singular Pillar",
+                theory: "Cognitive Load Theory (Sweller, 1988) & Problem-Based Learning (Barrows, 1996)",
+                principle: "Unique constraints create 'desirable difficulties' that force deeper cognitive processing. Novelty prevents automated responses.",
+                enhance: "When tasks cannot be completed through pattern-matching alone, learners must engage in genuine problem-solving.",
+                resist: "Highly specific, personalized, or novel constraints make it impossible for AI to retrieve existing solutions, forcing original thinking.",
+                icon: "ph-fingerprint",
+                color: "orange"
+            }
+        };
+
+        const references = [
+            {
+                category: "Authentic Assessment",
+                author: "Wiggins, G. (1990)",
+                title: "The Case for Authentic Assessment",
+                source: "ERIC Clearinghouse",
+                link: "https://eric.ed.gov/?id=ED328611"
+            },
+            {
+                category: "Formative Assessment",
+                author: "Black, P., & Wiliam, D. (1998)",
+                title: "Assessment and Classroom Learning",
+                source: "Assessment in Education",
+                link: "https://www.tandfonline.com/doi/abs/10.1080/0969595980050102"
+            },
+            {
+                category: "Expertise Development",
+                author: "Ericsson, K. A. (2008)",
+                title: "Deliberate Practice and Acquisition of Expert Performance",
+                source: "Academic Emergency Medicine",
+                link: "https://onlinelibrary.wiley.com/doi/full/10.1111/j.1553-2712.2008.00227.x"
+            },
+            {
+                category: "Situated Learning",
+                author: "Lave, J., & Wenger, E. (1991)",
+                title: "Situated Learning: Legitimate Peripheral Participation",
+                source: "Cambridge University Press",
+                link: "https://www.cambridge.org/core/books/situated-learning/D0C1579739561B619177D5E4D1A25B4C"
+            },
+            {
+                category: "Transfer of Learning",
+                author: "Perkins, D. N., & Salomon, G. (1992)",
+                title: "Transfer of Learning",
+                source: "International Encyclopedia of Education",
+                link: "https://learnweb.harvard.edu/alps/thinking/docs/traencyn.htm"
+            },
+            {
+                category: "Metacognition",
+                author: "Flavell, J. H. (1979)",
+                title: "Metacognition and cognitive monitoring",
+                source: "American Psychologist",
+                link: "https://psycnet.apa.org/record/1980-09388-001"
+            },
+             {
+                category: "Expertise",
+                author: "Chi, M. T., Feltovich, P. J., & Glaser, R. (1981)",
+                title: "Categorization and representation of physics problems by experts and novices",
+                source: "Cognitive Science",
+                link: "https://onlinelibrary.wiley.com/doi/abs/10.1207/s15516709cog0502_2"
+            }
+        ];
+
+        // State Management
+        let currentTab = 'dashboard';
+        let currentPillar = 'authentic';
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('main').classList.add('pb-24'); // Add padding to prevent content from being hidden behind footer
+            renderPillar(currentPillar);
+            renderReferences();
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Hide all contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            // Remove animation classes to reset
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('fade-in'));
+            
+            // Show selected
+            const activeEl = document.getElementById(tabId);
+            if(activeEl) {
+                activeEl.classList.add('active');
+                // Trigger reflow for animation restart
+                void activeEl.offsetWidth; 
+                activeEl.classList.add('fade-in');
+            }
+
+            // Update Nav Styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-800', 'text-white');
+                btn.classList.add('text-slate-300');
+            });
+            
+            // Highlight current button (simple text match for demo)
+            const btns = document.querySelectorAll('.nav-btn');
+            if (btns.length > 0) {
+                if(tabId === 'dashboard') btns[0].classList.add('bg-slate-800', 'text-white');
+                if(tabId === 'framework') btns[1].classList.add('bg-slate-800', 'text-white');
+                if(tabId === 'process') btns[2].classList.add('bg-slate-800', 'text-white');
+                if(tabId === 'library') btns[3].classList.add('bg-slate-800', 'text-white');
+            }
+
+            window.scrollTo(0,0);
+        }
+
+        // Render Framework Pillar Details
+        function renderPillar(key) {
+            const data = pillars[key];
+            const container = document.getElementById('pillar-content');
+            
+            if (!container) return; // Safety check
+
+            // Update buttons styling
+            document.querySelectorAll('.pillar-btn').forEach(btn => {
+                btn.classList.remove('pillar-active', 'ring-2', 'ring-blue-600', 'bg-slate-50');
+            });
+            const activeBtn = document.getElementById(`btn-${key}`);
+            if(activeBtn) {
+                activeBtn.classList.add('pillar-active');
+            }
+
+            // Color dictionary for dynamic styling
+            const colorMap = {
+                blue: 'text-blue-600 bg-blue-50 border-blue-200',
+                purple: 'text-purple-600 bg-purple-50 border-purple-200',
+                emerald: 'text-emerald-600 bg-emerald-50 border-emerald-200',
+                orange: 'text-orange-600 bg-orange-50 border-orange-200'
+            };
+
+            const theme = colorMap[data.color];
+
+            // Template Literal for Content
+            container.innerHTML = `
+                <div class="fade-in">
+                    <div class="flex items-center gap-4 mb-6 pb-6 border-b border-slate-100">
+                        <i class="ph ${data.icon} text-4xl text-${data.color}-600"></i>
+                        <div>
+                            <h3 class="text-3xl font-bold text-slate-800 serif">${data.title}</h3>
+                            <p class="text-slate-500 font-medium">${data.theory}</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-2">Core Principle</h4>
+                            <p class="text-lg text-slate-800 font-medium leading-relaxed">
+                                "${data.principle}"
+                            </p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div class="p-5 bg-green-50 border border-green-200 rounded-lg">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <i class="ph ph-student text-green-700 text-xl"></i>
+                                    <h5 class="font-bold text-green-900">Why It Enhances Learning</h5>
+                                </div>
+                                <p class="text-sm text-green-800 leading-relaxed">${data.enhance}</p>
+                            </div>
+
+                            <div class="p-5 bg-rose-50 border border-rose-200 rounded-lg">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <i class="ph ph-shield-check text-rose-700 text-xl"></i>
+                                    <h5 class="font-bold text-rose-900">Why It Resists AI</h5>
+                                </div>
+                                <p class="text-sm text-rose-800 leading-relaxed">${data.resist}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render Reference Library
+        function renderReferences() {
+            const list = document.getElementById('reference-list');
+            if(!list) return; // Safety check
+            let html = '';
+            
+            references.forEach(ref => {
+                html += `
+                    <div class="p-6 hover:bg-slate-50 transition flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                        <div>
+                            <span class="inline-block px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded font-semibold mb-2">${ref.category}</span>
+                            <h4 class="text-lg font-bold text-slate-800">${ref.title}</h4>
+                            <p class="text-slate-600 text-sm mt-1">${ref.author} • <em class="text-slate-500">${ref.source}</em></p>
+                        </div>
+                        <a href="${ref.link}" target="_blank" class="flex-shrink-0 inline-flex items-center justify-center px-4 py-2 border border-blue-600 text-blue-600 text-sm font-medium rounded-md hover:bg-blue-600 hover:text-white transition group">
+                            Read Theory
+                            <i class="ph ph-arrow-square-out ml-2 group-hover:text-white"></i>
+                        </a>
+                    </div>
+                `;
+            });
+            
+            list.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
