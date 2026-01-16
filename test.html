@@ -10,7 +10,7 @@
     <style>
         body {
             font-family: 'Lato', sans-serif;
-            background-color: #f0fdfa; /* Changed to very light teal/slate */
+            background-color: #f3f4f6;
         }
         h1, h2, h3, .serif {
             font-family: 'Merriweather', serif;
@@ -60,11 +60,11 @@
             background: #f1f1f1; 
         }
         .archive-scroll::-webkit-scrollbar-thumb {
-            background: #115e59; /* Teal-800 */
+            background: #888; 
             border-radius: 4px;
         }
         .wood-texture {
-            background-color: #4a3832; /* Slightly darker wood */
+            background-color: #5d4037;
             background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0V0zm10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm20 0a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM10 37a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm10-17h20v20H20V20zm10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14z' fill='%236d4c41' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
         .fade-in {
@@ -79,24 +79,24 @@
 <body class="text-gray-800 h-screen flex flex-col overflow-hidden">
 
     <!-- Navigation Bar -->
-    <nav class="bg-teal-900 text-white shadow-lg z-50">
+    <nav class="bg-indigo-900 text-white shadow-lg z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <i class="fas fa-book-open text-2xl mr-3 text-amber-300"></i>
+                    <i class="fas fa-book-open text-2xl mr-3 text-yellow-400"></i>
                     <span class="font-bold text-xl serif tracking-wider">Lit 205: Genre Lab</span>
                 </div>
                 <div class="flex space-x-4">
-                    <button onclick="app.navigate('home')" class="hover:bg-teal-700 px-3 py-2 rounded-md text-sm font-medium transition">Lecture Hall</button>
-                    <button onclick="app.navigate('study')" class="hover:bg-teal-700 px-3 py-2 rounded-md text-sm font-medium transition">The Archive</button>
-                    <button onclick="app.navigate('practice')" class="hover:bg-teal-700 px-3 py-2 rounded-md text-sm font-medium transition">Sorting Room</button>
+                    <button onclick="app.navigate('home')" class="hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium transition">Lecture Hall</button>
+                    <button onclick="app.navigate('study')" class="hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium transition">The Archive</button>
+                    <button onclick="app.navigate('practice')" class="hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium transition">Sorting Room</button>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Content Area -->
-    <main id="app-container" class="flex-grow relative overflow-hidden bg-slate-50">
+    <main id="app-container" class="flex-grow relative overflow-hidden bg-gray-100">
         <!-- Views will be injected here by JS -->
     </main>
 
@@ -138,7 +138,7 @@
                 id: 'realistic',
                 title: 'Realistic Fiction',
                 icon: 'fa-bicycle',
-                color: 'bg-emerald-700',
+                color: 'bg-green-600',
                 definition: 'Stories that could happen in the real world, set in modern times.',
                 elements: ['Plausible plot', 'Complex characters', 'Contemporary problems', 'No magic', 'Relatable settings'],
                 subgenres: ['Problem Novels', 'Humorous Stories', 'Sports Stories', 'School Stories'],
@@ -158,7 +158,7 @@
                 id: 'poetry',
                 title: 'Poetry & Verse',
                 icon: 'fa-feather-alt',
-                color: 'bg-rose-600',
+                color: 'bg-pink-600',
                 definition: 'Expression of feelings and ideas by the use of distinctive style and rhythm.',
                 elements: ['Rhythm/Meter', 'Rhyme schemes', 'Figurative language', 'Condensed language', 'Emotional intensity'],
                 subgenres: ['Narrative Poems', 'Lyric Poems', 'Haiku', 'Novels in Verse'],
@@ -265,8 +265,8 @@
                 container.innerHTML = `
                     <div class="h-full flex items-center justify-center bg-white fade-in p-6">
                         <div class="max-w-3xl text-center space-y-8">
-                            <div class="inline-block p-4 rounded-full bg-teal-100 mb-4">
-                                <i class="fas fa-graduation-cap text-6xl text-teal-900"></i>
+                            <div class="inline-block p-4 rounded-full bg-indigo-100 mb-4">
+                                <i class="fas fa-graduation-cap text-6xl text-indigo-900"></i>
                             </div>
                             <h1 class="text-4xl md:text-5xl text-gray-900 mb-4 font-bold">Welcome to Children's Literature</h1>
                             <p class="text-xl text-gray-600 leading-relaxed">
@@ -274,13 +274,13 @@
                                 A book's genre sets the rules for the reader—it tells us what to expect and how to interpret the story.
                             </p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left mt-8">
-                                <div class="bg-cyan-50 p-6 rounded-lg border-l-4 border-cyan-600 hover:shadow-md transition cursor-pointer" onclick="app.navigate('study')">
-                                    <h3 class="font-bold text-lg text-cyan-900 mb-2"><i class="fas fa-archive mr-2"></i>The Archive</h3>
-                                    <p class="text-sm text-cyan-800">Study the definitions, tropes, and key characteristics of the 6 major genres.</p>
+                                <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500 hover:shadow-md transition cursor-pointer" onclick="app.navigate('study')">
+                                    <h3 class="font-bold text-lg text-blue-900 mb-2"><i class="fas fa-archive mr-2"></i>The Archive</h3>
+                                    <p class="text-sm text-blue-800">Study the definitions, tropes, and key characteristics of the 5 major genres.</p>
                                 </div>
-                                <div class="bg-emerald-50 p-6 rounded-lg border-l-4 border-emerald-600 hover:shadow-md transition cursor-pointer" onclick="app.navigate('practice')">
-                                    <h3 class="font-bold text-lg text-emerald-900 mb-2"><i class="fas fa-boxes mr-2"></i>The Sorting Room</h3>
-                                    <p class="text-sm text-emerald-800">Test your knowledge by shelving books based on their summaries. Can you get 6/6?</p>
+                                <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-500 hover:shadow-md transition cursor-pointer" onclick="app.navigate('practice')">
+                                    <h3 class="font-bold text-lg text-green-900 mb-2"><i class="fas fa-boxes mr-2"></i>The Sorting Room</h3>
+                                    <p class="text-sm text-green-800">Test your knowledge by shelving books based on their summaries. Can you get 5/5?</p>
                                 </div>
                             </div>
                         </div>
@@ -301,7 +301,7 @@
                             <!-- Back -->
                             <div class="flip-card-back bg-white text-gray-800 p-6 rounded-xl border-2 border-gray-200 flex flex-col justify-between overflow-y-auto">
                                 <div>
-                                    <h3 class="text-xl font-bold text-teal-900 mb-2">${genre.title}</h3>
+                                    <h3 class="text-xl font-bold text-indigo-900 mb-2">${genre.title}</h3>
                                     <p class="text-sm italic text-gray-600 mb-4 bg-gray-100 p-2 rounded">"${genre.definition}"</p>
                                     
                                     <div class="text-left space-y-2">
@@ -313,7 +313,7 @@
                                 </div>
                                 <div class="mt-4 pt-4 border-t border-gray-100">
                                     <p class="text-xs font-bold text-gray-500 uppercase mb-1">Examples:</p>
-                                    <p class="text-sm text-teal-600 font-semibold">${genre.example}</p>
+                                    <p class="text-sm text-indigo-600 font-semibold">${genre.example}</p>
                                 </div>
                             </div>
                         </div>
@@ -326,7 +326,7 @@
                             <h2 class="text-2xl font-bold text-center text-gray-800 serif">Genre Archive</h2>
                             <p class="text-center text-gray-500 text-sm">Click any card to reveal details.</p>
                         </div>
-                        <div class="flex-grow overflow-y-auto p-6 bg-slate-100">
+                        <div class="flex-grow overflow-y-auto p-6 bg-gray-100">
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                                 ${cardsHtml}
                             </div>
@@ -348,8 +348,8 @@
                     <div class="h-full flex flex-col md:flex-row fade-in">
                         <!-- Book Area (Left/Top) -->
                         <div class="w-full md:w-1/2 p-8 flex flex-col items-center justify-center bg-gray-200">
-                            <div class="bg-white p-8 rounded shadow-2xl max-w-md w-full border-l-8 border-teal-900 relative">
-                                <div class="absolute -top-3 -right-3 bg-amber-400 text-teal-900 rounded-full w-10 h-10 flex items-center justify-center font-bold shadow">
+                            <div class="bg-white p-8 rounded shadow-2xl max-w-md w-full border-l-8 border-indigo-900 relative">
+                                <div class="absolute -top-3 -right-3 bg-yellow-400 text-indigo-900 rounded-full w-10 h-10 flex items-center justify-center font-bold shadow">
                                     ${this.state.currentQuestionIndex + 1}/${quizQuestions.length}
                                 </div>
                                 <h3 class="text-2xl font-bold serif mb-2 text-gray-800">${question.title}</h3>
@@ -371,7 +371,7 @@
                                             <i class="fas ${g.icon}"></i>
                                         </div>
                                         <div>
-                                            <span class="font-bold text-lg text-gray-800 block group-hover:text-teal-900">${g.title}</span>
+                                            <span class="font-bold text-lg text-gray-800 block group-hover:text-indigo-900">${g.title}</span>
                                         </div>
                                     </button>
                                 `).join('')}
@@ -393,12 +393,12 @@
                     <div class="h-full flex items-center justify-center bg-white fade-in">
                         <div class="text-center p-8 max-w-lg">
                             <div class="mb-6">
-                                <i class="fas fa-clipboard-check text-6xl text-emerald-500"></i>
+                                <i class="fas fa-clipboard-check text-6xl text-green-500"></i>
                             </div>
                             <h2 class="text-3xl font-bold mb-4">Simulation Complete</h2>
-                            <p class="text-6xl font-bold text-teal-900 mb-4">${score} / ${total}</p>
+                            <p class="text-6xl font-bold text-indigo-900 mb-4">${score} / ${total}</p>
                             <p class="text-xl text-gray-600 mb-8">${message}</p>
-                            <button onclick="app.resetQuiz()" class="bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition shadow-lg font-bold">
+                            <button onclick="app.resetQuiz()" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition shadow-lg font-bold">
                                 Restart Simulation
                             </button>
                         </div>
@@ -418,10 +418,10 @@
                     this.state.score++;
                     modalContent.innerHTML = `
                         <div class="text-center">
-                            <i class="fas fa-check-circle text-5xl text-emerald-500 mb-4"></i>
-                            <h3 class="text-2xl font-bold text-emerald-700 mb-2">Correct!</h3>
+                            <i class="fas fa-check-circle text-5xl text-green-500 mb-4"></i>
+                            <h3 class="text-2xl font-bold text-green-700 mb-2">Correct!</h3>
                             <p class="text-gray-700 mb-4 text-lg">${currentQ.explanation}</p>
-                            <button onclick="app.nextQuestion()" class="bg-emerald-600 text-white px-6 py-2 rounded shadow hover:bg-emerald-700">Next Book</button>
+                            <button onclick="app.nextQuestion()" class="bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700">Next Book</button>
                         </div>
                     `;
                 } else {
