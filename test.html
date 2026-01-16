@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lit 205: Children's Lit Genres</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #f0fdfa; /* Changed to very light teal/slate */
+        }
+        h1, h2, h3, .serif {
+            font-family: 'Merriweather', serif;
+        }
+        .book-spine {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transition: transform 0.2s;
+        }
+        .book-spine:hover {
+            transform: translateX(-5px);
+        }
+        .perspective-container {
+            perspective: 1000px;
+        }
+        .flip-card {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flipped {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.5rem;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        /* Custom Scrollbar for the archive */
+        .archive-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .archive-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .archive-scroll::-webkit-scrollbar-thumb {
+            background: #115e59; /* Teal-800 */
+            border-radius: 4px;
+        }
+        .wood-texture {
+            background-color: #4a3832; /* Slightly darker wood */
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0V0zm10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm20 0a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM10 37a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm10-17h20v20H20V20zm10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14z' fill='%236d4c41' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-gray-800 h-screen flex flex-col overflow-hidden">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-teal-900 text-white shadow-lg z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-book-open text-2xl mr-3 text-amber-300"></i>
+                    <span class="font-bold text-xl serif tracking-wider">Lit 205: Genre Lab</span>
+                </div>
+                <div class="flex space-x-4">
+                    <button onclick="app.navigate('home')" class="hover:bg-teal-700 px-3 py-2 rounded-md text-sm font-medium transition">Lecture Hall</button>
+                    <button onclick="app.navigate('study')" class="hover:bg-teal-700 px-3 py-2 rounded-md text-sm font-medium transition">The Archive</button>
+                    <button onclick="app.navigate('practice')" class="hover:bg-teal-700 px-3 py-2 rounded-md text-sm font-medium transition">Sorting Room</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main id="app-container" class="flex-grow relative overflow-hidden bg-slate-50">
+        <!-- Views will be injected here by JS -->
+    </main>
+
+    <!-- Modal Template -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all p-6 relative">
+            <button onclick="app.closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- Data & Content ---
+
+        const genres = [
+            {
+                id: 'traditional',
+                title: 'Traditional Literature',
+                icon: 'fa-scroll',
+                color: 'bg-amber-700',
+                definition: 'Stories passed down through oral tradition. They have no known original author.',
+                elements: ['Flat characters', 'Vague settings (Once upon a time)', 'Good vs. Evil', 'Magic is matter-of-fact', 'Rule of Three'],
+                subgenres: ['Myths', 'Fables', 'Legends', 'Fairy Tales', 'Tall Tales'],
+                example: "Aesop's Fables, Cinderella, Paul Bunyan"
+            },
+            {
+                id: 'fantasy',
+                title: 'Modern Fantasy',
+                icon: 'fa-dragon',
+                color: 'bg-purple-700',
+                definition: 'Stories with a known author that contain elements impossible in the real world.',
+                elements: ['Magic systems', 'Detailed world-building', 'Talking animals', 'Quests', 'Specific rules for the impossible'],
+                subgenres: ['High Fantasy (Secondary World)', 'Low Fantasy (Real world w/ magic)', 'Animal Fantasy'],
+                example: "Harry Potter, Charlotte's Web, The Giver"
+            },
+            {
+                id: 'realistic',
+                title: 'Realistic Fiction',
+                icon: 'fa-bicycle',
+                color: 'bg-emerald-700',
+                definition: 'Stories that could happen in the real world, set in modern times.',
+                elements: ['Plausible plot', 'Complex characters', 'Contemporary problems', 'No magic', 'Relatable settings'],
+                subgenres: ['Problem Novels', 'Humorous Stories', 'Sports Stories', 'School Stories'],
+                example: "Wonder, Bridge to Terabithia, Diary of a Wimpy Kid"
+            },
+            {
+                id: 'historical',
+                title: 'Historical Fiction',
+                icon: 'fa-hourglass-half',
+                color: 'bg-red-800',
+                definition: 'Realistic stories set in the past (typically at least one generation prior).',
+                elements: ['Authentic setting', 'Historical accuracy in details', 'Fictional characters in real events', 'Period-appropriate dialogue'],
+                subgenres: ['Fictionalized Memoir', 'Fictionalized Biography'],
+                example: "Number the Stars, Bud, Not Buddy, The Midwife's Apprentice"
+            },
+            {
+                id: 'poetry',
+                title: 'Poetry & Verse',
+                icon: 'fa-feather-alt',
+                color: 'bg-rose-600',
+                definition: 'Expression of feelings and ideas by the use of distinctive style and rhythm.',
+                elements: ['Rhythm/Meter', 'Rhyme schemes', 'Figurative language', 'Condensed language', 'Emotional intensity'],
+                subgenres: ['Narrative Poems', 'Lyric Poems', 'Haiku', 'Novels in Verse'],
+                example: "Where the Sidewalk Ends, Brown Girl Dreaming"
+            },
+            {
+                id: 'graphic',
+                title: 'Graphic Novels',
+                icon: 'fa-columns',
+                color: 'bg-orange-600',
+                definition: 'Book-length narratives told using a combination of words and sequential art.',
+                elements: ['Panels & Gutters', 'Speech Bubbles', 'Visual Literacy', 'Synergy of text/image', 'Non-linear reading'],
+                subgenres: ['Memoir', 'Superhero', 'Manga', 'Adaptations'],
+                example: "Smile, American Born Chinese, El Deafo"
+            }
+        ];
+
+        const quizQuestions = [
+            {
+                id: 1,
+                title: "The Clockwork Key",
+                blurb: "In 1890s London, orphan Clara finds a mechanical bird that leads her to a hidden underground society. While the setting is historically accurate to the Victorian era, the society uses steam-powered robots that never actually existed.",
+                answer: 'fantasy',
+                hint: "Even though it has history, do steam-robots exist in our history books?",
+                explanation: "This is **Fantasy** (specifically Steampunk). While it has a historical setting, the inclusion of technology (robots) that did not exist makes it fantasy, not historical fiction."
+            },
+            {
+                id: 2,
+                title: "Summer at the Creek",
+                blurb: "Leo is dreading summer camp until he meets a group of friends who are building a fort. They deal with bullies, a heatwave, and a missing camp flag. No magic, just summer struggles.",
+                answer: 'realistic',
+                hint: "Could this happen to you today?",
+                explanation: "This is **Realistic Fiction**. The events are plausible, the setting is contemporary, and there are no magical elements."
+            },
+            {
+                id: 3,
+                title: "The Fox and the Moon",
+                blurb: "A short tale explaining why the moon has craters. A clever fox tries to eat the moon, thinking it is cheese. The story has been told for hundreds of years and has no single author.",
+                answer: 'traditional',
+                hint: "Oral tradition and explaining nature are key clues.",
+                explanation: "This is **Traditional Literature** (specifically a Pourquois Tale). The lack of a known author and the oral tradition origin are the defining traits."
+            },
+            {
+                id: 4,
+                title: "Letters from the Trenches",
+                blurb: "Set in 1917, this story follows a young soldier. All the battles described actually happened, and the details of trench life are based on real letters, though the main character is invented.",
+                answer: 'historical',
+                hint: "The setting is the past, and everything is factually grounded.",
+                explanation: "This is **Historical Fiction**. It reconstructs a specific time period with accuracy, even if the protagonist is fictional."
+            },
+            {
+                id: 5,
+                title: "The Boy Who Spoke to Clouds",
+                blurb: "Written in stanzas, this book tells the emotional story of a boy dealing with grief. It focuses heavily on the sound of words and imagery rather than a linear plot.",
+                answer: 'poetry',
+                hint: "Look at the structure: stanzas.",
+                explanation: "This is **Poetry** (or a Novel in Verse). The structure (stanzas) and focus on rhythm/imagery distinguish it."
+            },
+            {
+                id: 6,
+                title: "Super Summer",
+                blurb: "There is very little narration in this book. Instead, the story unfolds through a series of illustrated panels. We see the main character's summer vacation through dialogue bubbles and visual sound effects like 'SPLASH!' and 'POW!'.",
+                answer: 'graphic',
+                hint: "Look at the format: panels and bubbles.",
+                explanation: "This is a **Graphic Novel**. While it tells a story, the reliance on sequential art, panels, and speech bubbles distinguishes it as a unique format/genre in children's literature."
+            }
+        ];
+
+        // --- Application Logic ---
+
+        const app = {
+            state: {
+                currentView: 'home',
+                score: 0,
+                currentQuestionIndex: 0,
+                completedQuestions: []
+            },
+
+            init() {
+                this.navigate('home');
+            },
+
+            navigate(view) {
+                this.state.currentView = view;
+                const container = document.getElementById('app-container');
+                container.innerHTML = '';
+                
+                switch(view) {
+                    case 'home':
+                        this.renderHome(container);
+                        break;
+                    case 'study':
+                        this.renderStudy(container);
+                        break;
+                    case 'practice':
+                        this.renderPractice(container);
+                        break;
+                }
+            },
+
+            // --- Views ---
+
+            renderHome(container) {
+                container.innerHTML = `
+                    <div class="h-full flex items-center justify-center bg-white fade-in p-6">
+                        <div class="max-w-3xl text-center space-y-8">
+                            <div class="inline-block p-4 rounded-full bg-teal-100 mb-4">
+                                <i class="fas fa-graduation-cap text-6xl text-teal-900"></i>
+                            </div>
+                            <h1 class="text-4xl md:text-5xl text-gray-900 mb-4 font-bold">Welcome to Children's Literature</h1>
+                            <p class="text-xl text-gray-600 leading-relaxed">
+                                Hello, scholars. Identifying genre is the first step in analyzing literature. 
+                                A book's genre sets the rules for the reader—it tells us what to expect and how to interpret the story.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left mt-8">
+                                <div class="bg-cyan-50 p-6 rounded-lg border-l-4 border-cyan-600 hover:shadow-md transition cursor-pointer" onclick="app.navigate('study')">
+                                    <h3 class="font-bold text-lg text-cyan-900 mb-2"><i class="fas fa-archive mr-2"></i>The Archive</h3>
+                                    <p class="text-sm text-cyan-800">Study the definitions, tropes, and key characteristics of the 6 major genres.</p>
+                                </div>
+                                <div class="bg-emerald-50 p-6 rounded-lg border-l-4 border-emerald-600 hover:shadow-md transition cursor-pointer" onclick="app.navigate('practice')">
+                                    <h3 class="font-bold text-lg text-emerald-900 mb-2"><i class="fas fa-boxes mr-2"></i>The Sorting Room</h3>
+                                    <p class="text-sm text-emerald-800">Test your knowledge by shelving books based on their summaries. Can you get 6/6?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderStudy(container) {
+                let cardsHtml = genres.map(genre => `
+                    <div class="flip-card h-96 w-full cursor-pointer perspective-container group" onclick="this.querySelector('.flip-card-inner').classList.toggle('flipped')">
+                        <div class="flip-card-inner shadow-xl rounded-xl">
+                            <!-- Front -->
+                            <div class="flip-card-front ${genre.color} text-white flex flex-col items-center justify-center p-6 rounded-xl">
+                                <i class="fas ${genre.icon} text-6xl mb-6 opacity-80"></i>
+                                <h3 class="text-2xl font-bold serif border-b-2 border-white/30 pb-2">${genre.title}</h3>
+                                <p class="mt-4 text-sm opacity-90 uppercase tracking-widest">Click to Flip</p>
+                            </div>
+                            <!-- Back -->
+                            <div class="flip-card-back bg-white text-gray-800 p-6 rounded-xl border-2 border-gray-200 flex flex-col justify-between overflow-y-auto">
+                                <div>
+                                    <h3 class="text-xl font-bold text-teal-900 mb-2">${genre.title}</h3>
+                                    <p class="text-sm italic text-gray-600 mb-4 bg-gray-100 p-2 rounded">"${genre.definition}"</p>
+                                    
+                                    <div class="text-left space-y-2">
+                                        <p class="text-xs font-bold text-gray-500 uppercase">Key Elements:</p>
+                                        <ul class="text-sm list-disc list-inside space-y-1">
+                                            ${genre.elements.slice(0,3).map(e => `<li>${e}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mt-4 pt-4 border-t border-gray-100">
+                                    <p class="text-xs font-bold text-gray-500 uppercase mb-1">Examples:</p>
+                                    <p class="text-sm text-teal-600 font-semibold">${genre.example}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                container.innerHTML = `
+                    <div class="h-full flex flex-col fade-in">
+                        <div class="bg-white shadow p-4 z-10">
+                            <h2 class="text-2xl font-bold text-center text-gray-800 serif">Genre Archive</h2>
+                            <p class="text-center text-gray-500 text-sm">Click any card to reveal details.</p>
+                        </div>
+                        <div class="flex-grow overflow-y-auto p-6 bg-slate-100">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                                ${cardsHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderPractice(container) {
+                const question = quizQuestions[this.state.currentQuestionIndex];
+                
+                // If finished
+                if (this.state.currentQuestionIndex >= quizQuestions.length) {
+                    this.renderResults(container);
+                    return;
+                }
+
+                container.innerHTML = `
+                    <div class="h-full flex flex-col md:flex-row fade-in">
+                        <!-- Book Area (Left/Top) -->
+                        <div class="w-full md:w-1/2 p-8 flex flex-col items-center justify-center bg-gray-200">
+                            <div class="bg-white p-8 rounded shadow-2xl max-w-md w-full border-l-8 border-teal-900 relative">
+                                <div class="absolute -top-3 -right-3 bg-amber-400 text-teal-900 rounded-full w-10 h-10 flex items-center justify-center font-bold shadow">
+                                    ${this.state.currentQuestionIndex + 1}/${quizQuestions.length}
+                                </div>
+                                <h3 class="text-2xl font-bold serif mb-2 text-gray-800">${question.title}</h3>
+                                <hr class="border-gray-300 mb-4">
+                                <p class="text-gray-700 leading-relaxed mb-6 font-serif text-lg">
+                                    "${question.blurb}"
+                                </p>
+                                <p class="text-sm text-gray-500 italic text-center">Read the summary above. Which shelf does this belong on?</p>
+                            </div>
+                        </div>
+
+                        <!-- Shelves (Right/Bottom) -->
+                        <div class="w-full md:w-1/2 wood-texture p-6 flex flex-col justify-center overflow-y-auto shadow-inner">
+                            <div class="max-w-md mx-auto w-full space-y-4">
+                                ${genres.map(g => `
+                                    <button onclick="app.checkAnswer('${g.id}')" 
+                                        class="w-full bg-white bg-opacity-90 hover:bg-opacity-100 hover:translate-x-2 transition transform p-4 rounded shadow-lg text-left border-b-4 border-amber-900 flex items-center group">
+                                        <div class="w-10 h-10 rounded-full ${g.color} text-white flex items-center justify-center mr-4 shadow">
+                                            <i class="fas ${g.icon}"></i>
+                                        </div>
+                                        <div>
+                                            <span class="font-bold text-lg text-gray-800 block group-hover:text-teal-900">${g.title}</span>
+                                        </div>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderResults(container) {
+                const score = this.state.score;
+                const total = quizQuestions.length;
+                let message = "";
+                if (score === total) message = "Outstanding! You are ready for the 300-level course.";
+                else if (score > total / 2) message = "Good work. Review the Archive for the ones you missed.";
+                else message = "Keep studying. The nuances between Fantasy and Traditional Lit can be tricky!";
+
+                container.innerHTML = `
+                    <div class="h-full flex items-center justify-center bg-white fade-in">
+                        <div class="text-center p-8 max-w-lg">
+                            <div class="mb-6">
+                                <i class="fas fa-clipboard-check text-6xl text-emerald-500"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold mb-4">Simulation Complete</h2>
+                            <p class="text-6xl font-bold text-teal-900 mb-4">${score} / ${total}</p>
+                            <p class="text-xl text-gray-600 mb-8">${message}</p>
+                            <button onclick="app.resetQuiz()" class="bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition shadow-lg font-bold">
+                                Restart Simulation
+                            </button>
+                        </div>
+                    </div>
+                `;
+            },
+
+            // --- Logic ---
+
+            checkAnswer(selectedGenreId) {
+                const currentQ = quizQuestions[this.state.currentQuestionIndex];
+                const isCorrect = selectedGenreId === currentQ.answer;
+
+                const modalContent = document.getElementById('modal-content');
+                
+                if (isCorrect) {
+                    this.state.score++;
+                    modalContent.innerHTML = `
+                        <div class="text-center">
+                            <i class="fas fa-check-circle text-5xl text-emerald-500 mb-4"></i>
+                            <h3 class="text-2xl font-bold text-emerald-700 mb-2">Correct!</h3>
+                            <p class="text-gray-700 mb-4 text-lg">${currentQ.explanation}</p>
+                            <button onclick="app.nextQuestion()" class="bg-emerald-600 text-white px-6 py-2 rounded shadow hover:bg-emerald-700">Next Book</button>
+                        </div>
+                    `;
+                } else {
+                    const correctGenre = genres.find(g => g.id === currentQ.answer);
+                    modalContent.innerHTML = `
+                        <div class="text-center">
+                            <i class="fas fa-exclamation-circle text-5xl text-red-500 mb-4"></i>
+                            <h3 class="text-2xl font-bold text-red-700 mb-2">Not quite.</h3>
+                            <p class="text-gray-600 mb-4 italic">Hint: ${currentQ.hint}</p>
+                            <p class="text-gray-800 mb-6 bg-gray-100 p-4 rounded text-left border-l-4 border-red-500">${currentQ.explanation}</p>
+                            <button onclick="app.nextQuestion()" class="bg-gray-800 text-white px-6 py-2 rounded shadow hover:bg-gray-900">Next Book</button>
+                        </div>
+                    `;
+                }
+
+                document.getElementById('modal-overlay').classList.remove('hidden');
+            },
+
+            nextQuestion() {
+                this.closeModal();
+                this.state.currentQuestionIndex++;
+                this.navigate('practice');
+            },
+
+            resetQuiz() {
+                this.state.score = 0;
+                this.state.currentQuestionIndex = 0;
+                this.navigate('practice');
+            },
+
+            closeModal() {
+                document.getElementById('modal-overlay').classList.add('hidden');
+            }
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+
+    </script>
+</body>
+</html>
