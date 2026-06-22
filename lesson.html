@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Resilient Assignments — Faculty Workshop Launchpad</title>
+  <!-- Google Fonts: Inter for premium legible typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind Configuration for custom animations and dark mode -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'bounce-slow': 'bounce 2s infinite',
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Core Styles for 3D Cards, Custom Scrollbars, and Theme Transitions -->
+  <style>
+    * {
+      transition: background-color 0.4s ease, border-color 0.4s ease, text-decoration-color 0.4s ease;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* 3D Flip Card Styles */
+    .card-container {
+      perspective: 1500px;
+    }
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 570px;
+      text-align: left;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .card-inner.is-flipped {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 1.25rem;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+    }
+
+    /* Term flip cards */
+    .term-card-container {
+      perspective: 1000px;
+    }
+    .term-card-inner {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+    .term-card-inner.is-flipped {
+      transform: rotateY(180deg);
+    }
+    .term-card-front, .term-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+    .term-card-back {
+      transform: rotateY(180deg);
+    }
+
+    /* Custom thin scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(16, 185, 129, 0.2);
+      border-radius: 99px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(16, 185, 129, 0.4);
+    }
+
+    /* Glassmorphism accent */
+    .glass-nav {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* Accordion transitions */
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    .accordion-content.open {
+      opacity: 1;
+    }
+
+    /* Stat counter animation */
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .stat-animate {
+      animation: countUp 0.6s ease forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen transition-colors duration-300">
+
+  <!-- ================= TOP NAVIGATION HEADER ================= -->
+  <header class="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 glass-nav transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+
+      <!-- Logo / Workshop Identifier -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-slate-900 dark:bg-slate-100 flex items-center justify-center text-emerald-500 dark:text-emerald-600 font-black shadow-md shadow-emerald-500/10 text-sm">
+          AR
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
+            <span>AI-Resilient Assignments</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          </h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Faculty Professional Development Workshop</p>
+        </div>
+      </div>
+
+      <!-- Theme & Progress Actions -->
+      <div class="flex items-center space-x-4">
+
+        <!-- Progress Badge -->
+        <div class="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/60">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-xs font-semibold text-emerald-700 dark:text-emerald-300" id="progress-badge">0/7 Explored</span>
+        </div>
+
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/80 text-slate-500 dark:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200" aria-label="Toggle dark mode">
+          <svg id="theme-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707-.707M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="w-full h-1 bg-slate-100 dark:bg-slate-800">
+      <div id="mastery-progress-bar" class="h-1 bg-emerald-500 dark:bg-emerald-400 w-0 transition-all duration-500"></div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+    <!-- ================= HERO SECTION ================= -->
+    <section class="text-center max-w-4xl mx-auto space-y-6 pt-6">
+      <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-100 dark:border-emerald-900 text-emerald-600 dark:text-emerald-400 text-xs font-semibold uppercase tracking-wider">
+        <span>Faculty Development Workshop</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+        Designing AI-Resilient <span class="bg-gradient-to-r from-emerald-600 via-slate-900 to-emerald-500 dark:from-emerald-400 dark:to-emerald-200 bg-clip-text text-transparent">Assignments</span>
+      </h1>
+      <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed">
+        Frameworks, scales, and practical strategies to preserve assessment validity in the age of generative AI. Move from detection to intentional design.
+      </p>
+    </section>
+
+    <!-- ================= RATIONALE & LEARNING OUTCOMES ================= -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+      <!-- Left Card: The Challenge -->
+      <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="flex items-center space-x-3 text-emerald-600 dark:text-emerald-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <h2 class="text-xl font-bold tracking-tight text-slate-950 dark:text-white">Why This Workshop Matters</h2>
+          </div>
+          <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+            <strong>92% of students</strong> now use AI in their studies (HEPI, 2025). <strong>88%</strong> acknowledge using generative AI for assessed work. Yet AI detection tools show false positive rates up to <strong>61.3%</strong> for non-native English speakers — making surveillance-based approaches both unreliable and inequitable.
+          </p>
+          <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+            The solution is not better detection — it is better design. This workshop equips faculty with validated frameworks and practical strategies to create assignments that remain meaningful measures of learning when AI access is assumed.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/60 flex items-center space-x-3 text-xs font-semibold text-slate-500">
+          <span>Grounded in 2024–2026 scholarship &bull; Evidence-informed &bull; All disciplines</span>
+        </div>
+      </div>
+
+      <!-- Right Card: Learning Outcomes -->
+      <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="flex items-center space-x-3 text-emerald-600 dark:text-emerald-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <h2 class="text-xl font-bold tracking-tight text-slate-950 dark:text-white">Learning Outcomes</h2>
+          </div>
+          <p class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">By the end of this workshop, you will be able to:</p>
+          <ul class="space-y-3">
+            <li class="flex items-start space-x-3 text-sm">
+              <input type="checkbox" class="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 dark:border-slate-700 dark:bg-slate-950" id="obj-1">
+              <label for="obj-1" class="text-slate-600 dark:text-slate-300 select-none cursor-pointer">Articulate the evidence-based rationale for redesigning assignments in response to generative AI.</label>
+            </li>
+            <li class="flex items-start space-x-3 text-sm">
+              <input type="checkbox" class="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 dark:border-slate-700 dark:bg-slate-950" id="obj-2">
+              <label for="obj-2" class="text-slate-600 dark:text-slate-300 select-none cursor-pointer">Distinguish among the five levels of the AI Assessment Scale (AIAS) and apply them to specific assessment contexts.</label>
+            </li>
+            <li class="flex items-start space-x-3 text-sm">
+              <input type="checkbox" class="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 dark:border-slate-700 dark:bg-slate-950" id="obj-3">
+              <label for="obj-3" class="text-slate-600 dark:text-slate-300 select-none cursor-pointer">Analyze existing assignments to identify vulnerability to AI-generated completion.</label>
+            </li>
+            <li class="flex items-start space-x-3 text-sm">
+              <input type="checkbox" class="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 dark:border-slate-700 dark:bg-slate-950" id="obj-4">
+              <label for="obj-4" class="text-slate-600 dark:text-slate-300 select-none cursor-pointer">Apply at least three research-supported design strategies to redesign an assignment for AI resilience.</label>
+            </li>
+            <li class="flex items-start space-x-3 text-sm">
+              <input type="checkbox" class="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 dark:border-slate-700 dark:bg-slate-950" id="obj-5">
+              <label for="obj-5" class="text-slate-600 dark:text-slate-300 select-none cursor-pointer">Construct an AI-resilient assignment for your own course using backward design principles.</label>
+            </li>
+            <li class="flex items-start space-x-3 text-sm">
+              <input type="checkbox" class="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 dark:border-slate-700 dark:bg-slate-950" id="obj-6">
+              <label for="obj-6" class="text-slate-600 dark:text-slate-300 select-none cursor-pointer">Evaluate peer-designed assignments using a structured rubric for alignment, resilience, and feasibility.</label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= THEORETICAL FOUNDATIONS ================= -->
+    <section class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm max-w-5xl mx-auto space-y-5">
+      <div class="flex items-center space-x-3 text-emerald-600 dark:text-emerald-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-5 1.253"></path>
+        </svg>
+        <h2 class="text-xl font-bold tracking-tight text-slate-950 dark:text-white">Theoretical Foundations</h2>
+      </div>
+      <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        This workshop is grounded in five established learning theories. These are not decorative citations — each one directly shapes a design decision in the strategies you will learn today.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 space-y-1.5">
+          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Backward Design</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">Wiggins &amp; McTighe (2005)</p>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Start with desired outcomes, then define acceptable evidence, then plan learning activities. Every redesigned assignment in this workshop follows this sequence — outcomes first, AIAS level second, strategies third.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 space-y-1.5">
+          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Constructive Alignment</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">Biggs &amp; Tang (2011)</p>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Learning outcomes, teaching activities, and assessment tasks must be aligned to the same intended learning. The AIAS framework is fundamentally a constructive alignment tool — it asks: does the AI use level match the outcome you are assessing?</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 space-y-1.5">
+          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Bloom's Revised Taxonomy</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">Anderson &amp; Krathwohl (2001)</p>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Cognitive levels from Remember to Create. AI handles lower-order tasks competently; higher-order tasks — evaluate, create with original judgment — remain distinctively human. This is your diagnostic tool for AI vulnerability.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 space-y-1.5">
+          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Andragogy</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">Knowles (1980)</p>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Adult learners need relevance, autonomy, and immediate application. This workshop is designed on those principles: you work with your own assignments, choose your own AIAS levels, and leave with a redesigned artifact ready for your next semester.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 space-y-1.5">
+          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Cognitive Load Theory</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">Sweller (1988)</p>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Working memory is limited. Rather than asking you to juggle all seven strategies at once, the Resilience Stack gives you a three-layer heuristic: process, personalization, verification. Layer two or three — not all seven.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 space-y-1.5">
+          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">TPACK</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">Mishra &amp; Koehler (2006)</p>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Effective teaching with technology requires integrating technological, pedagogical, and content knowledge. Today you are building TPACK for the AI era — understanding what AI can do (technology), how to design assessments (pedagogy), and what matters in your discipline (content).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= KEY TERMS GLOSSARY ================= -->
+    <section class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="space-y-1">
+          <h2 class="text-xl font-bold text-slate-950 dark:text-white">Workshop Key Terms</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Click any card to reveal the definition. Use the search to filter.</p>
+        </div>
+        <div class="relative w-full md:w-80">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+          <input type="text" id="terms-search" placeholder="Search key terms..." class="w-full pl-9 pr-4 py-2 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+        </div>
+      </div>
+      <div id="key-terms-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </section>
+
+    <!-- ================= EVIDENCE SECTION: WHY REDESIGN, NOT DETECT ================= -->
+    <section class="space-y-6">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">The Evidence: Why Redesign, Not Detect</h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm">Three converging pillars of evidence make the case for assignment redesign over detection-based approaches.</p>
+      </div>
+
+      <!-- Three Evidence Pillars -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Pillar 1 -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/60">
+            <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">Student AI Use Is Near-Universal</h3>
+          <div class="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+            <div class="flex items-center space-x-2">
+              <span class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">92%</span>
+              <span>of students use AI in studies (HEPI, 2025)</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">88%</span>
+              <span>use GenAI for assessed work (up from 53%)</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">5%</span>
+              <span>of students know their institution's AI policy</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 italic pt-2 border-t border-slate-100 dark:border-slate-800">AI use among students is normative, not exceptional.</p>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/60">
+            <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">Detection Tools Are Unreliable</h3>
+          <div class="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+            <div class="flex items-center space-x-2">
+              <span class="text-2xl font-extrabold text-rose-500">61%</span>
+              <span>false positive rate for non-native English speakers</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-2xl font-extrabold text-rose-500">28%</span>
+              <span>of international STEM students received lower grades from false flags</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 italic pt-2 border-t border-slate-100 dark:border-slate-800">Detection transfers the integrity burden to an algorithm that disproportionately harms our most vulnerable students. — Giray, Roe, &amp; Diesta Espiritu (2026)</p>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/60">
+            <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">Faculty Consensus Supports Redesign</h3>
+          <div class="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+            <div class="flex items-center space-x-2">
+              <span class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">92%</span>
+              <span>of faculty concerned about AI-facilitated dishonesty</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">84%</span>
+              <span>agree AI reduces critical thinking and originality</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 italic pt-2 border-t border-slate-100 dark:border-slate-800">Universal use + unreliable detection + faculty concern = assignment redesign is the most effective response.</p>
+        </div>
+      </div>
+
+      <!-- Analogy Card -->
+      <div class="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 max-w-4xl mx-auto">
+        <div class="flex items-start space-x-4">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center flex-shrink-0 border border-emerald-100 dark:border-emerald-900/60 mt-0.5">
+            <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm">The Open-Book Exam Parallel</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed italic">
+              "When calculators entered mathematics classrooms, we did not ban calculators — we redesigned what we asked students to do with them. When open-book exams emerged, we did not eliminate exams — we wrote questions that required application, not recall. Generative AI is the next iteration of that same pedagogical challenge. The question is not how to prevent access, but how to design assessments that remain meaningful when access is assumed."
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BLOOM'S TAXONOMY AI VULNERABILITY TOOL ================= -->
+    <section class="space-y-6">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Bloom's Taxonomy &amp; AI Vulnerability</h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm">
+          AI handles lower-order cognitive tasks competently. Click each level to see what AI can do, what remains distinctively human, and how to diagnose whether your assignment is vulnerable.
+          <span class="font-semibold">Adapted from Oregon State Ecampus, "Bloom's Taxonomy Revisited" (2024).</span>
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto space-y-3" id="blooms-container">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Diagnostic prompt -->
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm max-w-4xl mx-auto">
+        <div class="flex items-start space-x-4">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center flex-shrink-0 border border-emerald-100 dark:border-emerald-900/60 mt-0.5">
+            <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm">Quick Diagnostic for Your Assignment</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Look at your assignment prompt. What verb does it use? <strong>If the primary verb lives at Remember or Understand</strong> (define, list, summarize, explain), AI can likely complete it at a passing level. <strong>If it lives at Evaluate or Create</strong> (judge with personal criteria, design from lived experience, synthesize original insight), AI struggles without authentic human input. Your redesign goal: push at least one element of every major assignment into Evaluate or Create territory — or anchor lower-order tasks in situated, personal, or process-based contexts that AI cannot replicate.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= AI ASSESSMENT SCALE (AIAS) SECTION ================= -->
+    <section class="space-y-6">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">The AI Assessment Scale (AIAS)</h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm">
+          Developed by Perkins, Furze, Roe, &amp; MacVaugh (2024). Adopted by hundreds of institutions worldwide. Translated into 30+ languages. Replaces binary "AI allowed / AI banned" policies with a graduated, assignment-level approach.
+        </p>
+      </div>
+
+      <!-- AIAS 5 Levels as Flip Cards -->
+      <div id="aias-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+
+      <!-- AIAS Key Principles Panel -->
+      <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 max-w-4xl mx-auto">
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          Key AIAS Design Principles
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60">
+            <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">No Level Is Inherently Better</p>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">The appropriate level depends on the learning outcome, not a moral judgment about AI use. Version 2 abandoned the red-to-green color scheme to avoid implying a value hierarchy.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60">
+            <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">Assignment-Level, Not Course-Level</p>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">A single course might include Level 1 assessments (proctored midterm), Level 2 tasks (research proposal), and Level 4 activities (AI-assisted data analysis).</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60">
+            <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">Validity at All Levels</p>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">"Assessment security, in the traditional sense, is only possible at Level 1, but validity — whether the assessment measures what it claims — is achievable throughout." — Phillip Dawson</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60">
+            <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">Transparency Is the Mechanism</p>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Students know the AI use level for each assignment in advance. This replaces ambiguous syllabus policies with clear, assignment-specific expectations.</p>
+          </div>
+        </div>
+
+        <!-- Analogy -->
+        <div class="mt-4 p-4 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/40">
+          <p class="text-xs font-bold text-emerald-700 dark:text-emerald-400 mb-1">Analogy — Lab Safety Levels</p>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed italic">
+            "Think of the AIAS like laboratory safety levels. A BSL-1 lab handles low-risk agents with standard practices. A BSL-4 lab handles dangerous pathogens with maximum containment. Neither level is 'better' — each is appropriate to its purpose. Similarly, a Level 1 assessment (no AI) is appropriate when you need to verify foundational knowledge, while a Level 4 assessment (full AI) is appropriate when AI fluency is the learning outcome."
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SEVEN DESIGN STRATEGIES — FLIP CARDS ================= -->
+    <section class="space-y-4">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Seven Design Strategies for AI Resilience</h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm">
+          Flip each strategy card to explore why it works and see discipline-specific examples. Layer two or three strategies together for maximum resilience.
+        </p>
+      </div>
+
+      <div id="strategies-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+
+      <!-- Resilience Stack Visual -->
+      <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm max-w-3xl mx-auto space-y-4">
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white text-center">The Resilience Stack: Layer Strategies for Maximum Effect</h3>
+        <div class="space-y-0">
+          <div class="p-4 rounded-t-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 text-center">
+            <p class="text-xs font-extrabold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Layer 3: Verification</p>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">Oral defense, peer review, in-class component</p>
+          </div>
+          <div class="p-4 bg-slate-50 dark:bg-slate-900/50 border-x border-slate-200 dark:border-slate-800 text-center">
+            <p class="text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Layer 2: Personalization</p>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">Local knowledge, lived experience, class references, original data</p>
+          </div>
+          <div class="p-4 rounded-b-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
+            <p class="text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Layer 1: Process</p>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">Staged submissions, scaffolding, documented development, revision reflections</p>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 dark:text-slate-400 text-center italic">No single strategy is sufficient. The most resilient assignments layer 2–3 strategies together.</p>
+      </div>
+    </section>
+
+    <!-- ================= SCENARIO / WORKED EXAMPLES ================= -->
+    <section class="space-y-6">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Before &amp; After: Assignment Redesign Examples</h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm">See how real assignments transform when resilience strategies are applied. Click each discipline to expand.</p>
+      </div>
+
+      <div id="examples-accordion" class="space-y-3 max-w-4xl mx-auto"></div>
+    </section>
+
+    <!-- ================= INTERACTIVE DESIGN LAB ================= -->
+    <section class="space-y-6">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-100 dark:border-emerald-900 text-emerald-600 dark:text-emerald-400 text-xs font-semibold uppercase tracking-wider">
+          <span>Hands-On Activity</span>
+        </div>
+        <h2 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Design Lab: AI-Assisted Assignment Redesign</h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm">
+          Provide your assignment details and design choices. The system generates a draft redesign. Then <strong>you</strong> evaluate, revise, and stress-test it &mdash; exactly the way we ask students to work at AIAS Level 3.
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+
+        <!-- ===== PHASE 1: INPUTS ===== -->
+        <div id="lab-phase-input">
+
+          <!-- Step 1: Context -->
+          <div class="p-6 border-b border-slate-100 dark:border-slate-800 space-y-4">
+            <div class="flex items-center space-x-3">
+              <span class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm flex-shrink-0 border border-emerald-100 dark:border-emerald-900/60">1</span>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Your Course &amp; Original Assignment</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-1.5">
+                <label class="text-xs font-semibold text-slate-500 dark:text-slate-400" for="lab-course">Course name &amp; level</label>
+                <input type="text" id="lab-course" placeholder="e.g., ENG 101 — English Composition I" class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-xs font-semibold text-slate-500 dark:text-slate-400" for="lab-audience">Student population</label>
+                <input type="text" id="lab-audience" placeholder="e.g., Mixed — traditional, adult learners, ESL" class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400" for="lab-original">Original assignment prompt (paste or describe it)</label>
+              <textarea id="lab-original" rows="3" placeholder="Paste your current assignment prompt here..." class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all resize-y"></textarea>
+            </div>
+          </div>
+
+          <!-- Step 2: Outcome + AIAS Level -->
+          <div class="p-6 border-b border-slate-100 dark:border-slate-800 space-y-4">
+            <div class="flex items-center space-x-3">
+              <span class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm flex-shrink-0 border border-emerald-100 dark:border-emerald-900/60">2</span>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Learning Outcome &amp; AIAS Level</h3>
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400" for="lab-outcome">What should students be able to DO after completing this assignment?</label>
+              <textarea id="lab-outcome" rows="2" placeholder="Use a measurable verb: analyze, construct, evaluate, design, defend..." class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all resize-y"></textarea>
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Select AIAS Level (match to your learning outcome)</label>
+              <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                <label class="relative cursor-pointer"><input type="radio" name="lab-aias" value="1" class="peer sr-only" onchange="updateAIASSelection(1)"><div class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 peer-checked:border-emerald-500 peer-checked:bg-emerald-50 dark:peer-checked:bg-emerald-950/30 text-center transition-all hover:border-emerald-300 dark:hover:border-emerald-800"><p class="text-lg font-extrabold text-slate-900 dark:text-white">1</p><p class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">No AI</p></div></label>
+                <label class="relative cursor-pointer"><input type="radio" name="lab-aias" value="2" class="peer sr-only" onchange="updateAIASSelection(2)"><div class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 peer-checked:border-emerald-500 peer-checked:bg-emerald-50 dark:peer-checked:bg-emerald-950/30 text-center transition-all hover:border-emerald-300 dark:hover:border-emerald-800"><p class="text-lg font-extrabold text-slate-900 dark:text-white">2</p><p class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">AI Planning</p></div></label>
+                <label class="relative cursor-pointer"><input type="radio" name="lab-aias" value="3" class="peer sr-only" onchange="updateAIASSelection(3)"><div class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 peer-checked:border-emerald-500 peer-checked:bg-emerald-50 dark:peer-checked:bg-emerald-950/30 text-center transition-all hover:border-emerald-300 dark:hover:border-emerald-800"><p class="text-lg font-extrabold text-slate-900 dark:text-white">3</p><p class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">AI Collab</p></div></label>
+                <label class="relative cursor-pointer"><input type="radio" name="lab-aias" value="4" class="peer sr-only" onchange="updateAIASSelection(4)"><div class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 peer-checked:border-emerald-500 peer-checked:bg-emerald-50 dark:peer-checked:bg-emerald-950/30 text-center transition-all hover:border-emerald-300 dark:hover:border-emerald-800"><p class="text-lg font-extrabold text-slate-900 dark:text-white">4</p><p class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">Full AI</p></div></label>
+                <label class="relative cursor-pointer"><input type="radio" name="lab-aias" value="5" class="peer sr-only" onchange="updateAIASSelection(5)"><div class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 peer-checked:border-emerald-500 peer-checked:bg-emerald-50 dark:peer-checked:bg-emerald-950/30 text-center transition-all hover:border-emerald-300 dark:hover:border-emerald-800"><p class="text-lg font-extrabold text-slate-900 dark:text-white">5</p><p class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">AI Explore</p></div></label>
+              </div>
+              <p id="aias-selection-hint" class="text-xs text-slate-400 dark:text-slate-500 italic mt-1"></p>
+            </div>
+          </div>
+
+          <!-- Step 3: Strategies -->
+          <div class="p-6 border-b border-slate-100 dark:border-slate-800 space-y-4">
+            <div class="flex items-center space-x-3">
+              <span class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm flex-shrink-0 border border-emerald-100 dark:border-emerald-900/60">3</span>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Select 2–3 Design Strategies</h3>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 dark:border-slate-800/60 hover:border-emerald-300 dark:hover:border-emerald-800 cursor-pointer transition-all"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700" id="strat-1"><div><span class="text-sm font-semibold text-slate-900 dark:text-white">Process-Based</span><p class="text-[11px] text-slate-500 dark:text-slate-400">Staged submissions, scaffolding, revision reflections</p></div></label>
+              <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 dark:border-slate-800/60 hover:border-emerald-300 dark:hover:border-emerald-800 cursor-pointer transition-all"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700" id="strat-2"><div><span class="text-sm font-semibold text-slate-900 dark:text-white">Situated / Local Knowledge</span><p class="text-[11px] text-slate-500 dark:text-slate-400">Campus data, class discussions, community contexts</p></div></label>
+              <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 dark:border-slate-800/60 hover:border-emerald-300 dark:hover:border-emerald-800 cursor-pointer transition-all"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700" id="strat-3"><div><span class="text-sm font-semibold text-slate-900 dark:text-white">Authentic Performance</span><p class="text-[11px] text-slate-500 dark:text-slate-400">Oral defense, live demo, Q&amp;A, presentation</p></div></label>
+              <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 dark:border-slate-800/60 hover:border-emerald-300 dark:hover:border-emerald-800 cursor-pointer transition-all"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700" id="strat-4"><div><span class="text-sm font-semibold text-slate-900 dark:text-white">Multimodal</span><p class="text-[11px] text-slate-500 dark:text-slate-400">Written + visual + oral + experiential components</p></div></label>
+              <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 dark:border-slate-800/60 hover:border-emerald-300 dark:hover:border-emerald-800 cursor-pointer transition-all"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700" id="strat-5"><div><span class="text-sm font-semibold text-slate-900 dark:text-white">Metacognitive Reflection</span><p class="text-[11px] text-slate-500 dark:text-slate-400">Learning process analysis, struggle narratives, AI logs</p></div></label>
+              <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 dark:border-slate-800/60 hover:border-emerald-300 dark:hover:border-emerald-800 cursor-pointer transition-all"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700" id="strat-6"><div><span class="text-sm font-semibold text-slate-900 dark:text-white">Personalized / Experience-Based</span><p class="text-[11px] text-slate-500 dark:text-slate-400">Lived experience, interviews, career connection</p></div></label>
+              <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 dark:border-slate-800/60 hover:border-emerald-300 dark:hover:border-emerald-800 cursor-pointer transition-all sm:col-span-2"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700" id="strat-7"><div><span class="text-sm font-semibold text-slate-900 dark:text-white">Collaborative Verification</span><p class="text-[11px] text-slate-500 dark:text-slate-400">Jigsaw, peer teaching, group review with rotating roles</p></div></label>
+            </div>
+          </div>
+
+          <!-- Generate Button -->
+          <div class="p-6 text-center space-y-3">
+            <p id="lab-validation-msg" class="text-xs text-rose-500 font-semibold hidden"></p>
+            <button onclick="generateRedesign()" id="lab-generate-btn" class="inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-slate-950 hover:bg-slate-900 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/25 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-150">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              Generate AI-Resilient Draft
+            </button>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500">The system will produce a structured draft based on your selections. You will review and revise it next.</p>
+          </div>
+        </div>
+
+        <!-- ===== PHASE 2: REVIEW & REVISE (hidden until generated) ===== -->
+        <div id="lab-phase-review" class="hidden">
+
+          <!-- Teachable Moment Banner -->
+          <div class="p-5 bg-emerald-50 dark:bg-emerald-950/30 border-b border-emerald-100 dark:border-emerald-900/40">
+            <div class="flex items-start space-x-3 max-w-3xl mx-auto">
+              <div class="w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-5 h-5 text-emerald-700 dark:text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-emerald-800 dark:text-emerald-200">You are now working at AIAS Level 3: AI Collaboration</p>
+                <p class="text-xs text-emerald-700 dark:text-emerald-300 leading-relaxed mt-1">The system drafted; you bring the disciplinary judgment, local knowledge, and pedagogical intent. This is exactly what we ask students to do &mdash; critically evaluate AI output, identify what is generic or missing, and revise with authentic expertise. Notice what the draft gets right, what it gets wrong, and what only <em>you</em> can add.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4: Generated Draft (read-only display) -->
+          <div class="p-6 border-b border-slate-100 dark:border-slate-800 space-y-4">
+            <div class="flex items-center space-x-3">
+              <span class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm flex-shrink-0 border border-emerald-100 dark:border-emerald-900/60">4</span>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Generated Draft</h3>
+              <span class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded-full font-semibold">AI-GENERATED &mdash; REVIEW REQUIRED</span>
+            </div>
+            <div id="lab-draft-display" class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap custom-scrollbar max-h-96 overflow-y-auto"></div>
+          </div>
+
+          <!-- Step 5: Faculty Revision -->
+          <div class="p-6 border-b border-slate-100 dark:border-slate-800 space-y-4">
+            <div class="flex items-center space-x-3">
+              <span class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm flex-shrink-0 border border-emerald-100 dark:border-emerald-900/60">5</span>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Your Revised Version</h3>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Edit the draft below. Add your disciplinary specifics, local context, class references, and any details only you know. Remove anything generic, inaccurate, or unfeasible.</p>
+            <textarea id="lab-revised" rows="10" class="w-full px-4 py-3 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all resize-y custom-scrollbar"></textarea>
+          </div>
+
+          <!-- Step 6: Stress Test Checklist -->
+          <div class="p-6 space-y-4">
+            <div class="flex items-center space-x-3">
+              <span class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm flex-shrink-0 border border-emerald-100 dark:border-emerald-900/60">6</span>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Stress-Test Your Revision</h3>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Verify your revised assignment against each criterion before finalizing.</p>
+            <div class="space-y-2">
+              <label class="flex items-start space-x-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 cursor-pointer"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700 lab-check"><span class="text-xs text-slate-700 dark:text-slate-300"><strong>Outcome alignment:</strong> Does this assignment directly assess the stated learning outcome?</span></label>
+              <label class="flex items-start space-x-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 cursor-pointer"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700 lab-check"><span class="text-xs text-slate-700 dark:text-slate-300"><strong>AI resilience:</strong> Could AI still complete this at a passing level without significant authentic human input?</span></label>
+              <label class="flex items-start space-x-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 cursor-pointer"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700 lab-check"><span class="text-xs text-slate-700 dark:text-slate-300"><strong>AIAS clarity:</strong> Would students understand exactly how AI may or may not be used?</span></label>
+              <label class="flex items-start space-x-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 cursor-pointer"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700 lab-check"><span class="text-xs text-slate-700 dark:text-slate-300"><strong>Accessibility:</strong> Is this achievable for students with diverse abilities, technology access, and time constraints?</span></label>
+              <label class="flex items-start space-x-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 cursor-pointer"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700 lab-check"><span class="text-xs text-slate-700 dark:text-slate-300"><strong>Feasibility:</strong> Is the grading workload sustainable? Is the student workload proportional to the credit weight?</span></label>
+              <label class="flex items-start space-x-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60 cursor-pointer"><input type="checkbox" class="mt-0.5 h-4 w-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700 lab-check"><span class="text-xs text-slate-700 dark:text-slate-300"><strong>Bloom's level:</strong> Does at least one element require Evaluate or Create-level cognition with authentic personal input?</span></label>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <button onclick="printDesignLab()" class="inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-900 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs shadow-md transform hover:-translate-y-0.5 active:translate-y-0 transition-all">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                Print My Redesign
+              </button>
+              <button onclick="clearDesignLab()" class="inline-flex items-center justify-center px-6 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold text-xs transition-all">
+                Start Over with New Assignment
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= KEY TAKEAWAYS ================= -->
+    <section class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm max-w-4xl mx-auto space-y-6">
+      <div class="flex items-center space-x-3 text-emerald-600 dark:text-emerald-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <h2 class="text-xl font-bold tracking-tight text-slate-950 dark:text-white">Key Takeaways</h2>
+      </div>
+      <div class="space-y-4">
+        <div class="flex items-start space-x-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60">
+          <span class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm flex-shrink-0 border border-emerald-100 dark:border-emerald-900/60">1</span>
+          <p class="text-sm text-slate-700 dark:text-slate-300">The question is no longer <em>whether</em> students will use AI, but whether our assignments remain <strong>valid measures of learning</strong> when they do.</p>
+        </div>
+        <div class="flex items-start space-x-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60">
+          <span class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm flex-shrink-0 border border-emerald-100 dark:border-emerald-900/60">2</span>
+          <p class="text-sm text-slate-700 dark:text-slate-300">AI resilience is not about prohibition — it is about <strong>intentional design</strong>. The AIAS gives us a shared vocabulary for making AI use decisions transparent and pedagogically grounded, assignment by assignment.</p>
+        </div>
+        <div class="flex items-start space-x-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60">
+          <span class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm flex-shrink-0 border border-emerald-100 dark:border-emerald-900/60">3</span>
+          <p class="text-sm text-slate-700 dark:text-slate-300">The most resilient assignments share a common architecture: they are <strong>process-oriented, personally situated, and verified through human interaction</strong>. Layered strategies create meaningful resistance.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= REFLECTION & COMMITMENT ================= -->
+    <section class="max-w-4xl mx-auto space-y-6">
+      <div class="text-center space-y-2">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Reflection &amp; Commitment</h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm">Before you leave, capture your key insight and your first action step. Research on professional development transfer shows that naming a specific commitment dramatically increases follow-through.</p>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800 space-y-3">
+          <label class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider" for="reflect-insight">What is one insight from today that changes how you think about your assignments?</label>
+          <textarea id="reflect-insight" rows="2" placeholder="The most important thing I'm taking away is..." class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all resize-y"></textarea>
+        </div>
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800 space-y-3">
+          <label class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider" for="reflect-assignment">Which specific assignment will you redesign first, and by when?</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="sm:col-span-2">
+              <input type="text" id="reflect-assignment" placeholder="e.g., The research paper in my ENG 102 course" class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+            </div>
+            <div>
+              <input type="text" id="reflect-deadline" placeholder="By when? e.g., Aug 15" class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+            </div>
+          </div>
+        </div>
+        <div class="p-6 space-y-3">
+          <label class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider" for="reflect-support">What support would help you implement this? (e.g., peer consultation, instructional design help, more examples)</label>
+          <textarea id="reflect-support" rows="2" placeholder="I would benefit from..." class="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all resize-y"></textarea>
+          <div class="pt-3">
+            <button onclick="printReflection()" class="inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-900 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs shadow-md transform hover:-translate-y-0.5 active:translate-y-0 transition-all">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+              Print My Reflection
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= COMPLETION BANNER ================= -->
+    <div id="mastery-banner" class="hidden transition-all duration-500 scale-95 opacity-0 bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-8 rounded-2xl shadow-lg border border-emerald-400 text-center space-y-4">
+      <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto text-3xl animate-bounce">
+        &#127942;
+      </div>
+      <h3 class="text-2xl font-bold">Excellent Progress! You've Explored All Strategies!</h3>
+      <p class="text-sm text-emerald-50 max-w-2xl mx-auto font-medium">
+        You are now equipped to redesign assignments for AI resilience. Use the Design Lab worksheet and peer review rubric to apply these strategies to your own courses.
+      </p>
+    </div>
+
+    <!-- ================= RESOURCES & NEXT STEPS ================= -->
+    <section class="space-y-6">
+      <div class="text-center max-w-3xl mx-auto space-y-2">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Resources &amp; Next Steps</h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm">Continue your learning with these key references and tools.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <!-- Frameworks -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <h3 class="text-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Frameworks &amp; Scales</h3>
+          <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-300">
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span><strong>AI Assessment Scale (AIAS)</strong> — aiassessmentscale.com — Free framework with 50+ activities</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span><strong>Oregon State Bloom's Taxonomy Revisited</strong> (2024) — Mapping AI capabilities at each cognitive level</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span><strong>AI Pedagogy Project</strong> — aipedagogy.org — Curated gallery of AI-integrated assignments</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Research -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <h3 class="text-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Key Research</h3>
+          <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-300">
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span>Perkins, Roe, Furze &amp; MacVaugh (2024). <em>AIAS: A Framework for Ethical Integration of GenAI in Educational Assessment.</em> JUTLP.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span>Giray, Roe &amp; Diesta Espiritu (2026). <em>AI writing detectors are ineffective, unreliable and harmful.</em> English Teaching: Practice &amp; Critique.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span>Mollick &amp; Mollick (2023). <em>Assigning AI: Seven Approaches for Students, with Prompts.</em> Wharton/SSRN.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Institutional Guides -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <h3 class="text-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Institutional Guides</h3>
+          <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-300">
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span><strong>Middlebury DLINQ</strong> — Seven-category AI assignment design framework</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span><strong>Harvard Bok Center</strong> — Courses and assignments in the age of AI</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span><strong>EDUCAUSE</strong> — 2025 AI Landscape Study and Action Plans</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Key Researchers -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <h3 class="text-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Key Researchers to Follow</h3>
+          <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-300">
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span><strong>Mike Perkins</strong> — Co-creator of AIAS, British University Vietnam</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span><strong>Leon Furze</strong> — Co-creator of AIAS, "Beyond Scales" (2026), Deakin University</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span><strong>Ethan &amp; Lilach Mollick</strong> — "Co-Intelligence," Wharton School</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+              <span><strong>Anna Mills</strong> — AI &amp; writing, community college perspective, Canada College</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-10 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-sm">
+      <div class="flex items-center space-x-3 text-slate-500 dark:text-slate-400">
+        <span class="font-bold text-slate-900 dark:text-white">AI-Resilient Assignments Workshop</span>
+        <span>&bull;</span>
+        <span>Faculty Professional Development</span>
+      </div>
+      <div class="flex space-x-4 text-xs font-semibold text-slate-500 dark:text-slate-400">
+        <span>Faculty Development Workshop</span>
+        <span>|</span>
+        <span>Evidence-Informed &bull; 2024–2026 Scholarship</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= CORE JAVASCRIPT ================= -->
+  <script>
+    // ===== DATA =====
+
+    const keyTerms = [
+      { term: "AI-Resilient Assignment", tag: "Core Concept", definition: "An assessment designed to preserve learning outcome validity when students have access to generative AI. Emphasizes process over product, personalized content, and human verification rather than prohibition." },
+      { term: "AI Assessment Scale (AIAS)", tag: "Framework", definition: "A five-level framework by Perkins, Furze, Roe, & MacVaugh (2024) that classifies the permitted degree of AI use in assessments — from no AI (Level 1) to AI exploration (Level 5). Operates at the assignment level, not the course level." },
+      { term: "Backward Design", tag: "Theory", definition: "An instructional design framework (Wiggins & McTighe) that starts with desired learning outcomes, then determines acceptable evidence of learning, and finally plans learning activities — outcomes first, then assessment, then instruction." },
+      { term: "Hallucination", tag: "AI Concept", definition: "A phenomenon where an AI model generates content that is plausible-sounding but factually incorrect or unsupported by its training data. A key vulnerability when students use AI to complete assignments without critical evaluation." },
+      { term: "Process-Based Assessment", tag: "Strategy", definition: "An assessment approach that evaluates how students develop their work through staged submissions (proposal, draft, peer review, revision reflection) rather than evaluating only the final product." },
+      { term: "Situated Knowledge", tag: "Strategy", definition: "Content that is grounded in specific local contexts AI cannot access: campus observations, in-class discussions, community data, guest speaker content, or institutional documents not publicly indexed." },
+      { term: "Authentic Performance Task", tag: "Strategy", definition: "An assessment requiring demonstration in real time — oral presentations with Q&A, live problem-solving, clinical simulations, or teaching demonstrations — that cannot be pre-generated by AI." },
+      { term: "Multimodal Assessment", tag: "Strategy", definition: "An assignment combining written, visual, oral, and/or experiential components. The integration of multiple modes makes AI substitution substantially more difficult than single-mode tasks." },
+      { term: "AI Interaction Log", tag: "Tool", definition: "A required documentation artifact where students record all AI prompts used, outputs received, and critical evaluations of each output. Assessment focuses on prompt quality and judgment rather than the AI-generated product." },
+      { term: "Metacognitive Reflection", tag: "Strategy", definition: "An assessment component requiring students to analyze their own learning process: where they were stuck, what strategies they tried, and what they would do differently — knowledge that only the learner possesses." },
+      { term: "Detection Bias", tag: "Evidence", definition: "The documented tendency of AI detection tools to disproportionately flag authentic writing by non-native English speakers, with false positive rates up to 61.3% for TOEFL essays versus near-zero for native English writing." },
+      { term: "Bloom's Taxonomy (AI-Adapted)", tag: "Framework", definition: "Revised frameworks mapping AI capabilities at each cognitive level. At lower levels (Remember, Understand), AI performs competently; at higher levels (Evaluate, Create), distinctive human skills — ethical reasoning, lived experience, original judgment — remain essential." }
+    ];
+
+    const aiasLevels = [
+      {
+        id: 1,
+        level: "Level 1",
+        title: "No AI",
+        description: "Students complete assessments entirely without AI in controlled environments, demonstrating core skills and knowledge relying solely on existing competencies.",
+        whenToUse: "Foundational skills verification, licensure preparation, proctored exams, baseline knowledge assessment where you need to confirm the student can perform independently.",
+        examples: [
+          {
+            title: "In-class essay exam",
+            scenario: "Students write an analytical essay during class time with no device access, demonstrating they can construct an argument, recall key concepts, and write coherently under controlled conditions."
+          },
+          {
+            title: "Lab practical demonstration",
+            scenario: "In a biology lab, students perform a hands-on dissection or microscopy exercise, recording observations in a handwritten lab notebook. The assessment verifies procedural skills AI cannot replicate."
+          },
+          {
+            title: "Oral comprehensive exam",
+            scenario: "Graduate students respond to faculty questions in real time during a 30-minute oral examination, demonstrating depth of understanding that cannot be pre-generated."
+          }
+        ]
+      },
+      {
+        id: 2,
+        level: "Level 2",
+        title: "AI Planning",
+        description: "AI supports planning, idea development, and research, but final submissions must demonstrate how students independently developed and refined initial concepts.",
+        whenToUse: "Brainstorming phases, literature exploration, outlining — where the thinking process matters more than the starting point and students must show independent development.",
+        examples: [
+          {
+            title: "Research proposal with AI-assisted literature review",
+            scenario: "Students may use AI to identify potential sources and generate an initial bibliography, but must independently read, evaluate, and synthesize sources into an original research question with documented reasoning."
+          },
+          {
+            title: "Annotated outline with development notes",
+            scenario: "Students submit an outline that may have been brainstormed with AI assistance, accompanied by handwritten development notes explaining how they transformed initial ideas into their own framework."
+          }
+        ]
+      },
+      {
+        id: 3,
+        level: "Level 3",
+        title: "AI Collaboration",
+        description: "Students utilize AI for drafting text, refining and evaluating work while critically examining and modifying generated outputs to demonstrate comprehension.",
+        whenToUse: "Writing-intensive tasks where revision skills, critical evaluation of AI output, and voice development are explicit learning outcomes.",
+        examples: [
+          {
+            title: "Draft-and-critique writing assignment",
+            scenario: "Students use AI to generate an initial draft, then systematically critique it: identifying factual errors, improving argument structure, adding personal analysis, and documenting every change with rationale."
+          },
+          {
+            title: "AI-assisted code review",
+            scenario: "Computer science students use AI to generate starter code, then must debug it, optimize it, add error handling based on their course-specific requirements, and explain every modification in comments."
+          }
+        ]
+      },
+      {
+        id: 4,
+        level: "Level 4",
+        title: "Full AI",
+        description: "Extensive AI usage permitted throughout. Students focus on directing AI to achieve goals while demonstrating critical thinking about the process and outputs.",
+        whenToUse: "Advanced courses, professional preparation where AI fluency is itself a learning outcome, prompt engineering skill development.",
+        examples: [
+          {
+            title: "AI-directed marketing campaign",
+            scenario: "Business students use AI extensively to research, draft, and refine a full marketing plan. Assessment focuses on the quality of their AI direction, their critical evaluation of outputs, and their ability to defend decisions live."
+          },
+          {
+            title: "AI interaction portfolio",
+            scenario: "Students submit a complete log of their AI interactions with reflective analysis: which prompts produced useful results, which failed, how they iterated, and what they learned about effective human-AI collaboration."
+          }
+        ]
+      },
+      {
+        id: 5,
+        level: "Level 5",
+        title: "AI Exploration",
+        description: "AI serves creative problem-solving roles. Students use AI creatively, potentially co-designing new approaches with instructors. Includes multimodal and emerging technologies.",
+        whenToUse: "Capstone projects, innovation courses, emerging technology exploration, cross-disciplinary experiments where pushing the boundaries of AI application is the learning goal.",
+        examples: [
+          {
+            title: "AI-augmented capstone research",
+            scenario: "Students design a novel research methodology that integrates AI as a research tool — using it for data analysis, pattern recognition, or hypothesis generation — then critically evaluate the AI's contribution alongside traditional methods."
+          },
+          {
+            title: "Multimodal AI design challenge",
+            scenario: "Students combine text, image, and code generation AI tools to create an interactive prototype, documenting the creative process and evaluating where AI enhanced versus limited their vision."
+          }
+        ]
+      }
+    ];
+
+    const strategies = [
+      {
+        id: 1,
+        number: "Strategy 1",
+        title: "Process-Based Assessment",
+        icon: '<svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>',
+        description: "Replace single-submission assignments with staged, scaffolded sequences. Each stage is assessed independently, making AI substitution at any single point detectable.",
+        whyWorks: "AI can generate a final product, but it cannot authentically replicate a documented developmental process. Each checkpoint creates accountability and reveals the student's actual thinking trajectory.",
+        examples: [
+          {
+            title: "Scaffolded research paper (6 weeks)",
+            scenario: "A research paper submitted as five staged artifacts: proposal with research question, annotated bibliography, detailed outline, draft with peer review, and final submission with a 300-word revision reflection documenting specific changes and rationale."
+          },
+          {
+            title: "Engineering design portfolio",
+            scenario: "Students document every design decision across four weeks: initial requirements analysis, three rejected approaches with reasoning, prototype sketches, test results, and a final report. Each stage receives formative feedback."
+          },
+          {
+            title: "Iterative coding project",
+            scenario: "A programming assignment broken into weekly Git commits with required commit messages explaining design choices. The instructor reviews the commit history to verify authentic development progression."
+          }
+        ]
+      },
+      {
+        id: 2,
+        number: "Strategy 2",
+        title: "Situated & Local Knowledge",
+        icon: '<svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>',
+        description: "Require content AI cannot access: campus-specific observations, local community data, in-class discussion references, specific guest speaker content, or institutional documents.",
+        whyWorks: "AI generates from its training data. By grounding assignments in local, ephemeral, or classroom-specific content, you create a knowledge gap that only participants possess.",
+        examples: [
+          {
+            title: "In-class discussion analysis",
+            scenario: "\"Analyze the communication dynamics you observed during Tuesday's in-class simulation, referencing at least two specific moments and connecting them to [theoretical framework from the course reading].\""
+          },
+          {
+            title: "Institutional data analysis",
+            scenario: "\"Using data from our institution's published fact book, analyze enrollment trends in your discipline over the past five years. Compare these trends to national data and propose two evidence-based recommendations.\""
+          },
+          {
+            title: "Community-based field observation",
+            scenario: "\"Observe a public space on campus for 30 minutes. Document specific interactions using the ethnographic methods discussed in Week 3. Apply Goffman's dramaturgical framework to three observed moments.\""
+          }
+        ]
+      },
+      {
+        id: 3,
+        number: "Strategy 3",
+        title: "Authentic Performance Tasks",
+        icon: '<svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>',
+        description: "Require real-time demonstration: oral presentations with Q&A, live problem-solving, teaching demonstrations, client presentations, or clinical simulations.",
+        whyWorks: "Live performance is naturally AI-resistant because it requires students to think on their feet, respond to unscripted questions, and demonstrate understanding in real time — capabilities that cannot be pre-generated.",
+        examples: [
+          {
+            title: "Policy brief + simulated hearing",
+            scenario: "Students submit a written policy brief, then participate in a 10-minute simulated legislative hearing where they must respond to unscripted questions from peers and the instructor acting as committee members."
+          },
+          {
+            title: "Oral defense of take-home work",
+            scenario: "Students prepare a written analysis at home, then defend it in a 5-minute individual conference with the instructor. The grade weights the live defense at 40% and the written product at 60%."
+          },
+          {
+            title: "Teaching demonstration",
+            scenario: "Education majors teach a 15-minute micro-lesson to peers, then respond to pedagogical questions about their choices. Peers evaluate using a structured observation rubric."
+          }
+        ]
+      },
+      {
+        id: 4,
+        number: "Strategy 4",
+        title: "Multimodal Requirements",
+        icon: '<svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>',
+        description: "Combine written, visual, oral, and experiential components in a single assignment. The integration of multiple modes makes AI substitution substantially more difficult.",
+        whyWorks: "While AI can generate text competently and images separately, it cannot authentically integrate modes in ways that reflect a coherent personal experience or creative process. The connections between modes reveal human authorship.",
+        examples: [
+          {
+            title: "Video reflection + written rationale",
+            scenario: "Students create a 3-minute video explaining a concept to a specific audience, accompanied by a 500-word written reflection analyzing their pedagogical choices — why they used certain examples, visuals, and pacing."
+          },
+          {
+            title: "Process portfolio with gallery walk",
+            scenario: "Art/Design students document their creative process from concept to final work: sketches, rejected ideas, material experiments, and written reflections. They present in a gallery walk format where they explain choices in response to audience questions."
+          },
+          {
+            title: "Podcast + transcript annotation",
+            scenario: "Students produce a 10-minute podcast episode on a course topic, then annotate the transcript with citations, noting where they simplified for the audience and where they chose to go deeper."
+          }
+        ]
+      },
+      {
+        id: 5,
+        number: "Strategy 5",
+        title: "Metacognitive Reflection",
+        icon: '<svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>',
+        description: "Require students to analyze their own learning process — where they were stuck, what strategies they tried, what they would change — knowledge that only the learner possesses.",
+        whyWorks: "Metacognition is inherently personal. AI can generate plausible-sounding reflections, but they lack the specificity and authenticity of a student describing their actual learning struggles and breakthroughs.",
+        examples: [
+          {
+            title: "Three-point struggle analysis",
+            scenario: "\"Describe three points during this project where you were stuck. For each: What was the obstacle? What did you try first? What ultimately worked? What would you do differently next time?\""
+          },
+          {
+            title: "AI interaction reflection log",
+            scenario: "Students document all AI interactions including prompts, outputs, and critical evaluation of each output. The grade assesses the quality of prompting, the sophistication of critique, and honest reflection on AI's contribution."
+          },
+          {
+            title: "Learning process comparison",
+            scenario: "\"Compare how you approached this assignment to how you approached a similar task earlier in the semester. What has changed in your thinking? What specific course concepts influenced your approach this time?\""
+          }
+        ]
+      },
+      {
+        id: 6,
+        number: "Strategy 6",
+        title: "Personalized & Experience-Based",
+        icon: '<svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>',
+        description: "Ground assignments in students' lived experiences, professional backgrounds, disciplinary interests, or career goals. Especially effective in community college contexts.",
+        whyWorks: "Personal experience is the one dataset AI definitively does not have. Community college students bring rich professional and life experience that can anchor assignments in irreplaceable authenticity.",
+        examples: [
+          {
+            title: "Professional interview + analysis",
+            scenario: "\"Interview a professional in your intended career field about [topic]. Analyze the interview using [framework] and present findings with direct quotations. Include a reflection on how the interview changed your understanding.\""
+          },
+          {
+            title: "Media diary + theoretical application",
+            scenario: "\"Track your own social media use for five days: platform, duration, purpose, emotional state. In a 1,200-word essay, apply [theoretical framework] to patterns in your own data. Support claims with at least three peer-reviewed sources.\""
+          },
+          {
+            title: "Workplace problem analysis",
+            scenario: "\"Identify a real organizational challenge from your current or past workplace. Apply the management framework from Chapter 7 to diagnose the problem and propose two evidence-based interventions. Your analysis must reference specific workplace details.\""
+          }
+        ]
+      },
+      {
+        id: 7,
+        number: "Strategy 7",
+        title: "Collaborative Verification",
+        icon: '<svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>',
+        description: "Use peer interaction as a verification mechanism: jigsaw activities, peer teaching, group problem-solving with rotating roles, collaborative annotation.",
+        whyWorks: "Collaborative verification creates social accountability. When students must explain, teach, or defend their work to peers in real time, AI-generated work without genuine understanding is quickly exposed.",
+        examples: [
+          {
+            title: "Jigsaw expert teaching",
+            scenario: "Each student becomes the expert on one component of a larger topic. They must teach their section to the group with no notes, answering peers' questions. Individual accountability is built into the group structure."
+          },
+          {
+            title: "Structured peer code review",
+            scenario: "In computer science, students submit code then participate in live peer review sessions where they must explain their design decisions, identify potential bugs in partners' code, and suggest improvements — all in real time."
+          },
+          {
+            title: "Collaborative annotation",
+            scenario: "Students annotate a shared document using social annotation tools (e.g., Hypothesis). Each student must respond substantively to at least two peers' annotations, creating a layered dialogue that AI cannot replicate."
+          }
+        ]
+      }
+    ];
+
+    const redesignExamples = [
+      {
+        discipline: "English Composition",
+        original: "Write a 5-paragraph argumentative essay on whether social media does more harm than good.",
+        aiasLevel: "Level 2 — AI Planning",
+        redesigned: "Over four weeks, develop an argumentative essay grounded in your own media habits.\n\nWeek 1 — Media Diary: Track your social media use for five days. Log platform, duration, purpose, and emotional state. Submit diary with a 200-word reflection on patterns.\n\nWeek 2 — Annotated Sources: Find three peer-reviewed articles related to a pattern from your diary. Write 150-word annotations connecting each to your observations. You may use AI to locate sources, but annotations must reflect your own analysis.\n\nWeek 3 — Draft & Peer Review: Submit a full draft. Participate in structured peer review. Write a 100-word response plan based on feedback.\n\nWeek 4 — Final Essay & Revision Reflection: Submit 1,200–1,500-word essay with a 300-word revision reflection identifying specific changes and why.\n\nWeek 5: 5-minute individual conference to discuss your essay.",
+        strategies: "Process-Based + Personalized + Collaborative Verification"
+      },
+      {
+        discipline: "Introduction to Biology",
+        original: "Write a lab report on the osmosis experiment conducted in class.",
+        aiasLevel: "Level 1 — No AI",
+        redesigned: "Using your handwritten lab notebook entries from this week's osmosis experiment, compose a lab report in class during the next lab period (90 minutes, no devices).\n\nYour report must reference your specific data, including any anomalies or errors you observed.\n\nIn the discussion section, address:\n• What surprised you about your results?\n• How did your data differ from your lab partner's, and what might account for the difference?\n• What would you change about the experimental design if you repeated it?",
+        strategies: "Situated Knowledge + Metacognitive Reflection"
+      },
+      {
+        discipline: "Introduction to Sociology",
+        original: "Discussion board: Summarize Goffman's dramaturgical theory and give an example.",
+        aiasLevel: "Level 2 — AI Planning",
+        redesigned: "Before next class, observe a real social interaction in a public space on campus (cafeteria, library, student center, or hallway). Take brief field notes.\n\nIn your discussion post (300–400 words):\n1. Describe the interaction using specific, observable details.\n2. Apply Goffman's \"front stage\" and \"back stage\" concepts to analyze what you observed.\n3. Identify one moment Goffman's framework explains well and one it does not fully account for.\n\nYou may use AI to review Goffman's concepts before your observation, but the observation and analysis must be your own. Be prepared to discuss in class.",
+        strategies: "Situated Knowledge + Authentic Performance"
+      },
+      {
+        discipline: "Nursing",
+        original: "Develop a care plan for a patient with Type 2 diabetes.",
+        aiasLevel: "Level 3 — AI Collaboration",
+        redesigned: "Using the clinical scenario from your practicum placement this week, develop a comprehensive care plan.\n\nYou may use AI tools to research evidence-based interventions, but you must:\n1. Document all AI prompts and evaluate the accuracy of each AI recommendation against at least one peer-reviewed clinical source.\n2. Include ethical considerations specific to your patient's cultural and socioeconomic context — information you gathered during clinical observation.\n3. Present your care plan in a 10-minute case conference with your clinical group, responding to questions from peers and instructor.\n\nSubmit your AI interaction log with your final plan.",
+        strategies: "Situated Knowledge + Metacognitive + Authentic Performance"
+      },
+      {
+        discipline: "Business Marketing",
+        original: "Create a marketing plan for a new product.",
+        aiasLevel: "Level 4 — Full AI",
+        redesigned: "Using any AI tools available to you, create a comprehensive marketing plan for a product addressing a need you've identified in the student community at this institution.\n\nRequirements:\n1. Conduct 5 brief interviews with potential customers (fellow students) and incorporate direct quotations.\n2. Submit a complete AI interaction log documenting your prompts, outputs, and evaluation — where did you accept AI recommendations? Where did you override them, and why?\n3. Present a 15-minute pitch to a panel of peers acting as venture investors. Panelists will ask unscripted questions.\n\nGrade based on: quality of AI direction, critical judgment in evaluating AI outputs, authenticity of customer research, and ability to defend decisions live.",
+        strategies: "Personalized + Metacognitive + Authentic Performance"
+      }
+    ];
+
+    // ===== STATE =====
+    const state = {
+      isDarkMode: false,
+      exploredCards: new Set(),
+      activeExamples: {},
+      searchTerm: ""
+    };
+
+    // Initialize active examples for all card sets
+    strategies.forEach(s => { state.activeExamples['s' + s.id] = 0; });
+    aiasLevels.forEach(a => { state.activeExamples['a' + a.id] = 0; });
+
+    // ===== THEME TOGGLE =====
+    const themeToggleButton = document.getElementById('theme-toggle');
+    themeToggleButton.addEventListener('click', () => {
+      state.isDarkMode = !state.isDarkMode;
+      if (state.isDarkMode) {
+        document.documentElement.classList.add('dark');
+        themeToggleButton.innerHTML = '<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707-.707M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>';
+      } else {
+        document.documentElement.classList.remove('dark');
+        themeToggleButton.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>';
+      }
+    });
+
+    // ===== KEY TERMS =====
+    function renderKeyTerms() {
+      const grid = document.getElementById('key-terms-grid');
+      grid.innerHTML = '';
+      const filtered = keyTerms.filter(item =>
+        item.term.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
+        item.definition.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
+        (item.tag && item.tag.toLowerCase().includes(state.searchTerm.toLowerCase()))
+      );
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="col-span-full text-center py-6 text-slate-500 dark:text-slate-400 text-sm font-medium">No matching terms found.</div>';
+        return;
+      }
+      filtered.forEach((item, idx) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = "term-card-container";
+        wrapper.innerHTML = `
+          <div class="term-card-inner" onclick="this.classList.toggle('is-flipped')" id="term-card-${idx}">
+            <div class="term-card-front border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 flex flex-col justify-between shadow-sm hover:border-emerald-300/60 dark:hover:border-emerald-900/50 transition-all duration-300">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-400 px-2 py-0.5 rounded-md uppercase tracking-wider">${item.tag || 'Glossary'}</span>
+                  <svg class="w-4 h-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                </div>
+                <h3 class="font-bold text-slate-900 dark:text-white text-sm tracking-tight leading-snug">${item.term}</h3>
+              </div>
+              <p class="text-[11px] text-slate-400 dark:text-slate-500 font-medium">Click to reveal definition</p>
+            </div>
+            <div class="term-card-back border border-emerald-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 flex flex-col justify-between shadow-inner">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">${item.term}</span>
+                  <svg class="w-4 h-4 text-slate-300 dark:text-slate-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                </div>
+                <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">${item.definition}</p>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(wrapper);
+      });
+    }
+    document.getElementById('terms-search').addEventListener('input', (e) => {
+      state.searchTerm = e.target.value;
+      renderKeyTerms();
+    });
+
+    // ===== PROGRESS TRACKING =====
+    const TOTAL_SECTIONS = 7; // 5 AIAS + 7 strategies = tracked via exploredCards
+    function updateProgress() {
+      const count = state.exploredCards.size;
+      const total = strategies.length;
+      const pct = Math.round((count / total) * 100);
+      document.getElementById('progress-badge').innerText = `${count}/${total} Explored`;
+      document.getElementById('mastery-progress-bar').style.width = `${pct}%`;
+      if (count === total) {
+        const banner = document.getElementById('mastery-banner');
+        banner.classList.remove('hidden');
+        setTimeout(() => {
+          banner.classList.add('scale-100', 'opacity-100');
+          banner.classList.remove('scale-95', 'opacity-0');
+        }, 50);
+      }
+    }
+
+    // ===== FLIP CARD MECHANICS =====
+    window.flipCard = function(prefix, id) {
+      const inner = document.getElementById(`card-inner-${prefix}${id}`);
+      inner.classList.toggle('is-flipped');
+      if (inner.classList.contains('is-flipped') && prefix === 's') {
+        state.exploredCards.add(id);
+        updateProgress();
+      }
+    };
+
+    window.setCardExample = function(key, index, event) {
+      if (event) event.stopPropagation();
+      state.activeExamples[key] = index;
+      renderCardBackState(key);
+    };
+
+    window.nextCardExample = function(key, max, event) {
+      if (event) event.stopPropagation();
+      state.activeExamples[key] = (state.activeExamples[key] + 1) % max;
+      renderCardBackState(key);
+    };
+
+    function renderCardBackState(key) {
+      const prefix = key.charAt(0);
+      const id = parseInt(key.substring(1));
+      const dataSet = prefix === 's' ? strategies : aiasLevels;
+      const item = dataSet.find(d => d.id === id);
+      const activeIdx = state.activeExamples[key];
+      const ex = item.examples[activeIdx];
+
+      const linksEl = document.getElementById(`example-links-${key}`);
+      linksEl.innerHTML = '';
+      item.examples.forEach((e, i) => {
+        const btn = document.createElement('button');
+        btn.onclick = (ev) => setCardExample(key, i, ev);
+        btn.className = `px-3 py-1 text-xs font-semibold rounded-lg transition-all ${
+          i === activeIdx
+            ? 'bg-slate-950 text-white dark:bg-emerald-500 dark:text-slate-950 shadow-sm'
+            : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700/80'
+        }`;
+        btn.innerText = `Ex ${i + 1}`;
+        linksEl.appendChild(btn);
+      });
+
+      document.getElementById(`example-text-frame-${key}`).innerHTML = `
+        <div class="space-y-1.5">
+          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 tracking-tight flex items-center justify-between">
+            <span>${ex.title}</span>
+            <span class="text-[10px] font-mono bg-slate-100 dark:bg-slate-950 text-slate-500 px-1.5 py-0.5 rounded">${activeIdx + 1}/${item.examples.length}</span>
+          </p>
+          <blockquote class="text-[12px] font-medium leading-relaxed italic text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-950 p-3 rounded-lg border-l-2 border-emerald-500">
+            "${ex.scenario}"
+          </blockquote>
+        </div>
+      `;
+    }
+
+    // ===== RENDER AIAS FLIP CARDS =====
+    function renderAIASGrid() {
+      const grid = document.getElementById('aias-grid');
+      grid.innerHTML = '';
+      aiasLevels.forEach(level => {
+        const key = 'a' + level.id;
+        const container = document.createElement('div');
+        container.className = "card-container w-full h-[590px]";
+        container.innerHTML = `
+          <div id="card-inner-a${level.id}" class="card-inner">
+            <div class="card-front border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col justify-between shadow-sm hover:border-emerald-300/40 dark:hover:border-emerald-900/30 transition-all duration-300">
+              <div class="space-y-5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-bold tracking-widest text-slate-400 uppercase font-mono">${level.level}</span>
+                  <span class="text-[10px] bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">AIAS Scale</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-950 flex items-center justify-center border border-slate-100 dark:border-slate-800">
+                  <span class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">${level.id}</span>
+                </div>
+                <div class="space-y-2">
+                  <h3 class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">${level.title}</h3>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-medium">${level.description}</p>
+                </div>
+              </div>
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800/60">
+                <button onclick="flipCard('a',${level.id})" class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-900 text-white dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-bold border border-slate-850 dark:border-slate-700 transition-all">
+                  <span>When to Use &amp; Examples</span>
+                  <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-back border border-emerald-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col justify-between shadow-inner">
+              <div class="space-y-4 overflow-y-auto custom-scrollbar flex-grow pr-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest font-mono">${level.level}: ${level.title}</span>
+                  <span class="text-[9px] bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 font-semibold px-2 py-0.5 rounded-full">${level.examples.length} Examples</span>
+                </div>
+                <div class="space-y-1 bg-slate-50 dark:bg-slate-950 p-3.5 rounded-xl border border-slate-100 dark:border-slate-800/60">
+                  <h4 class="text-[11px] font-extrabold uppercase tracking-wide text-slate-500">When to use this level</h4>
+                  <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">${level.whenToUse}</p>
+                </div>
+                <div class="space-y-3 pt-1">
+                  <h4 class="text-[11px] font-extrabold uppercase tracking-wide text-slate-400">Examples</h4>
+                  <div id="example-links-${key}" class="flex flex-wrap gap-1.5"></div>
+                  <div id="example-text-frame-${key}" class="min-h-[140px] flex flex-col justify-center bg-slate-50 dark:bg-slate-950 rounded-xl p-3 border border-slate-100 dark:border-slate-800/60 transition-all duration-300"></div>
+                </div>
+              </div>
+              <div class="pt-4 mt-2 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between gap-3">
+                <button onclick="flipCard('a',${level.id})" class="inline-flex items-center justify-center px-3.5 py-2 rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                  <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                  <span>Flip Back</span>
+                </button>
+                <button onclick="nextCardExample('${key}', ${level.examples.length}, event)" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-xs font-extrabold transition-all">
+                  <span>Next Example</span>
+                  <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(container);
+        renderCardBackState(key);
+      });
+    }
+
+    // ===== RENDER STRATEGY FLIP CARDS =====
+    function renderStrategiesGrid() {
+      const grid = document.getElementById('strategies-grid');
+      grid.innerHTML = '';
+      strategies.forEach(tech => {
+        const key = 's' + tech.id;
+        const container = document.createElement('div');
+        container.className = "card-container w-full h-[590px]";
+        container.innerHTML = `
+          <div id="card-inner-s${tech.id}" class="card-inner">
+            <div class="card-front border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col justify-between shadow-sm hover:border-emerald-300/40 dark:hover:border-emerald-900/30 transition-all duration-300">
+              <div class="space-y-5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-bold tracking-widest text-slate-400 uppercase font-mono">${tech.number}</span>
+                  <span class="text-[10px] bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Resilience</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-950 flex items-center justify-center border border-slate-100 dark:border-slate-800">${tech.icon}</div>
+                <div class="space-y-2">
+                  <h3 class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">${tech.title}</h3>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-medium">${tech.description}</p>
+                </div>
+              </div>
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800/60">
+                <button onclick="flipCard('s',${tech.id})" class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-900 text-white dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-bold border border-slate-850 dark:border-slate-700 transition-all">
+                  <span>Explore Strategy &amp; Examples</span>
+                  <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-back border border-emerald-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col justify-between shadow-inner">
+              <div class="space-y-4 overflow-y-auto custom-scrollbar flex-grow pr-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest font-mono">${tech.number}</span>
+                  <span class="text-[9px] bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 font-semibold px-2 py-0.5 rounded-full">${tech.examples.length} Scenarios</span>
+                </div>
+                <div class="space-y-1 bg-slate-50 dark:bg-slate-950 p-3.5 rounded-xl border border-slate-100 dark:border-slate-800/60">
+                  <h4 class="text-[11px] font-extrabold uppercase tracking-wide text-slate-500">Why this strategy works</h4>
+                  <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">${tech.whyWorks}</p>
+                </div>
+                <div class="space-y-3 pt-1">
+                  <h4 class="text-[11px] font-extrabold uppercase tracking-wide text-slate-400">Discipline Examples</h4>
+                  <div id="example-links-${key}" class="flex flex-wrap gap-1.5"></div>
+                  <div id="example-text-frame-${key}" class="min-h-[140px] flex flex-col justify-center bg-slate-50 dark:bg-slate-950 rounded-xl p-3 border border-slate-100 dark:border-slate-800/60 transition-all duration-300"></div>
+                </div>
+              </div>
+              <div class="pt-4 mt-2 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between gap-3">
+                <button onclick="flipCard('s',${tech.id})" class="inline-flex items-center justify-center px-3.5 py-2 rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                  <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                  <span>Flip Back</span>
+                </button>
+                <button onclick="nextCardExample('${key}', ${tech.examples.length}, event)" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-xs font-extrabold transition-all">
+                  <span>Next Example</span>
+                  <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(container);
+        renderCardBackState(key);
+      });
+    }
+
+    // ===== REDESIGN EXAMPLES ACCORDION =====
+    function renderExamplesAccordion() {
+      const container = document.getElementById('examples-accordion');
+      container.innerHTML = '';
+      redesignExamples.forEach((ex, i) => {
+        const div = document.createElement('div');
+        div.className = "bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden";
+        div.innerHTML = `
+          <button onclick="toggleAccordion(${i})" class="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors" id="acc-btn-${i}">
+            <div class="flex items-center space-x-3">
+              <span class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-xs flex-shrink-0 border border-emerald-100 dark:border-emerald-900/60">${i + 1}</span>
+              <div>
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white">${ex.discipline}</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">${ex.aiasLevel} &bull; ${ex.strategies}</p>
+              </div>
+            </div>
+            <svg class="w-5 h-5 text-slate-400 transition-transform duration-300" id="acc-chevron-${i}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="accordion-content" id="acc-content-${i}">
+            <div class="px-6 pb-6 space-y-4">
+              <div class="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40">
+                <p class="text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider mb-1">Original (AI-Vulnerable)</p>
+                <p class="text-sm text-slate-700 dark:text-slate-300 italic">"${ex.original}"</p>
+              </div>
+              <div class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40">
+                <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">Redesigned (AI-Resilient)</p>
+                <p class="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-line">${ex.redesigned}</p>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    window.toggleAccordion = function(index) {
+      const content = document.getElementById(`acc-content-${index}`);
+      const chevron = document.getElementById(`acc-chevron-${index}`);
+      const isOpen = content.classList.contains('open');
+      if (isOpen) {
+        content.style.maxHeight = '0px';
+        content.classList.remove('open');
+        chevron.style.transform = 'rotate(0deg)';
+      } else {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        content.classList.add('open');
+        chevron.style.transform = 'rotate(180deg)';
+      }
+    };
+
+    // ===== QUIZ =====
+    // ===== BLOOM'S TAXONOMY AI VULNERABILITY TOOL =====
+    const bloomsLevels = [
+      {
+        level: "Remember",
+        verb: "Define, list, recall, memorize, identify",
+        aiCapability: "AI performs this effortlessly. It can retrieve and reproduce factual information with high accuracy from its training data.",
+        humanEdge: "Limited. Recall tasks can be fully automated. Only proctored, controlled environments preserve validity at this level.",
+        vulnerability: "high",
+        designTip: "If your assignment primarily asks students to recall facts, it is highly AI-vulnerable. Anchor recall tasks in controlled environments (AIAS Level 1) or combine with higher-order components."
+      },
+      {
+        level: "Understand",
+        verb: "Explain, summarize, paraphrase, describe, classify",
+        aiCapability: "AI can explain concepts, summarize texts, and paraphrase at a competent level. It produces fluent, organized summaries that often earn passing grades.",
+        humanEdge: "Moderate. Students can contextualize within emotional, moral, and ethical dimensions that AI cannot authentically access.",
+        vulnerability: "high",
+        designTip: "Standard 'explain this concept' prompts are vulnerable. Add situated context: 'Explain this to a specific audience you know' or 'Summarize and connect to your own observation from class.'"
+      },
+      {
+        level: "Apply",
+        verb: "Solve, demonstrate, implement, use, execute",
+        aiCapability: "AI can apply formulas, follow procedures, and generate solutions for well-defined problems. It handles textbook application tasks competently.",
+        humanEdge: "Growing. Real-world application requires judgment about which tools, methods, or frameworks fit ambiguous situations — context AI lacks.",
+        vulnerability: "moderate",
+        designTip: "Shift from textbook problems to messy, real-world applications. Require students to justify why they chose a particular approach, not just execute it."
+      },
+      {
+        level: "Analyze",
+        verb: "Compare, contrast, examine, differentiate, organize",
+        aiCapability: "AI can identify patterns in structured data and produce competent comparative analyses. It struggles with nuanced, context-dependent interpretation.",
+        humanEdge: "Significant. Rigorous analysis requires weighing competing interpretations, recognizing what's missing, and applying disciplinary judgment.",
+        vulnerability: "moderate",
+        designTip: "Require analysis of novel, local, or personal data. Ask students to analyze something they collected, observed, or experienced — not a published dataset AI has already seen."
+      },
+      {
+        level: "Evaluate",
+        verb: "Judge, critique, defend, justify, argue, assess",
+        aiCapability: "AI can list pros and cons and generate generic evaluations. It cannot make authentic value-laden judgments grounded in personal ethics, lived experience, or professional context.",
+        humanEdge: "Strong. Evaluation requires metacognitive reflection, ethical reasoning, and the ability to defend a position under questioning.",
+        vulnerability: "low",
+        designTip: "Ask students to take and defend a position with personal stakes. Pair written evaluation with oral defense. Require justification grounded in specific personal or professional experience."
+      },
+      {
+        level: "Create",
+        verb: "Design, construct, produce, invent, compose, synthesize",
+        aiCapability: "AI can brainstorm and generate drafts, but it cannot synthesize lived experience, original field data, and disciplinary insight into genuinely novel work.",
+        humanEdge: "Strongest. Original creation drawing on personal experience, intuition, and original judgment remains distinctively human.",
+        vulnerability: "low",
+        designTip: "Anchor creation in personal data, original research, community contexts, or professional experience. The more the 'raw material' is unique to the student, the more resilient the assignment."
+      }
+    ];
+
+    function renderBloomsTool() {
+      const container = document.getElementById('blooms-container');
+      container.innerHTML = '';
+      const vulnColors = {
+        high: { bg: 'bg-rose-50 dark:bg-rose-950/20', border: 'border-rose-200 dark:border-rose-900/40', badge: 'bg-rose-100 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400', bar: 'bg-rose-400' },
+        moderate: { bg: 'bg-amber-50 dark:bg-amber-950/20', border: 'border-amber-200 dark:border-amber-900/40', badge: 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400', bar: 'bg-amber-400' },
+        low: { bg: 'bg-emerald-50 dark:bg-emerald-950/20', border: 'border-emerald-200 dark:border-emerald-900/40', badge: 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400', bar: 'bg-emerald-400' }
+      };
+
+      bloomsLevels.forEach((b, i) => {
+        const vc = vulnColors[b.vulnerability];
+        const div = document.createElement('div');
+        div.className = "bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden";
+        div.innerHTML = `
+          <button onclick="toggleBloom(${i})" class="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors" id="bloom-btn-${i}">
+            <div class="flex items-center space-x-3 flex-grow min-w-0">
+              <span class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0 ${vc.badge}">${i + 1}</span>
+              <div class="min-w-0">
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white">${b.level}</h3>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">${b.verb}</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-3 flex-shrink-0 ml-3">
+              <span class="hidden sm:inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${vc.badge}">${b.vulnerability === 'high' ? 'AI-Vulnerable' : b.vulnerability === 'moderate' ? 'Mixed Risk' : 'AI-Resilient'}</span>
+              <svg class="w-5 h-5 text-slate-400 transition-transform duration-300" id="bloom-chevron-${i}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </button>
+          <div class="accordion-content" id="bloom-content-${i}">
+            <div class="px-5 pb-5 space-y-3">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="p-3 rounded-xl ${vc.bg} ${vc.border} border">
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">What AI Can Do</p>
+                  <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">${b.aiCapability}</p>
+                </div>
+                <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40">
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Distinctive Human Edge</p>
+                  <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">${b.humanEdge}</p>
+                </div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60">
+                <p class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">Design Recommendation</p>
+                <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">${b.designTip}</p>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    window.toggleBloom = function(index) {
+      const content = document.getElementById(`bloom-content-${index}`);
+      const chevron = document.getElementById(`bloom-chevron-${index}`);
+      const isOpen = content.classList.contains('open');
+      if (isOpen) {
+        content.style.maxHeight = '0px';
+        content.classList.remove('open');
+        chevron.style.transform = 'rotate(0deg)';
+      } else {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        content.classList.add('open');
+        chevron.style.transform = 'rotate(180deg)';
+      }
+    };
+
+    // ===== DESIGN LAB FUNCTIONS =====
+    const aiasHints = {
+      1: "Level 1 — No AI: Use for foundational skill verification. Pair with controlled environments (in-class, proctored). Best when you need to confirm students can perform independently.",
+      2: "Level 2 — AI Planning: AI may assist with brainstorming and research, but the final product must show independent development. Require documentation of how ideas evolved beyond AI suggestions.",
+      3: "Level 3 — AI Collaboration: Students may use AI for drafting/refining, but must critically evaluate and modify outputs. Require AI interaction logs and evidence of human judgment.",
+      4: "Level 4 — Full AI: AI fluency is the learning outcome. Assess the quality of students' AI direction, critical evaluation of outputs, and ability to defend decisions. Pair with oral defense.",
+      5: "Level 5 — AI Exploration: Students push AI boundaries creatively. Best for capstone/innovation contexts. Assess the novelty of the human-AI collaboration and critical reflection on AI's role."
+    };
+
+    const aiasStudentPolicy = {
+      1: "AI Use Policy: No AI tools may be used for any part of this assignment. All work must be completed independently in the designated class session without access to AI assistants, chatbots, or generative tools.",
+      2: "AI Use Policy (AIAS Level 2 — AI Planning): You may use AI tools to brainstorm ideas, explore topics, and identify potential sources during the planning phase. However, all analysis, writing, and final submissions must be your own original work. If you used AI during planning, briefly note how in your submission.",
+      3: "AI Use Policy (AIAS Level 3 — AI Collaboration): You may use AI tools to generate initial drafts and refine your writing. However, you must critically evaluate all AI output, make substantive revisions, and document your AI interactions. Submit an AI interaction log showing your prompts, the AI outputs, and your evaluation of each. Your grade reflects the quality of your critical judgment, not the AI's output.",
+      4: "AI Use Policy (AIAS Level 4 — Full AI): You may use AI tools extensively throughout this assignment. The learning goal is your ability to direct AI effectively, evaluate outputs critically, and defend your decisions. Submit a complete AI interaction log and be prepared to explain and defend every element of your work in a live discussion.",
+      5: "AI Use Policy (AIAS Level 5 — AI Exploration): You are encouraged to push the boundaries of AI tools creatively. Experiment with multiple AI modalities, novel prompting approaches, and unconventional applications. Document your process, reflect on where AI enhanced or limited your work, and propose what these experiments reveal about human-AI collaboration in your field."
+    };
+
+    const strategyTemplates = {
+      1: { name: "Process-Based", gen: (ctx) => `STAGED SUBMISSION SCHEDULE:\n• Stage 1 (Week 1): Submit a proposal outlining your approach to "${ctx.topicSummary}." Include your initial thesis or central question and a brief plan of action. [Formative feedback provided.]\n• Stage 2 (Week 2): Submit an annotated outline or draft framework showing how your argument or analysis is developing. Reference at least [X] sources with brief annotations explaining their relevance.\n• Stage 3 (Week 3): Submit a complete draft for structured peer review. Participate in peer review using the provided rubric and write a 150-word response plan based on feedback received.\n• Stage 4 (Week 4): Submit your final version accompanied by a 250-word revision reflection. In this reflection, identify three specific changes you made between draft and final, explain why you made each change, and assess how the revision strengthened your work.` },
+      2: { name: "Situated/Local Knowledge", gen: (ctx) => `LOCAL CONTEXT REQUIREMENT:\nThis assignment must incorporate specific, verifiable information from our shared course context that AI tools cannot access:\n• Reference at least one specific moment, example, or discussion from our class sessions (include the date or topic).\n• [If applicable:] Use data, documents, or observations from ${ctx.audience ? 'your campus or community' : 'our institution'} rather than generic national sources.\n• [If applicable:] Incorporate insights from our guest speaker, field trip, or shared class activity on [specific topic].` },
+      3: { name: "Authentic Performance", gen: (ctx) => `LIVE VERIFICATION COMPONENT:\nIn addition to your written submission, you will:\n• Present your work in a [5–10]-minute session to [the class / a small group / the instructor].\n• Respond to unscripted follow-up questions about your analysis, methods, and conclusions.\n• Demonstrate that you can explain, extend, and defend your work without notes or AI assistance.\n\nGrading weight: Written submission [60%] | Live presentation and Q&A [40%].` },
+      4: { name: "Multimodal", gen: (ctx) => `MULTIMODAL REQUIREMENTS:\nYour submission must integrate at least two of the following modes:\n• Written analysis (the core document)\n• Visual component (infographic, diagram, annotated images, or data visualization created by you)\n• Oral component (recorded video explanation, podcast segment, or live presentation)\n• Experiential component (field observation notes, interview transcript, or hands-on prototype documentation)\n\nInclude a brief rationale (150 words) explaining why you chose these specific modes and how they work together to communicate your argument.` },
+      5: { name: "Metacognitive Reflection", gen: (ctx) => `METACOGNITIVE REFLECTION REQUIREMENT:\nInclude a 300-word reflection addressing:\n1. Describe two moments during this assignment where you felt stuck or uncertain. What was the specific obstacle? What strategy did you try first? What ultimately worked?\n2. What is one thing you understand now about ${ctx.topicSummary} that you did not understand when you started? What caused that shift?\n3. If you used AI tools at any point, document what you asked, what you received, and how you evaluated the output. What did the AI get right? What did it miss that only you could provide?` },
+      6: { name: "Personalized/Experience-Based", gen: (ctx) => `PERSONAL CONNECTION REQUIREMENT:\nThis assignment must be grounded in your own experience, observations, or professional context:\n• Connect your analysis to a specific situation from your own life, work, or community. Generic or hypothetical examples will not meet this requirement.\n• [Option A:] Interview one person in your field or community about [topic]. Incorporate direct quotations and your analysis of their perspective.\n• [Option B:] Collect original data from your own context (workplace observation, personal tracking, campus environment) and analyze it using the course framework.` },
+      7: { name: "Collaborative Verification", gen: (ctx) => `COLLABORATIVE COMPONENT:\n• You will be assigned to a peer group of [3–4] students.\n• Each group member is responsible for a distinct component of the larger topic. You will teach your component to the group in a [5]-minute presentation without reading from notes.\n• After all presentations, the group collaboratively synthesizes findings into a shared framework, with each member contributing their section in writing.\n• Individual accountability: each student submits their own written analysis plus a brief assessment of what they learned from their peers' presentations.` }
+    };
+
+    window.updateAIASSelection = function(level) {
+      document.getElementById('aias-selection-hint').innerText = aiasHints[level] || '';
+    };
+
+    function getLabInputs() {
+      const course = document.getElementById('lab-course').value.trim();
+      const audience = document.getElementById('lab-audience').value.trim();
+      const original = document.getElementById('lab-original').value.trim();
+      const outcome = document.getElementById('lab-outcome').value.trim();
+      const aiasRadio = document.querySelector('input[name="lab-aias"]:checked');
+      const aiasLevel = aiasRadio ? parseInt(aiasRadio.value) : 0;
+      const selectedStrats = [];
+      for (let i = 1; i <= 7; i++) {
+        if (document.getElementById('strat-' + i).checked) selectedStrats.push(i);
+      }
+      const topicSummary = original.length > 80 ? original.substring(0, 80) + '...' : original;
+      return { course, audience, original, outcome, aiasLevel, selectedStrats, topicSummary };
+    }
+
+    window.generateRedesign = function() {
+      const inp = getLabInputs();
+      const msgEl = document.getElementById('lab-validation-msg');
+
+      // Validation
+      if (!inp.original) { msgEl.innerText = 'Please enter your original assignment prompt.'; msgEl.classList.remove('hidden'); return; }
+      if (!inp.outcome) { msgEl.innerText = 'Please enter a learning outcome.'; msgEl.classList.remove('hidden'); return; }
+      if (!inp.aiasLevel) { msgEl.innerText = 'Please select an AIAS level.'; msgEl.classList.remove('hidden'); return; }
+      if (inp.selectedStrats.length === 0) { msgEl.innerText = 'Please select at least one design strategy.'; msgEl.classList.remove('hidden'); return; }
+      msgEl.classList.add('hidden');
+
+      // Build the draft
+      const aiasNames = { 1: 'No AI', 2: 'AI Planning', 3: 'AI Collaboration', 4: 'Full AI', 5: 'AI Exploration' };
+      let draft = '';
+
+      draft += `REDESIGNED ASSIGNMENT — ${inp.course || '[Course Name]'}\n`;
+      draft += `${'═'.repeat(50)}\n\n`;
+
+      draft += `LEARNING OUTCOME:\n${inp.outcome}\n\n`;
+
+      draft += `AIAS LEVEL: ${inp.aiasLevel} — ${aiasNames[inp.aiasLevel]}\n`;
+      draft += `${'─'.repeat(50)}\n\n`;
+
+      draft += `ASSIGNMENT PROMPT:\n\n`;
+
+      // Opening context — reframe the original
+      draft += `Building on the core task of your original assignment ("${inp.topicSummary}"), this redesigned version adds structure, accountability, and authentic human engagement to ensure the work reflects genuine learning.\n\n`;
+
+      // Generate strategy-specific sections
+      const ctx = { course: inp.course, audience: inp.audience, topicSummary: inp.topicSummary, outcome: inp.outcome };
+      inp.selectedStrats.forEach((stratId) => {
+        const tmpl = strategyTemplates[stratId];
+        if (tmpl) {
+          draft += `${tmpl.gen(ctx)}\n\n`;
+        }
+      });
+
+      // AI use policy
+      draft += `${'─'.repeat(50)}\n`;
+      draft += `${aiasStudentPolicy[inp.aiasLevel]}\n\n`;
+
+      // Assessment criteria
+      draft += `ASSESSMENT CRITERIA:\n`;
+      draft += `• Alignment with the stated learning outcome\n`;
+      if (inp.selectedStrats.includes(1)) draft += `• Quality and depth of progression across staged submissions\n`;
+      if (inp.selectedStrats.includes(2)) draft += `• Authentic use of local, class-specific, or community-based evidence\n`;
+      if (inp.selectedStrats.includes(3)) draft += `• Ability to explain and defend your work in real time\n`;
+      if (inp.selectedStrats.includes(4)) draft += `• Coherent integration of multiple modes with clear rationale\n`;
+      if (inp.selectedStrats.includes(5)) draft += `• Depth and honesty of metacognitive reflection\n`;
+      if (inp.selectedStrats.includes(6)) draft += `• Authentic connection to personal, professional, or community experience\n`;
+      if (inp.selectedStrats.includes(7)) draft += `• Quality of peer teaching and collaborative synthesis\n`;
+      if (inp.aiasLevel >= 3) draft += `• Quality of AI interaction, critical judgment, and documentation\n`;
+      draft += `• Overall clarity, rigor, and evidence of genuine engagement\n`;
+
+      draft += `\n${'═'.repeat(50)}\n`;
+      draft += `[NOTE TO INSTRUCTOR: Review this draft carefully. Replace bracketed placeholders with your specific course details — exact dates, source materials, rubric criteria, and local references that only you can provide. The more specific the local context, the more AI-resilient the assignment becomes.]`;
+
+      // Display the draft and switch phases
+      document.getElementById('lab-draft-display').innerText = draft;
+      document.getElementById('lab-revised').value = draft;
+      document.getElementById('lab-phase-input').classList.add('hidden');
+      document.getElementById('lab-phase-review').classList.remove('hidden');
+
+      // Scroll to review phase
+      document.getElementById('lab-phase-review').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    window.printDesignLab = function() {
+      const inp = getLabInputs();
+      const aiasNames = { 1: 'Level 1 — No AI', 2: 'Level 2 — AI Planning', 3: 'Level 3 — AI Collaboration', 4: 'Level 4 — Full AI', 5: 'Level 5 — AI Exploration' };
+      const stratNames = { 1:'Process-Based', 2:'Situated/Local Knowledge', 3:'Authentic Performance', 4:'Multimodal', 5:'Metacognitive Reflection', 6:'Personalized/Experience-Based', 7:'Collaborative Verification' };
+      const strategiesText = inp.selectedStrats.map(s => stratNames[s]).join(', ') || '(none)';
+      const draft = document.getElementById('lab-draft-display').innerText || '(not generated)';
+      const revised = document.getElementById('lab-revised').value || '(not yet revised)';
+      const checks = document.querySelectorAll('.lab-check');
+      let passCount = 0;
+      checks.forEach(c => { if (c.checked) passCount++; });
+
+      const printWin = window.open('', '_blank');
+      printWin.document.write(`<!DOCTYPE html><html><head><title>Design Lab — ${inp.course || 'Assignment Redesign'}</title>
+        <style>body{font-family:'Inter',system-ui,sans-serif;max-width:700px;margin:40px auto;padding:20px;color:#1e293b;line-height:1.6}
+        h1{font-size:20px;border-bottom:2px solid #10b981;padding-bottom:8px}h2{font-size:14px;color:#10b981;text-transform:uppercase;letter-spacing:0.05em;margin-top:24px}
+        .field{margin:8px 0;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;white-space:pre-wrap}
+        .label{font-weight:700;font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.05em}
+        .badge{display:inline-block;padding:2px 10px;background:#ecfdf5;color:#059669;border-radius:20px;font-size:12px;font-weight:700}
+        .draft{background:#fff7ed;border-color:#fed7aa}
+        .revised{background:#ecfdf5;border-color:#a7f3d0}
+        hr{border:none;border-top:1px solid #e2e8f0;margin:24px 0}
+        @media print{body{margin:20px}}</style></head><body>
+        <h1>AI-Resilient Assignment Redesign</h1>
+        <h2>Course &amp; Context</h2>
+        <p class="label">Course</p><div class="field">${inp.course || '(not specified)'}</div>
+        <p class="label">Student Population</p><div class="field">${inp.audience || '(not specified)'}</div>
+        <h2>Original Assignment</h2><div class="field">${inp.original || '(not specified)'}</div>
+        <h2>Design Decisions</h2>
+        <p class="label">Learning Outcome</p><div class="field">${inp.outcome || '(not specified)'}</div>
+        <p class="label">AIAS Level</p><div class="field"><span class="badge">${aiasNames[inp.aiasLevel] || '(not selected)'}</span></div>
+        <p class="label">Strategies Applied</p><div class="field">${strategiesText}</div>
+        <hr>
+        <h2>System-Generated Draft</h2><div class="field draft">${draft}</div>
+        <h2>Your Revised Version (Final)</h2><div class="field revised">${revised}</div>
+        <h2>Stress-Test Results</h2><div class="field">${passCount}/6 criteria confirmed</div>
+        <p style="margin-top:32px;font-size:11px;color:#94a3b8;text-align:center">AI-Resilient Assignments Workshop &bull; Faculty Development &bull; Design Lab Output</p>
+        </body></html>`);
+      printWin.document.close();
+      printWin.print();
+    };
+
+    window.clearDesignLab = function() {
+      ['lab-course','lab-audience','lab-original','lab-outcome'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.querySelectorAll('input[name="lab-aias"]').forEach(r => r.checked = false);
+      for (let i = 1; i <= 7; i++) {
+        const cb = document.getElementById('strat-' + i);
+        if (cb) cb.checked = false;
+      }
+      document.querySelectorAll('.lab-check').forEach(c => c.checked = false);
+      document.getElementById('aias-selection-hint').innerText = '';
+      document.getElementById('lab-draft-display').innerText = '';
+      document.getElementById('lab-revised').value = '';
+      document.getElementById('lab-phase-review').classList.add('hidden');
+      document.getElementById('lab-phase-input').classList.remove('hidden');
+      document.getElementById('lab-validation-msg').classList.add('hidden');
+      document.getElementById('lab-phase-input').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    // ===== REFLECTION PRINT =====
+    window.printReflection = function() {
+      const insight = document.getElementById('reflect-insight').value || '(not yet written)';
+      const assignment = document.getElementById('reflect-assignment').value || '(not specified)';
+      const deadline = document.getElementById('reflect-deadline').value || '(no date set)';
+      const support = document.getElementById('reflect-support').value || '(not specified)';
+
+      const printWin = window.open('', '_blank');
+      printWin.document.write(`<!DOCTYPE html><html><head><title>Workshop Reflection</title>
+        <style>body{font-family:'Inter',system-ui,sans-serif;max-width:600px;margin:40px auto;padding:20px;color:#1e293b;line-height:1.6}
+        h1{font-size:20px;border-bottom:2px solid #10b981;padding-bottom:8px}
+        .label{font-weight:700;font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;margin-top:20px}
+        .field{margin:8px 0;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;white-space:pre-wrap}
+        @media print{body{margin:20px}}</style></head><body>
+        <h1>My Workshop Reflection &amp; Commitment</h1>
+        <p class="label">Key Insight</p><div class="field">${insight}</div>
+        <p class="label">First Assignment to Redesign</p><div class="field">${assignment}</div>
+        <p class="label">Target Completion</p><div class="field">${deadline}</div>
+        <p class="label">Support Needed</p><div class="field">${support}</div>
+        <p style="margin-top:32px;font-size:11px;color:#94a3b8;text-align:center">AI-Resilient Assignments Workshop &bull; Faculty Development</p>
+        </body></html>`);
+      printWin.document.close();
+      printWin.print();
+    };
+
+    // ===== ESCAPE KEY =====
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        // Close any open accordions
+      }
+    });
+
+    // ===== INIT =====
+    window.onload = function() {
+      renderKeyTerms();
+      renderBloomsTool();
+      renderAIASGrid();
+      renderStrategiesGrid();
+      renderExamplesAccordion();
+      updateProgress();
+    };
+  </script>
+</body>
+</html>
